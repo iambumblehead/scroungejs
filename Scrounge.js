@@ -9,10 +9,10 @@ var argv = require('optimist').argv,
     BasepageUtil = require('./lib/BasepageUtil.js'),
     InfoTree = require('./lib/InfoTree.js'),
     InfoFile = require('./lib/InfoFile.js'),
-    UserOptions = require('./lib/UserOptions.js');
-    // args
-    
-var options = UserOptions.getNew(argv);
+    UserOptions = require('./lib/UserOptions.js'),
+
+    options = UserOptions.getNew(argv);
+
 
 var scrounge = {
   getBasepageFilters : function (basepage, funchandle) {
@@ -31,6 +31,7 @@ var scrounge = {
   // copies each tree item to timestamped file in final dir
   writeFilesTreeArr : function (treeObjArr, opts, funchandle) {
     var that = this, output = opts.outputPath;
+
     if (!treeObjArr || !treeObjArr.length) return funchandle(null, 'success');
     (function copyNextTreeObj(x, treeObj) {
       if (!x--) return funchandle(null, 'success');    
@@ -43,6 +44,7 @@ var scrounge = {
 
   writeTreesTreeArr : function (treeObjArr, opts, funchandle) {
     var that = this, output = opts.outputPath;
+
     if (!treeObjArr || !treeObjArr.length) return funchandle(null, 'success');
     (function copyNextTreeObj(x, treeObj) {
       if (!x--) return funchandle(null, 'success');    
@@ -77,6 +79,7 @@ var scrounge = {
   // async access of files as fileinfo objs
   getFileInfoObjArr : function (filenameArr, funchandle) {
     var fileObjArr = [], that = this;
+
     if (!filenameArr.length) return funchandle(null, fileObjArr);
     (function openNext(x, filename) {
       if (!x--) return funchandle(null, fileObjArr);
@@ -93,13 +96,17 @@ var scrounge = {
   // build a new tree with associated files of different extension
   getAssociatedCSSTree : function (treeObj, funchandle) {
     var newFileObjArr = [];
+
     if (!treeObj.fileObjArr || !treeObj.fileObjArr.length) return funchandle();
 
     (function getNext(x, fileObj, filename) {
       if (!x--) return funchandle(null, newFileObjArr);
       fileObj = BMBLib.clone(treeObj.fileObjArr[x]);
       
-      if (!fileObj.filename) console.log('[!!!] dependency not found (' + treeObj.fileInfoObj.treename + '): ' + treeObj.fileObjArr[x].treename);
+      if (!fileObj.filename) {
+         console.log(Message.missingDependency(treeObj.fileInfoObj.treename,  treeObj.fileObjArr[x].treename));
+      }
+
       filename = fileObj.filename.replace(/\.js$/, '.css');
 
       FileUtil.getFile(filename, function (err, fd, nfileObj) {
@@ -141,8 +148,6 @@ var scrounge = {
     funchandle(null, assocTreeArr);
   },
 
-  // each tag obj should update the trees
-  // if no basepage is specified tagObj defaults should be used?
   getAsTrees : function (fileInfoObjArr, filters) {
     var treeFilters, graph = Graph.get(),
         treeArr = graph.addFileInfoArr(fileInfoObjArr).getSourceArr();
@@ -158,8 +163,6 @@ var scrounge = {
     return treeArr;
   },
 
-
-  ////////////////////////////////////////////////////
   getMissingDependencyArr : function (treeArr) {
     var missingDependencyArr = [], missingTreeInfoArr, x, y;
     for (x = treeArr.length; x--;) {
@@ -182,7 +185,6 @@ var scrounge = {
     } 
     funchandle(null);
   },
-
 
   treesBuild : function (opts, basepage, funchandle) {
     var basepageUtil, fileObjBuilder, x, treeObjArr;
@@ -230,7 +232,7 @@ var scrounge = {
         if (err) return console.log(err);
         Message.releaseMessages();
         totalTime = BMBLib.getElapsedTime(bgnDateObj, new Date());
-        console.log('[...] finish: ' + totalTime);
+        console.log(Message.finish(totalTime));
       });
     });
   }
