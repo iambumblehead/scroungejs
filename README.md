@@ -1,6 +1,6 @@
 Scrounge.js
 ===========
-**(c)Bumblehead, 2012** [MIT-license](#licensing)  
+**(c)Bumblehead, 2012** [MIT-license](#license)  
 ![scrounge](http://github.com/iambumblehead/scroungejs/raw/master/img/hand3.png)
 ### OVERVIEW:
 
@@ -23,7 +23,7 @@ Scrounge.js provides advantages over other deployment tools:
 Scrounge.js relies on other packages, notably: [css-clean][1] and 
 [js-uglify][2].  
 
-[Get Started](#getstarted) with Scrounge.js to learn more.
+[Get Started](#get-started) with Scrounge.js to learn more.
 
 [0]: http://www.freebsd.or/copyright/freebsd-license.html  "BSD-license"
 [1]: http://github.com/GoalSmashers/clean-css              "css-clean"
@@ -40,7 +40,7 @@ have all dependencies fetched for you.
 
 ---------------------------------------------------------
 
-#### <a id="getstarted">GET STARTED:
+#### <a id="get-started">GET STARTED:
 
 _The directory named 'getStarted' and its contents are provided with the 
 [Scrounge][3] package._
@@ -166,7 +166,7 @@ _The directory named 'getStarted' and its contents are provided with the
  property if one is provided. To create a dependency on ViewA_mint.js use
  '`// Requires: ViewA.js`' in another file.
  
- All file properties are explained in the [File Properties](#fileproperties) 
+ All file properties are explained in the [File Properties](#file-properties) 
  section.  
 
  8. **Update _index.mustache_ using Scrounge.js.**  
@@ -298,7 +298,7 @@ _The directory named 'getStarted' and its contents are provided with the
 
 ---------------------------------------------------------
 
-#### <a id="fileproperties">FILE PROPERTIES:
+#### <a id="file-properties">FILE PROPERTIES:
 
 Scrounge.js' build process is affected by information in files it processes.
 
@@ -456,7 +456,7 @@ example scrounge elements are given below
 
 ---------------------------------------------------------
 
-#### <a id="licensing">License:
+#### <a id="license">License:
 
  ![scrounge](http://github.com/iambumblehead/scroungejs/raw/master/img/hand.png) 
 
