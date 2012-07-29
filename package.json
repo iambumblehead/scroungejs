@@ -1,0 +1,9 @@
+{
+    "name" : "Scrounge.js",
+    "version" : "0.1.0",
+    "dependencies" : {
+        "optimist" : "0.3.0",
+        "uglify-js" : "1.2.0",
+        "clean-css" : "0.3.1"
+    }
+}

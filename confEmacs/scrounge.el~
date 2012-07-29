@@ -1,0 +1,249 @@
+;; load this file by including the below line in your .emacs
+;; (load-file "~/path/to/scrounge.el")
+
+;; gallerynav.js
+(defvar *Scrounge-Path* "~/Software/JavaScript/scrounge/scrounge.js")
+
+(defvar *Scrounge-Mint-Syspath-Hash* (make-hash-table :test 'equal))
+(puthash "iammegumi" "~/Software/iammegumi.com/project" *Scrounge-Mint-Syspath-Hash*)
+
+(defvar *Scrounge-Cmpr-Syspath-Hash* (make-hash-table :test 'equal))
+(puthash "iammegumi" "~/Software/iammegumi.com/project/public" *Scrounge-Cmpr-Syspath-Hash*)
+
+(defvar *System-Dir-Bash-Hash* (make-hash-table :test 'equal))
+(puthash "iammegumi" "~/Software/iammegumi.com/bash" *System-Dir-Bash-Hash*)
+(puthash "kuaweb" "~/Software/kuaweb/bash"  *System-Dir-Bash-Hash*)
+(puthash "kuaadmin" "~/Software/kuaweb/bash"  *System-Dir-Bash-Hash*)
+
+(defvar *Scrounge-Public-Js-Hash* (make-hash-table :test 'equal))
+(puthash "iammegumi" "/js" *Scrounge-Public-Js-Hash*)
+(puthash "kuapay" "/js" *Scrounge-Public-Js-Hash*)
+
+(defvar *Scrounge-Public-Css-Hash* (make-hash-table :test 'equal))
+(puthash "iammegumi" "/css" *Scrounge-Public-Css-Hash*)
+(puthash "kuapay" "/css" *Scrounge-Public-Css-Hash*)
+
+(defvar *Scrounge-Basepage-Hash* (make-hash-table :test 'equal))
+(puthash "iammegumi" "~/Software/iammegumi.com/project/Main.mustache" *Scrounge-Basepage-Hash*)
+(puthash "kuapay" "~/Software/JavaScript/Node/RizeTheWhiteBox/rizethewhitebox/public" *Scrounge-Basepage-Hash*)
+
+
+;; for copying buffer's *.mustache file to the templates public dir
+(defvar *Public-Dir-Mustache-Hash* (make-hash-table :test 'equal))
+(puthash "iammegumi" "~/Software/iammegumi.com/project/public/tpl" *Public-Dir-Mustache-Hash*)
+(puthash "kuaweb" "~/Software/kuaweb/tpl" *Public-Dir-Mustache-Hash*)
+(puthash "kuaadmin" "~/Software/kuaweb/tpl" *Public-Dir-Mustache-Hash*)
+
+(defvar *Devel-Root-Hash* (make-hash-table :test 'equal))
+(puthash "iammegumi" "~/Software/iammegumi.com" *Devel-Root-Hash*)
+
+
+(defun Sass (&optional site) (interactive "sSingle-assemble which site?: ")
+  "calls mvn assembly process on specified directory path"
+  (let ((compile-dir (gethash focus-site *Devel-Root-Hash*))
+        (persist-dir default-directory))
+    (cd compile-dir)
+    (shell-command-to-string (concat "bash ./deploy.sh"))
+    (cd persist-dir)))
+
+
+(defvar focus-site "devilmaycare")
+(defun set-focus-site (site) (interactive "sFocus scrounge on what?: ")
+  "set a focus page for scrounge. page must be a key at scrounge hash."
+  (setq focus-site site))
+
+(global-set-key (kbd "C-c f") 'set-focus-site)
+
+;; something like the following used:
+;;$ node ../../scrounge/scrounge.js -r -t js -b /home/duck/Software/JavaScript/Node/gitmaster.amgavin.com/views/main/home/home.mustache -i public -l -f -p /scr
+
+(defun Scrounge (&optional type) (interactive)
+  "compress the buffer file with scrounge"
+  (setq compilation-scroll-output t)
+  (if (and focus-site (gethash focus-site *Scrounge-Mint-Syspath-Hash*))
+      (let* ((mint-path (gethash focus-site *Scrounge-Mint-Syspath-Hash*))
+             (cmpr-path (gethash focus-site *Scrounge-Cmpr-Syspath-Hash*))
+             (base-path (gethash focus-site *Scrounge-Basepage-Hash*))
+             (public-path (cond
+                           ((equal type "js") (gethash focus-site *Scrounge-Public-Js-Hash*))
+                           ((equal type "css") (gethash focus-site *Scrounge-Public-Css-Hash*))
+                           (t nil))))
+        (compile (concat "node " *Scrounge-Path* " -r -l -p /cmpr "
+                         (if type (concat "-t " type) "")
+                         (if base-path (concat " -b " base-path) "")
+                         (if mint-path (concat " -i " mint-path) "")
+                         (if cmpr-path (concat " -o " cmpr-path) ""))))
+    ;(print (concat "node " *Scrounge-Path* " -i ./"))))    
+    (compile (concat "node " *Scrounge-Path* " -i ./"))))
+
+
+(defun Scrounge-fake (&optional type) (interactive)
+  "compress the buffer file with scrounge"
+  (setq compilation-scroll-output t)
+  (if (and focus-site (gethash focus-site *Scrounge-Mint-Syspath-Hash*))
+      (let* ((mint-path (gethash focus-site *Scrounge-Mint-Syspath-Hash*))
+             (cmpr-path (gethash focus-site *Scrounge-Cmpr-Syspath-Hash*))
+             (base-path (gethash focus-site *Scrounge-Basepage-Hash*))
+             (public-path (cond
+                           ((equal type "js") (gethash focus-site *Scrounge-Public-Js-Hash*))
+                           ((equal type "css") (gethash focus-site *Scrounge-Public-Css-Hash*))
+                           (t nil))))
+        (compile (concat "node " *Scrounge-Path* " -r -l -f "
+;;                         (if type (concat "-t " type) "")
+                         (if base-path (concat " -b " base-path) "")
+                         (if mint-path (concat " -i " mint-path) "")
+                         (if cmpr-path (concat " -o " cmpr-path) "")
+;;                         (if public-path (concat " -p " public-path) ""))))
+    ;(print (concat "node " *Scrounge-Path* " -i ./"))))
+    (compile (concat "node " *Scrounge-Path* " -i ./"))))
+
+
+(defun Cmpr-fake () (interactive)
+  "scrounge -f _only_ files of type being edited in the buffer"
+  (let ((extn (file-name-extension buffer-file-name)))
+    (cond ((equal extn "js") (Scrounge-fake "js"))
+          ((equal extn "css") (Scrounge-fake "css"))
+          (t nil))))
+
+(defun Cmpr-real () (interactive)
+  "scrounge _only_ files of type being edited in the buffer"
+  (let ((extn (file-name-extension buffer-file-name)))
+    (cond ((equal extn "js") (Scrounge "js"))
+          ((equal extn "css") (Scrounge "css"))
+          (t nil))))
+
+(defun Cmpr-all () (interactive)
+  "scrounge all files",
+  (Scrounge))
+
+(global-set-key (kbd "C-c n") (lambda() (interactive) (Cmpr-real)))
+(global-set-key (kbd "C-c m") (lambda() (interactive) (Cmpr-fake)))
+
+(defun string-replace (from to string &optional re)
+  (let ((pos 0)
+        (res "")
+        (from (if re from (regexp-quote from))))
+    (while (< pos (length string))
+      (if (setq beg (string-match from string pos))
+          (progn
+            (setq res (concat res
+                              (substring string pos (match-beginning 0))
+                              to))
+            (setq pos (match-end 0)))
+        (progn
+          (setq res (concat res (substring string pos (length string))))
+          (setq pos (length string)))))
+    res))
+
+(defun get-file-timestamp (file-name) (interactive)
+  "get the a timestamp from a _mint stamp"
+  (let* ((regexp "^\.*Timestamp:\[a-Z ]*(\[0-9\]*.\[0-9\]*.\[0-9\]*)\.*")
+         (match (shell-command-to-string
+                 (concat "egrep -i '" regexp "' " file-name))))
+    (if (> (length match) 1)
+        (let ((p (string-match "\\(\[0-9\]+.\[0-9\]+.\[0-9\]+\\)" match)))
+          (substring match p (match-end 0))))))
+
+(defun full-js-stamp() (interactive)
+  "add a full js mint stamp to the top of the buffer file"
+  (let ((filename (file-name-nondirectory buffer-file-name)))
+    (concat 
+     "// Filename: " (string-replace "_mint" "" filename) "\n"
+     "// Timestamp: " (format-time-string "%Y.%m.%d-%H:%M:%S") " (last modified)\n"
+     "// Author(s): Bumblehead (www.bumblehead.com)\n")))
+
+(defun full-css-stamp() (interactive)
+  "add a full css mint stamp to the top of the buffer file"
+  (let ((filename (file-name-nondirectory buffer-file-name)))
+    (concat 
+     "/* " (string-replace "_mint" "" filename) "\n"
+     " *\n"
+     " * Timestamp: " (format-time-string "%Y.%m.%d-%H:%M:%S") " (last modified)\n"
+     " * Author(s): Bumblehead (www.bumblehead.com)\n"
+     " */")))
+
+(defun time-stamp() (interactive)
+  "updates/adds buffer-file timestamp
+  '// Timestamp: 2011.05.21 (last modified)'
+  '/* Timestamp: 2011.05.21 (last modified) */'"
+  (let* ((regexp "^\.*Timestamp:\[a-Z ]*\\(\[0-9\]+.\[0-9\]+.\[0-9\]+\\)\.*")
+         (extn (file-name-extension (buffer-file-name)))
+         (time (format-time-string "%Y.%m.%d-%H:%M:%S"))
+         (timestamp
+          (cond ((equal extn "js")
+                 (concat "// Timestamp: " time " (last modified)"))
+                ((equal extn "css")
+                 (concat " * Timestamp: " time " (last modified)"))
+                (t
+                 (concat "// Timestamp: " time " (last modified)"))))
+         (old-point (point)))
+    (beginning-of-buffer)   
+    (if (re-search-forward regexp nil t)
+        (if (equal (match-string 1) time)
+            (goto-char old-point)
+          (replace-match timestamp)
+          (goto-char old-point))
+      (insert (if (equal extn "css") (full-css-stamp) (full-js-stamp))))
+    time))
+
+(defun add-template() (interactive)
+  "copy mustache file to mustache root"
+  (if (and focus-site (gethash focus-site *Public-Dir-Mustache-Hash*))
+     (let* ((root (gethash focus-site *Public-Dir-Mustache-Hash*))
+            (file-name buffer-file-name)
+            (file-base (file-name-nondirectory file-name)))
+       (shell-command (concat "cp " file-name " " root "/" file-base)))))
+
+(defun add-timestamped-template() (interactive)
+  "copy mustache file to mustache root"
+  (if (and focus-site (gethash focus-site *Public-Dir-Mustache-Hash*))
+     (let* ((root (gethash focus-site *Public-Dir-Mustache-Hash*))
+            (bashScriptsDir
+             (gethash focus-site *System-Dir-Bash-Hash*))
+            (timestamp (format-time-string "%Y.%m.%d-%H:%M:%S"))
+            (file-extn (file-name-extension buffer-file-name))
+            (file-base (file-name-sans-extension
+                        (file-name-nondirectory buffer-file-name)))
+            (file-new (concat file-base "_" timestamp "." file-extn)))
+       (progn ;; update templates dir (-to-string makes it silent)
+         (shell-command-to-string
+          (concat "rm " root "/" file-base "_" "*" "." file-extn))
+         (shell-command-to-string
+          (concat "cp " buffer-file-name " " root "/" file-new))
+         (shell-command-to-string 
+          (concat "bash " bashScriptsDir "/files_mapUpdate.sh "
+                  "-i " root "/ "
+                  "-f " file-new))))))
+
+(defun rm-similar-timestamped-template() (interactive)
+  "copy mustache file to mustache root"
+  (if (and focus-site (gethash focus-site *Public-Dir-Mustache-Hash*))
+     (let* ((root (gethash focus-site *Public-Dir-Mustache-Hash*))
+            (timestamp (format-time-string "%Y.%m.%d-%H:%M:%S"))
+            (file-extn (file-name-extension buffer-file-name))
+            (file-base (file-name-sans-extension
+                        (file-name-nondirectory buffer-file-name))))
+       (shell-command (concat "cp " buffer-file-name " " root "/" 
+                              file-base "_" timestamp "." file-extn)))))
+
+
+(add-hook 'write-file-hooks
+          '(lambda () ()
+             "when saving '_mint' files, add/update mint info at file"
+             (let ((regexp "^\.*\\(mint\\)$")
+                   (fname (file-name-sans-extension buffer-file-name)))
+               (if (string-match regexp fname) 
+                   (time-stamp))) nil))
+
+(add-hook 'after-save-hook
+          '(lambda ()
+             "timestamp if file has mint affixation..."
+             (let* ((regexp "^mustache$")
+                    (file-name buffer-file-name)
+                    (file-date (get-file-timestamp file-name))
+                    (file-path (file-name-directory file-name))
+                    (file-extn (file-name-extension file-name))
+                    (fname (file-name-sans-extension buffer-file-name)))
+               (if (string-match regexp file-extn)
+                   (add-timestamped-template)))
+             nil))
