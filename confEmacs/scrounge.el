@@ -2,33 +2,38 @@
 ;; (load-file "~/path/to/scrounge.el")
 
 
-(defvar *Scrounge-Path* "~/Software/scrounge/Scrounge.js")
-
+;;(defvar *Scrounge-Path* "~/Software/scrounge/Scrounge.js")
+(defvar *Scrounge-Path* "~/Software/scroungejs/Scrounge.js")
 (defvar *Project-Source-Hash* (make-hash-table :test 'equal))
-(puthash "iammegumi" "~/Software/iammegumi.com/project/appSrc" *Project-Source-Hash*)
-(puthash "kuaweb" "~/Software/kuaweb/project/appSrc" *Project-Source-Hash*)
-(puthash "kuaadmin" "~/Software/kuaweb/project/appSrc" *Project-Source-Hash*)
-
 (defvar *Project-Scrounge-Hash* (make-hash-table :test 'equal))
-(puthash "iammegumi" "~/Software/iammegumi.com/project/app" *Project-Scrounge-Hash*)
-(puthash "kuaweb" "~/Software/kuaweb/project/app" *Project-Scrounge-Hash*)
-(puthash "kuaadmin" "~/Software/kuaweb/project/app" *Project-Scrounge-Hash*)
-
-
+(defvar *Basepage-Path-Hash* (make-hash-table :test 'equal))
 (defvar *Project-Root-Hash* (make-hash-table :test 'equal))
-(puthash "iammegumi" "~/Software/iammegumi.com" *Project-Root-Hash*)
-(puthash "kuaweb" "~/Software/kuaweb" *Project-Root-Hash*)
-(puthash "kuaadmin" "~/Software/kuaweb" *Project-Root-Hash*)
-
 (defvar *Public-Root-Hash* (make-hash-table :test 'equal))
+
+(puthash "iammegumi" "~/Software/iammegumi.com/project/appSrc" *Project-Source-Hash*)
+(puthash "iammegumi" "~/Software/iammegumi.com/project/app" *Project-Scrounge-Hash*)
+(puthash "iammegumi" "~/Software/iammegumi.com/index.html" *Basepage-Path-Hash*)
+(puthash "iammegumi" "~/Software/iammegumi.com" *Project-Root-Hash*)
 (puthash "iammegumi" "/scrounge" *Public-Root-Hash*)
+
+(puthash "kuaweb" "~/Software/kuaweb/project/appSrc" *Project-Source-Hash*)
+(puthash "kuaweb" "~/Software/kuaweb/project/app" *Project-Scrounge-Hash*)
+(puthash "kuaweb" "~/Software/kuaweb/index.html" *Basepage-Path-Hash*)
+(puthash "kuaweb" "~/Software/kuaweb" *Project-Root-Hash*)
 (puthash "kuaweb" "/project/app" *Public-Root-Hash*)
+
+(puthash "kuaadmin" "~/Software/kuaweb/project/appSrc" *Project-Source-Hash*)
+(puthash "kuaadmin" "~/Software/kuaweb/project/app" *Project-Scrounge-Hash*)
+(puthash "kuaadmin" "~/Software/kuaweb/admin.html" *Basepage-Path-Hash*)
+(puthash "kuaadmin" "~/Software/kuaweb" *Project-Root-Hash*)
 (puthash "kuaadmin" "/project/app" *Public-Root-Hash*)
 
-(defvar *Basepage-Path-Hash* (make-hash-table :test 'equal))
-(puthash "iammegumi" "~/Software/iammegumi.com/index.html" *Basepage-Path-Hash*)
-(puthash "kuaweb" "~/Software/kuaweb/index.html" *Basepage-Path-Hash*)
-(puthash "kuaadmin" "~/Software/kuaweb/admin.html" *Basepage-Path-Hash*)
+(puthash "scroungejs" "~/Software/scroungejs.com/sources/appSrc" *Project-Source-Hash*)
+(puthash "scroungejs" "~/Software/scroungejs.com/sources/app" *Project-Scrounge-Hash*)
+(puthash "scroungejs" "~/Software/scroungejs.com/sources/index.mustache" *Basepage-Path-Hash*)
+(puthash "scroungejs" "~/Software/scroungejs.com" *Project-Root-Hash*)
+(puthash "scroungejs" "/app" *Public-Root-Hash*)
+
 
 (defun Sass (&optional site) (interactive "sSingle-assemble which site?: ")
   "calls mvn assembly process on specified directory path"
