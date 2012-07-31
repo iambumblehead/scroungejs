@@ -152,7 +152,9 @@ var scrounge = {
     var treeFilters, graph = Graph.get(),
         treeArr = graph.addFileInfoArr(fileInfoObjArr).getSourceArr();
 
-    treeArr = filters.getFilteredTreeArr(treeArr);
+    if (filters) {
+      treeArr = filters.getFilteredTreeArr(treeArr);    
+    }
     treeArr = treeArr.map(function (tree) {
       return InfoTree.getNew({
         fileObjArr : graph.getSorted(tree),
@@ -198,7 +200,7 @@ var scrounge = {
           treeObjArr = scrounge.getAsTrees(fileInfoObjArr, filters);
           scrounge.treesInspect(treeObjArr, function (err) {
             if (err) return funchandle(err);
-            scrounge.getAssociatedTrees(filters.trees, treeObjArr, function (err, assocTreeArr) {
+            scrounge.getAssociatedTrees((filters) ? filters.trees : null, treeObjArr, function (err, assocTreeArr) {
               if (err) return funchandle(err);              
               for (x = assocTreeArr.length; x--;) {
                 treeObjArr.push(assocTreeArr[x]);
