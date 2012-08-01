@@ -194,7 +194,6 @@ var scrounge = {
         if (err) return funchandle(err);
         scrounge.getFileInfoObjArr(fileInfoArr, function (err, fileInfoObjArr) {
           if (err) return funchandle(err);          
-
           treeObjArr = scrounge.getAsTrees(fileInfoObjArr, filters);
           scrounge.treesInspect(treeObjArr, function (err) {
             if (err) return funchandle(err);
