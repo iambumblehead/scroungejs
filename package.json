@@ -4,6 +4,6 @@
     "dependencies" : {
         "optimist" : "0.3.0",
         "uglify-js" : "1.2.0",
-        "clean-css" : "0.3.1"
+        "clean-css" : "0.5.0"
     }
 }
