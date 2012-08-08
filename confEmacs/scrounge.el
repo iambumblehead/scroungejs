@@ -34,6 +34,12 @@
 (puthash "scroungejs" "~/Software/scroungejs.com" *Project-Root-Hash*)
 (puthash "scroungejs" "/app" *Public-Root-Hash*)
 
+(puthash "kuapayDemo" "~/Software/kuapayDemo.com/sources/appSrc" *Project-Source-Hash*)
+(puthash "kuapayDemo" "~/Software/kuapayDemo.com/sources/app" *Project-Scrounge-Hash*)
+(puthash "kuapayDemo" "~/Software/kuapayDemo.com/sources/index.mustache" *Basepage-Path-Hash*)
+(puthash "kuapayDemo" "~/Software/kuapayDemo.com" *Project-Root-Hash*)
+(puthash "kuapayDemo" "/app" *Public-Root-Hash*)
+
 
 (defun Sass (&optional site) (interactive "sSingle-assemble which site?: ")
   "calls mvn assembly process on specified directory path"
