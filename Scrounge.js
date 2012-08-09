@@ -155,6 +155,7 @@ var scrounge = {
     if (filters) {
       treeArr = filters.getFilteredTreeArr(treeArr);    
     }
+
     treeArr = treeArr.map(function (tree) {
       return InfoTree.getNew({
         fileObjArr : graph.getSorted(tree),
@@ -196,7 +197,15 @@ var scrounge = {
         if (err) return funchandle(err);
         scrounge.getFileInfoObjArr(fileInfoArr, function (err, fileInfoObjArr) {
           if (err) return funchandle(err);          
-          treeObjArr = scrounge.getAsTrees(fileInfoObjArr, filters);
+
+          if (opts.isUpdateOnly) {
+            treeObjArr = [InfoTree.getNew({
+              fileObjArr : fileInfoObjArr,
+              fileInfoObj : fileInfoObjArr[0] 
+            })];
+          } else {
+            treeObjArr = scrounge.getAsTrees(fileInfoObjArr, filters);            
+          }
           scrounge.treesInspect(treeObjArr, function (err) {
             if (err) return funchandle(err);
             scrounge.getAssociatedTrees((filters) ? filters.trees : null, treeObjArr, function (err, assocTreeArr) {

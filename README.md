@@ -436,7 +436,10 @@ example scrounge elements are given below
    add a timestamp to name of the output files.
 
  - `--isRemoveRequires=`_bool_  
-   remove 'requires' statements from javascript files.
+   remove 'requires' statements from javascript files. `true` by default.
+   
+ - `--isUpdateOnly=`_bool_  
+   modify include tags in a basepage only. do not build scrounge elements.
 
  - `--extensionType=`_type_, `-t` _type_   
    process files of one type only, `js` or `css`.

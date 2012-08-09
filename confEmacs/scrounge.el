@@ -88,6 +88,7 @@
                          (if project-path (concat " --inputPath=" project-path) "")
                          (if public-path (concat " --outputPath=" public-path) ""))))))
 
+
 (defun Cmpr-fake () (interactive)
   "scrounge -f _only_ files of type being edited in the buffer"
   (let ((extn (file-name-extension buffer-file-name)))
@@ -210,31 +211,23 @@
          (concat "cp " buffer-file-name " " scrounge-root "/" file-name)))))
 
 
-(defun add-bufferfile-to-scrounge-dir() (interactive)
-  "add buffer file to scrounge root"
+(defun Scrounge-update-buffer-file (&optional type is-fake) (interactive)
+  "compress the buffer file with scrounge"
+  (setq compilation-scroll-output t)
   (if (and focus-site (gethash focus-site *Project-Root-Hash*))
-      ;; get similar file and remove it
-      (let* ((scrounge-root (gethash focus-site *Project-Scrounge-Hash*))
-             (file-name (file-name-nondirectory buffer-file-name))
-             (file-extn (file-name-extension buffer-file-name))
-             (file-base (file-name-sans-extension file-name))
-             (timestamp (format-time-string "%Y.%m.%d-%H:%M:%S"))
-             (file-base-nomint (string-replace "_mint" "" file-base))
-             (date-match "_[0-9][0-9][0-9][0-9].[0-9][0-9].[0-9][0-9]")
-             (time-match "-[0-9][0-9]:[0-9][0-9]:[0-9][0-9]")
-             (old-file (concat file-base-nomint date-match time-match "." file-extn))
-             (new-file (concat file-base-nomint "_" timestamp "." file-extn)))
-        (shell-command-to-string
-         (concat "rm " scrounge-root "/" old-file))
-        (shell-command-to-string
-         (concat "cp " buffer-file-name " " scrounge-root "/" new-file))
-        (shell-command-to-string
-         (concat "bash " (gethash focus-site *Project-Root-Hash*) "/bash/files_mapUpdate.sh "
-                 " -i " scrounge-root
-                 " -m " (gethash focus-site *Basepage-Path-Hash*)
-                 " -f " file-name))
-        )))
-  
+      (let* ((project-path (gethash focus-site *Project-Source-Hash*))
+             (public-path (gethash focus-site *Project-Scrounge-Hash*))
+             (public-root-path (gethash focus-site *Public-Root-Hash*))
+             (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
+        (shell-command-to-string (concat "node " *Scrounge-Path* " -l --isMintFilter=true --isRecursive=true --isTimestamped=true --isUpdateOnly=true --isSilent=true "
+                         (if is-fake " --isCompressed=false ")
+                         (if is-fake " --isConcatenation=false")
+                         (if public-root-path (concat " --publicPath=" public-root-path) "")
+                         (if basepage-path (concat " --basepage=" basepage-path) "")                         
+                         (if project-path (concat " --inputPath=" buffer-file-name) "")
+                         (if public-path (concat " --outputPath=" public-path) ""))))))
+
+
 (add-hook 'write-file-hooks
           '(lambda () ()
              "when saving '_mint' files, add/update mint info at file"
@@ -252,9 +245,11 @@
                  (if (string-match mustache-re buffer-file-name)
                      (cp-bufferfile-to-scrounge-dir))
                  (if (string-match mintjs-re buffer-file-name)
-                     (add-bufferfile-to-scrounge-dir))
+;                     (add-bufferfile-to-scrounge-dir))
+                     (Scrounge-update-buffer-file))
                  (if (string-match mintcss-re buffer-file-name)
-                     (add-bufferfile-to-scrounge-dir)))
+                     (Scrounge-update-buffer-file)))
+;                     (add-bufferfile-to-scrounge-dir)))
                ) nil))
              
              
