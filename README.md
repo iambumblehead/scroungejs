@@ -21,11 +21,11 @@ Scrounge.js provides advantages over other deployment tools:
  - it is packaged with an emacs config file.
  
 Scrounge.js relies on other packages, notably: [css-clean][1] and 
-[js-uglify][2].  
+[js-uglify][2].
 
 [Get Started](#get-started) with Scrounge.js to learn more.
 
-[0]: http://www.freebsd.or/copyright/freebsd-license.html  "BSD-license"
+[0]: http://github.com/medikoo/find-requires               "find-requires"
 [1]: http://github.com/GoalSmashers/clean-css              "css-clean"
 [2]: http://github.com/mishoo/UglifyJS                     "js-uglify"
 
@@ -434,6 +434,12 @@ example scrounge elements are given below
 
  - `--isTimestamped=`_bool_  
    add a timestamp to name of the output files.
+
+ - `--isRemoveRequires=`_bool_  
+   remove 'requires' statements from javascript files. `true` by default.
+   
+ - `--isUpdateOnly=`_bool_  
+   modify include tags in a basepage only. do not build scrounge elements.
 
  - `--extensionType=`_type_, `-t` _type_   
    process files of one type only, `js` or `css`.
