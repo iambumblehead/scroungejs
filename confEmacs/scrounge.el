@@ -82,6 +82,23 @@
                          (if project-path (concat " --inputPath=" project-path) "")
                          (if public-path (concat " --outputPath=" public-path) ""))))))
 
+(defun Scrounge-warn (&optional type is-fake) (interactive)
+  "compress the buffer file with scrounge"
+  (setq compilation-scroll-output t)
+  (if (and focus-site (gethash focus-site *Project-Root-Hash*))
+      (let* ((project-path (gethash focus-site *Project-Source-Hash*))
+             (public-path (gethash focus-site *Project-Scrounge-Hash*))
+             (public-root-path (gethash focus-site *Public-Root-Hash*))
+             (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
+        (compile (concat "node " *Scrounge-Path* " -l --isMintFilter=true --isRecursive=true --isTimestamped=true --isWarning=true "
+                         (if is-fake " --isCompressed=false" " --isCompressed=true")
+                         (if is-fake " --isConcatenation=false" " --isConcatenation=true")
+                         (if public-root-path (concat " --publicPath=" public-root-path) "")
+                         (if basepage-path (concat " --basepage=" basepage-path) "")                         
+                         (if project-path (concat " --inputPath=" project-path) "")
+                         (if public-path (concat " --outputPath=" public-path) ""))))))
+
+
 (defun Cmpr-fake () (interactive)
   "scrounge -f _only_ files of type being edited in the buffer"
   (let ((extn (file-name-extension buffer-file-name)))
