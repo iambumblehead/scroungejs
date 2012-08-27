@@ -24,13 +24,13 @@
 
 (puthash "kuaadmin" "~/Software/kuaweb/sources/appSrc" *Project-Source-Hash*)
 (puthash "kuaadmin" "~/Software/kuaweb/sources/app" *Project-Scrounge-Hash*)
-(puthash "kuaadmin" "~/Software/kuaweb/admin.html" *Basepage-Path-Hash*)
+(puthash "kuaadmin" "~/Software/kuaweb/sources/admin.html" *Basepage-Path-Hash*)
 (puthash "kuaadmin" "~/Software/kuaweb" *Project-Root-Hash*)
 (puthash "kuaadmin" "/app" *Public-Root-Hash*)
 
 (puthash "kuaweb" "~/Software/kuaweb/sources/appSrc" *Project-Source-Hash*)
 (puthash "kuaweb" "~/Software/kuaweb/sources/app" *Project-Scrounge-Hash*)
-(puthash "kuaweb" "~/Software/kuaweb/index.html" *Basepage-Path-Hash*)
+(puthash "kuaweb" "~/Software/kuaweb/sources/index.html" *Basepage-Path-Hash*)
 (puthash "kuaweb" "~/Software/kuaweb" *Project-Root-Hash*)
 (puthash "kuaweb" "/app" *Public-Root-Hash*)
 
@@ -237,6 +237,7 @@
              (public-root-path (gethash focus-site *Public-Root-Hash*))
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
         (shell-command-to-string (concat "node " *Scrounge-Path* " -l --isMintFilter=true --isRecursive=true --isTimestamped=true --isUpdateOnly=true --isSilent=true "
+;;        (print (concat "node " *Scrounge-Path* " -l --isMintFilter=true --isRecursive=true --isTimestamped=true --isUpdateOnly=true --isSilent=true "
                          (if is-fake " --isCompressed=false ")
                          (if is-fake " --isConcatenation=false")
                          (if public-root-path (concat " --publicPath=" public-root-path) "")
