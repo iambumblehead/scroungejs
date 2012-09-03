@@ -10,11 +10,11 @@
 (defvar *Project-Root-Hash* (make-hash-table :test 'equal))
 (defvar *Public-Root-Hash* (make-hash-table :test 'equal))
 
-(puthash "iammegumi" "~/Software/iammegumi.com/project/appSrc" *Project-Source-Hash*)
-(puthash "iammegumi" "~/Software/iammegumi.com/project/app" *Project-Scrounge-Hash*)
-(puthash "iammegumi" "~/Software/iammegumi.com/index.html" *Basepage-Path-Hash*)
+(puthash "iammegumi" "~/Software/iammegumi.com/sources/appSrc" *Project-Source-Hash*)
+(puthash "iammegumi" "~/Software/iammegumi.com/sources/app" *Project-Scrounge-Hash*)
+(puthash "iammegumi" "~/Software/iammegumi.com/sources/index.mustache" *Basepage-Path-Hash*)
 (puthash "iammegumi" "~/Software/iammegumi.com" *Project-Root-Hash*)
-(puthash "iammegumi" "/scrounge" *Public-Root-Hash*)
+(puthash "iammegumi" "/app" *Public-Root-Hash*)
 
 (puthash "kuaweb" "~/Software/kuaweb/project/appSrc" *Project-Source-Hash*)
 (puthash "kuaweb" "~/Software/kuaweb/project/app" *Project-Scrounge-Hash*)
