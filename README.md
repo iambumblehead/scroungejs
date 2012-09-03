@@ -37,6 +37,7 @@ have all dependencies fetched for you.
 
 > `$ cd /path/to/scrounge/ && npm install`
 
+If you have npm installed, you may also use `npm install scroungejs`
 
 ---------------------------------------------------------
 
