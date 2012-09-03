@@ -1,8 +1,6 @@
 ;; load this file by including the below line in your .emacs
 ;; (load-file "~/path/to/scrounge.el")
 
-
-;;(defvar *Scrounge-Path* "~/Software/scrounge/Scrounge.js")
 (defvar *Scrounge-Path* "~/Software/scroungejs/scrounge.js")
 (defvar *Project-Source-Hash* (make-hash-table :test 'equal))
 (defvar *Project-Scrounge-Hash* (make-hash-table :test 'equal))
