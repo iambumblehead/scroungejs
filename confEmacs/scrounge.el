@@ -16,23 +16,23 @@
 (puthash "iammegumi" "~/Software/iammegumi.com" *Project-Root-Hash*)
 (puthash "iammegumi" "/app" *Public-Root-Hash*)
 
-(puthash "kuaweb" "~/Software/kuaweb/project/appSrc" *Project-Source-Hash*)
-(puthash "kuaweb" "~/Software/kuaweb/project/app" *Project-Scrounge-Hash*)
-(puthash "kuaweb" "~/Software/kuaweb/index.html" *Basepage-Path-Hash*)
-(puthash "kuaweb" "~/Software/kuaweb" *Project-Root-Hash*)
-(puthash "kuaweb" "/project/app" *Public-Root-Hash*)
-
-(puthash "kuaadmin" "~/Software/kuaweb/project/appSrc" *Project-Source-Hash*)
-(puthash "kuaadmin" "~/Software/kuaweb/project/app" *Project-Scrounge-Hash*)
-(puthash "kuaadmin" "~/Software/kuaweb/admin.html" *Basepage-Path-Hash*)
-(puthash "kuaadmin" "~/Software/kuaweb" *Project-Root-Hash*)
-(puthash "kuaadmin" "/project/app" *Public-Root-Hash*)
-
 (puthash "scroungejs" "~/Software/scroungejs.com/sources/appSrc" *Project-Source-Hash*)
 (puthash "scroungejs" "~/Software/scroungejs.com/sources/app" *Project-Scrounge-Hash*)
 (puthash "scroungejs" "~/Software/scroungejs.com/sources/index.mustache" *Basepage-Path-Hash*)
 (puthash "scroungejs" "~/Software/scroungejs.com" *Project-Root-Hash*)
 (puthash "scroungejs" "/app" *Public-Root-Hash*)
+
+(puthash "kuaadmin" "~/Software/kuaweb/sources/appSrc" *Project-Source-Hash*)
+(puthash "kuaadmin" "~/Software/kuaweb/sources/app" *Project-Scrounge-Hash*)
+(puthash "kuaadmin" "~/Software/kuaweb/sources/admin.html" *Basepage-Path-Hash*)
+(puthash "kuaadmin" "~/Software/kuaweb" *Project-Root-Hash*)
+(puthash "kuaadmin" "/app" *Public-Root-Hash*)
+
+(puthash "kuaweb" "~/Software/kuaweb/sources/appSrc" *Project-Source-Hash*)
+(puthash "kuaweb" "~/Software/kuaweb/sources/app" *Project-Scrounge-Hash*)
+(puthash "kuaweb" "~/Software/kuaweb/sources/index.html" *Basepage-Path-Hash*)
+(puthash "kuaweb" "~/Software/kuaweb" *Project-Root-Hash*)
+(puthash "kuaweb" "/app" *Public-Root-Hash*)
 
 (puthash "kuapayDemo" "~/Software/kuapayDemo.com/sources/appSrc" *Project-Source-Hash*)
 (puthash "kuapayDemo" "~/Software/kuapayDemo.com/sources/app" *Project-Scrounge-Hash*)
@@ -83,6 +83,23 @@
         (compile (concat "node " *Scrounge-Path* " -l --isMintFilter=true --isRecursive=true --isTimestamped=true ";;--forceConcatenateTypes=css "
                          (if is-fake " --isCompressed=false" " --isCompressed=true")
                          (if is-fake " --isConcatenation=false" " --isConcatenation=true")
+                         (if public-root-path (concat " --publicPath=" public-root-path) "")
+                         (if basepage-path (concat " --basepage=" basepage-path) "")                         
+                         (if project-path (concat " --inputPath=" project-path) "")
+                         (if public-path (concat " --outputPath=" public-path) ""))))))
+
+
+(defun Scrounge-warn (&optional type is-fake) (interactive)
+  "compress the buffer file with scrounge"
+  (setq compilation-scroll-output t)
+  (if (and focus-site (gethash focus-site *Project-Root-Hash*))
+      (let* ((project-path (gethash focus-site *Project-Source-Hash*))
+             (public-path (gethash focus-site *Project-Scrounge-Hash*))
+             (public-root-path (gethash focus-site *Public-Root-Hash*))
+             (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
+        (compile (concat "node " *Scrounge-Path* " -l --isMintFilter=true --isRecursive=true --isTimestamped=true --isWarning=true "
+                         (if is-fake " --isCompressed=false ")
+                         (if is-fake " --isConcatenation=false ")
                          (if public-root-path (concat " --publicPath=" public-root-path) "")
                          (if basepage-path (concat " --basepage=" basepage-path) "")                         
                          (if project-path (concat " --inputPath=" project-path) "")
@@ -220,6 +237,7 @@
              (public-root-path (gethash focus-site *Public-Root-Hash*))
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
         (shell-command-to-string (concat "node " *Scrounge-Path* " -l --isMintFilter=true --isRecursive=true --isTimestamped=true --isUpdateOnly=true --isSilent=true "
+;;        (print (concat "node " *Scrounge-Path* " -l --isMintFilter=true --isRecursive=true --isTimestamped=true --isUpdateOnly=true --isSilent=true "
                          (if is-fake " --isCompressed=false ")
                          (if is-fake " --isConcatenation=false")
                          (if public-root-path (concat " --publicPath=" public-root-path) "")
