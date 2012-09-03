@@ -3,7 +3,7 @@
 
 
 ;;(defvar *Scrounge-Path* "~/Software/scrounge/Scrounge.js")
-(defvar *Scrounge-Path* "~/Software/scroungejs/Scrounge.js")
+(defvar *Scrounge-Path* "~/Software/scroungejs/scrounge.js")
 (defvar *Project-Source-Hash* (make-hash-table :test 'equal))
 (defvar *Project-Scrounge-Hash* (make-hash-table :test 'equal))
 (defvar *Basepage-Path-Hash* (make-hash-table :test 'equal))
