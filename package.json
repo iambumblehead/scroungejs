@@ -1,5 +1,5 @@
 {
-    "name" : "Scrounge.js",
+    "name" : "scroungejs",
     "version" : "0.1.0",
     "dependencies" : {
         "optimist" : "0.3.0",
