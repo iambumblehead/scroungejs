@@ -1,6 +1,6 @@
 Scrounge.js
 ===========
-**(c)Bumblehead, 2012** [MIT-license](#license)  
+**(c)[Bumblehead][0], 2012** [MIT-license](#license)  
 ![scrounge](http://github.com/iambumblehead/scroungejs/raw/master/img/hand3.png)
 ### OVERVIEW:
 
@@ -25,7 +25,7 @@ Scrounge.js relies on other packages, notably: [css-clean][1] and
 
 [Get Started](#get-started) with Scrounge.js to learn more.
 
-[0]: http://github.com/medikoo/find-requires               "find-requires"
+[0]: http://www.bumblehead.com                             "bumblehead"
 [1]: http://github.com/GoalSmashers/clean-css              "css-clean"
 [2]: http://github.com/mishoo/UglifyJS                     "js-uglify"
 
@@ -383,7 +383,7 @@ example scrounge elements are given below
   >  `<!-- <scrounge.css tree="Map.css,Main.js"> -->`  
   >  `<!-- </scrounge> -->`  
   >  `<!-- <scrounge.js tree="Main.js,Crypto.js"> -->`  
-  >  `<!-- </scrounge> -->`
+  >  `<!-- </scrounge> -->`  
   >  `<!-- <scrounge.css tree="Main.js"> -->`  
   >  `<!-- </scrounge> -->`  
 
@@ -468,7 +468,7 @@ example scrounge elements are given below
 
 (The MIT License)
 
-Copyright (c) 2012 Bumblehead <chris@bumblehead.com>
+Copyright (c) 2012 [Bumblehead][0] <chris@bumblehead.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of 
 this software and associated documentation files (the 'Software'), to deal in 
