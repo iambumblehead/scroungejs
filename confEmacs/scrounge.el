@@ -134,24 +134,6 @@
 (global-set-key (kbd "C-c c") (lambda() (interactive) (Cmpr-warn)))
 
 
-;; ----------------------------------
-(defun project-replace (searchStr) (interactive "sReplace what?: ")
-  "open each file in a buffer with activated string replace"
-  (let*
-      ((bashScriptsDir
-             (gethash focus-site *Scrounge-BashScripts-Syspath-Hash*))
-       (files (process-lines
-         (shell-command
-          (concat "bash " bashScriptsDir "/findFilesContaining.sh "
-                  "-d " bashScriptsDir "/../js/ "
-                  "-s " searchStr)
-          )))
-
-       
-       (print files)
-     )))
-;; ----------------------------------
-
 (defun concat-all-css () (interactive)
   (let
       ((bashScriptsDir
@@ -243,7 +225,6 @@
              (public-root-path (gethash focus-site *Public-Root-Hash*))
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
         (shell-command-to-string (concat "node " *Scrounge-Path* " -l --isMintFilter=true --isRecursive=true --isTimestamped=true --isUpdateOnly=true --isSilent=true "
-;;        (print (concat "node " *Scrounge-Path* " -l --isMintFilter=true --isRecursive=true --isTimestamped=true --isUpdateOnly=true --isSilent=true "
                          (if is-fake " --isCompressed=false ")
                          (if is-fake " --isConcatenation=false")
                          (if public-root-path (concat " --publicPath=" public-root-path) "")
@@ -269,11 +250,9 @@
                  (if (string-match mustache-re buffer-file-name)
                      (cp-bufferfile-to-scrounge-dir))
                  (if (string-match mintjs-re buffer-file-name)
-;                     (add-bufferfile-to-scrounge-dir))
                      (Scrounge-update-buffer-file))
                  (if (string-match mintcss-re buffer-file-name)
                      (Scrounge-update-buffer-file)))
-;                     (add-bufferfile-to-scrounge-dir)))
                ) nil))
              
              
