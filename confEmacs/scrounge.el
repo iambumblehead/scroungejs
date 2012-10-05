@@ -78,7 +78,7 @@
              (public-path (gethash focus-site *Project-Scrounge-Hash*))
              (public-root-path (gethash focus-site *Public-Root-Hash*))
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
-        (compile (concat "node " *Scrounge-Path* " -l --isMintFilter=true --isRecursive=true --isTimestamped=true ";;--forceConcatenateTypes=css "
+        (compile (concat "node " *Scrounge-Path* " -l --isRecursive=true --isTimestamped=true "
                          (if is-fake " --isCompressed=false" " --isCompressed=true")
                          (if is-fake " --isConcatenation=false" " --isConcatenation=true")
                          (if public-root-path (concat " --publicPath=" public-root-path) "")
@@ -95,7 +95,7 @@
              (public-path (gethash focus-site *Project-Scrounge-Hash*))
              (public-root-path (gethash focus-site *Public-Root-Hash*))
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
-        (compile (concat "node " *Scrounge-Path* " -l --isMintFilter=true --isRecursive=true --isTimestamped=true --isWarning=true "
+        (compile (concat "node " *Scrounge-Path* " -l --isRecursive=true --isTimestamped=true --isWarning=true "
                          (if is-fake " --isCompressed=false ")
                          (if is-fake " --isConcatenation=false ")
                          (if public-root-path (concat " --publicPath=" public-root-path) "")
@@ -169,10 +169,17 @@
 
 (defun is-scrounge-file (file-name) ()
   "is the buffer file a scrounge file? is `Filename: $name` on first line?"
-  (let* ((regexp "^(//|/\\*) Filename:\.*")
-         (match (shell-command-to-string
-                 (concat "egrep -i '" regexp "' " file-name))))
-    (if (> (length match) 1) "true")))
+  (let* ((extn (file-name-extension buffer-file-name)))
+    (if (or (equal extn "js") 
+            (equal extn "css"))
+               
+        (let* ((regexp "^(//|/\\*) Filename:\.*")
+               (match (shell-command-to-string
+                       (concat "egrep -i '" regexp "' " file-name))))
+          (if (> (length match) 1) "true")))))
+
+(defun check () (interactive)
+  (print (is-scrounge-file buffer-file-name)))
 
 
 (defun full-js-stamp() (interactive)
@@ -224,6 +231,8 @@
          (concat "cp " buffer-file-name " " scrounge-root "/" file-name)))))
 
 
+(defun show-path () (interactive)
+  (print *Scrounge-Path*))
 
 
 (defun Scrounge-update-buffer-file (&optional type is-fake) (interactive)
@@ -234,39 +243,42 @@
              (public-path (gethash focus-site *Project-Scrounge-Hash*))
              (public-root-path (gethash focus-site *Public-Root-Hash*))
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
-        (shell-command-to-string (concat "node " *Scrounge-Path* " -l --isMintFilter=true --isRecursive=true --isTimestamped=true --isUpdateOnly=true --isSilent=true "
-                         (if is-fake " --isCompressed=false ")
-                         (if is-fake " --isConcatenation=false")
-                         (if public-root-path (concat " --publicPath=" public-root-path) "")
-                         (if basepage-path (concat " --basepage=" basepage-path) "")                         
-                         (if project-path (concat " --inputPath=" buffer-file-name) "")
-                         (if public-path (concat " --outputPath=" public-path) ""))))))
+        (shell-command-to-string 
+         (concat "node " *Scrounge-Path* 
+                 " -l --isRecursive=true --isTimestamped=true --isUpdateOnly=true --isSilent=true "
+                 (if is-fake " --isCompressed=false ")
+                 (if is-fake " --isConcatenation=false")
+                 (if public-root-path (concat " --publicPath=" public-root-path) "")
+                 (if basepage-path (concat " --basepage=" basepage-path) "")                         
+                 (if project-path (concat " --inputPath=" buffer-file-name) "")
+                 (if public-path (concat " --outputPath=" public-path) ""))))))
+
+
+
+(defun update-buffer-file-timestamp () (interactive)
+  (let ((extn (file-name-extension buffer-file-name)))
+    (if (is-scrounge-file buffer-file-name)
+        (time-stamp))))
+
+(defun update-buffer-file () (interactive)
+  "check if buffer file is scrounge related -if so, scrounge-update"
+  (let* ((mustache-re "mustache$"))
+    (progn
+      (if (string-match mustache-re buffer-file-name)
+          (cp-bufferfile-to-scrounge-dir))
+      (if (is-scrounge-file buffer-file-name)
+          (Scrounge-update-buffer-file)))))
 
 
 (add-hook 'write-file-hooks
           '(lambda () ()
              "when saving '_mint' files, add/update mint info at file"
-             (let ((regexp "^\.*\\(mint\\)$")
-                   (fname (file-name-sans-extension buffer-file-name)))
-               (if (string-match regexp fname) 
-                   (time-stamp))) nil))
-
-
+             (update-buffer-file-timestamp)
+             nil))
 
 (add-hook 'after-save-hook
           '(lambda ()
-             (let* ((mustache-re "mustache$")
-                    (js-re "js$")
-                    (css-re "css$"))
-               (progn
-                 (if (string-match mustache-re buffer-file-name)
-                     (cp-bufferfile-to-scrounge-dir))
-                 (if (string-match js-re buffer-file-name)
-                     (if (is-scrounge-file buffer-file-name)
-                         (Scrounge-update-buffer-file)))
-                 (if (string-match css-re buffer-file-name)
-                     (if (is-scrounge-file buffer-file-name)
-                         (Scrounge-update-buffer-file))))
-               ) nil))
+             (update-buffer-file)
+             nil))
              
              
