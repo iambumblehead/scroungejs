@@ -1,20 +1,18 @@
 ;; load this file by including the below line in your .emacs
 ;; (load-file "~/path/to/scrounge.el")
 
-
-;;(defvar *Scrounge-Path* "~/Software/scrounge/Scrounge.js")
-(defvar *Scrounge-Path* "~/Software/scroungejs/Scrounge.js")
+(defvar *Scrounge-Path* "~/Software/scroungejs/scrounge.js")
 (defvar *Project-Source-Hash* (make-hash-table :test 'equal))
 (defvar *Project-Scrounge-Hash* (make-hash-table :test 'equal))
 (defvar *Basepage-Path-Hash* (make-hash-table :test 'equal))
 (defvar *Project-Root-Hash* (make-hash-table :test 'equal))
 (defvar *Public-Root-Hash* (make-hash-table :test 'equal))
 
-(puthash "iammegumi" "~/Software/iammegumi.com/project/appSrc" *Project-Source-Hash*)
-(puthash "iammegumi" "~/Software/iammegumi.com/project/app" *Project-Scrounge-Hash*)
-(puthash "iammegumi" "~/Software/iammegumi.com/index.html" *Basepage-Path-Hash*)
+(puthash "iammegumi" "~/Software/iammegumi.com/sources/appSrc" *Project-Source-Hash*)
+(puthash "iammegumi" "~/Software/iammegumi.com/sources/app" *Project-Scrounge-Hash*)
+(puthash "iammegumi" "~/Software/iammegumi.com/sources/index.mustache" *Basepage-Path-Hash*)
 (puthash "iammegumi" "~/Software/iammegumi.com" *Project-Root-Hash*)
-(puthash "iammegumi" "/scrounge" *Public-Root-Hash*)
+(puthash "iammegumi" "/app" *Public-Root-Hash*)
 
 (puthash "scroungejs" "~/Software/scroungejs.com/sources/appSrc" *Project-Source-Hash*)
 (puthash "scroungejs" "~/Software/scroungejs.com/sources/app" *Project-Scrounge-Hash*)
