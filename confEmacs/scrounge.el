@@ -158,7 +158,7 @@
           (setq pos (length string)))))
     res))
 
-(defun get-file-timestamp (file-name) (interactive)
+(defun get-file-timestamp (file-name) ()
   "get the a timestamp from a _mint stamp"
   (let* ((regexp "^\.*Timestamp:\[a-Z ]*(\[0-9\]*.\[0-9\]*.\[0-9\]*)\.*")
          (match (shell-command-to-string
@@ -166,6 +166,14 @@
     (if (> (length match) 1)
         (let ((p (string-match "\\(\[0-9\]+.\[0-9\]+.\[0-9\]+\\)" match)))
           (substring match p (match-end 0))))))
+
+(defun is-scrounge-file (file-name) ()
+  "is the buffer file a scrounge file? is `Filename: $name` on first line?"
+  (let* ((regexp "^(//|/\\*) Filename:\.*")
+         (match (shell-command-to-string
+                 (concat "egrep -i '" regexp "' " file-name))))
+    (if (> (length match) 1) "true")))
+
 
 (defun full-js-stamp() (interactive)
   "add a full js mint stamp to the top of the buffer file"
@@ -216,6 +224,8 @@
          (concat "cp " buffer-file-name " " scrounge-root "/" file-name)))))
 
 
+
+
 (defun Scrounge-update-buffer-file (&optional type is-fake) (interactive)
   "compress the buffer file with scrounge"
   (setq compilation-scroll-output t)
@@ -241,18 +251,22 @@
                (if (string-match regexp fname) 
                    (time-stamp))) nil))
 
+
+
 (add-hook 'after-save-hook
           '(lambda ()
              (let* ((mustache-re "mustache$")
-                    (mintjs-re "^\.*\\(_mint\\).js$")
-                    (mintcss-re "^\.*\\(_mint\\).css$"))
+                    (js-re "js$")
+                    (css-re "css$"))
                (progn
                  (if (string-match mustache-re buffer-file-name)
                      (cp-bufferfile-to-scrounge-dir))
-                 (if (string-match mintjs-re buffer-file-name)
-                     (Scrounge-update-buffer-file))
-                 (if (string-match mintcss-re buffer-file-name)
-                     (Scrounge-update-buffer-file)))
+                 (if (string-match js-re buffer-file-name)
+                     (if (is-scrounge-file buffer-file-name)
+                         (Scrounge-update-buffer-file)))
+                 (if (string-match css-re buffer-file-name)
+                     (if (is-scrounge-file buffer-file-name)
+                         (Scrounge-update-buffer-file))))
                ) nil))
              
              
