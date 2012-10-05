@@ -4,6 +4,7 @@ Scrounge.js
 ![scrounge](http://github.com/iambumblehead/scroungejs/raw/master/img/hand3.png)
 ### OVERVIEW:
 
+
 Scrounge.js is a command line tool that processes .js and .css files.
 With it you may compress, concatenate and/or timestamp your files as part of a
 build process for your web site. It is made to be as flexible as possible and 

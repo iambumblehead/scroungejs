@@ -113,6 +113,13 @@
           ((equal extn "css") (Scrounge "css" "fake"))
           (t nil))))
 
+(defun Cmpr-warn () (interactive)
+  "scrounge -f _only_ files of type being edited in the buffer"
+  (let ((extn (file-name-extension buffer-file-name)))
+    (cond ((equal extn "js") (Scrounge-warn "js" "fake"))
+          ((equal extn "css") (Scrounge-warn "css" "fake"))
+          (t nil))))
+
 (defun Cmpr-real () (interactive)
   "scrounge _only_ files of type being edited in the buffer"
   (let ((extn (file-name-extension buffer-file-name)))
@@ -126,6 +133,7 @@
 
 (global-set-key (kbd "C-c n") (lambda() (interactive) (Cmpr-real)))
 (global-set-key (kbd "C-c m") (lambda() (interactive) (Cmpr-fake)))
+(global-set-key (kbd "C-c c") (lambda() (interactive) (Cmpr-warn)))
 
 
 ;; ----------------------------------
