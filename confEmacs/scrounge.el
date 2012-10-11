@@ -87,6 +87,23 @@
                          (if public-path (concat " --outputPath=" public-path) ""))))))
 
 
+(defun Scrounge-source (&optional type is-fake) (interactive)
+  "compress the buffer file with scrounge"
+  (setq compilation-scroll-output t)
+  (if (and focus-site (gethash focus-site *Project-Root-Hash*))
+      (let* ((project-path (gethash focus-site *Project-Source-Hash*))
+             (public-path (gethash focus-site *Project-Scrounge-Hash*))
+             (public-root-path (gethash focus-site *Public-Root-Hash*))
+             (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
+        ;;(compile 
+        (print
+         (concat "node " *Scrounge-Path* " -l --isRecursive=true --isBasepageSourcePaths=true "
+                 (if basepage-path (concat " --basepage=" basepage-path) "")                         
+                 (if project-path (concat " --inputPath=" project-path) "")
+                 (if public-path (concat " --publicPath=" "/appSrc") ""))))))
+
+
+
 (defun Scrounge-warn (&optional type is-fake) (interactive)
   "compress the buffer file with scrounge"
   (setq compilation-scroll-output t)

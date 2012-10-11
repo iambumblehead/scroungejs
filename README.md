@@ -413,6 +413,15 @@ example scrounge elements are given below
    a public path is not useful without a `-basepage` argument as it affects
    only paths generated for the specified basepage.   
   
+ - `--isBasepageSourcePaths=`_bool_  
+   basepage include tags will reference scripts in source directory.
+   disables compression, concatenation and copying of files. uses `publicPath`
+       
+   ex.  
+   >  `$ node scrounge.js -l --isRecursive=true --isBasepageSourcePaths=true \`  
+   >  `  --basepage=~/Software/kuaweb/sources/index.html \`  
+   >  `  --inputPath=~/Software/kuaweb/sources/appSrc --publicPath=/appSrc`
+
  - `--isCompressed=`_bool_  
    compress all files and trees before writing them to disk.
 

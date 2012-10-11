@@ -60,6 +60,9 @@ var scrounge = {
     var concatArr = [], that = this,
         unconcatArr = [], x, forceTypes;
 
+    // do not compress or copy files if basepage uses source paths.
+    if (opts.isBasepageSourcePaths) return  funchandle(null);
+
     if (opts.isConcatenation) {
       this.writeTreesTreeArr(treeObjArr, opts, funchandle);
     } else {
