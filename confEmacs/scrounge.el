@@ -32,6 +32,12 @@
 (puthash "kuaweb" "~/Software/kuaweb" *Project-Root-Hash*)
 (puthash "kuaweb" "/app" *Public-Root-Hash*)
 
+(puthash "kuawebHTTP" "~/Software/kuaweb/sources/appSrc" *Project-Source-Hash*)
+(puthash "kuawebHTTP" "~/Software/kuaweb/sources/app" *Project-Scrounge-Hash*)
+(puthash "kuawebHTTP" "~/Software/kuaweb/sources/indexHTTP.html" *Basepage-Path-Hash*)
+(puthash "kuawebHTTP" "~/Software/kuaweb" *Project-Root-Hash*)
+(puthash "kuawebHTTP" "/app" *Public-Root-Hash*)
+
 (puthash "kuapayDemo" "~/Software/kuapayDemo.com/sources/appSrc" *Project-Source-Hash*)
 (puthash "kuapayDemo" "~/Software/kuapayDemo.com/sources/app" *Project-Scrounge-Hash*)
 (puthash "kuapayDemo" "~/Software/kuapayDemo.com/sources/index.mustache" *Basepage-Path-Hash*)
@@ -48,6 +54,7 @@
     (cd persist-dir)))
 
 (defvar focus-site "devilmaycare")
+
 (defun get-focus-sites() (interactive)
   (let ((keys-string ""))
     (progn
@@ -95,8 +102,7 @@
              (public-path (gethash focus-site *Project-Scrounge-Hash*))
              (public-root-path (gethash focus-site *Public-Root-Hash*))
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
-        ;;(compile 
-        (print
+        (compile 
          (concat "node " *Scrounge-Path* " -l --isRecursive=true --isBasepageSourcePaths=true "
                  (if basepage-path (concat " --basepage=" basepage-path) "")                         
                  (if project-path (concat " --inputPath=" project-path) "")
