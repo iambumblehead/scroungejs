@@ -449,6 +449,9 @@ example scrounge elements are given below
  - `--isRemoveRequires=`_bool_  
    remove 'requires' statements from javascript files. `true` by default.
    
+ - `--isRemoveConsole=`_bool_  
+   remove 'console' statements from javascript files. `false` by default.   
+   
  - `--isUpdateOnly=`_bool_  
    modify include tags in a basepage only. do not build scrounge elements.
 

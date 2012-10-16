@@ -88,6 +88,7 @@
         (compile (concat "node " *Scrounge-Path* " -l --isRecursive=true --isTimestamped=true "
                          (if is-fake " --isCompressed=false" " --isCompressed=true")
                          (if is-fake " --isConcatenation=false" " --isConcatenation=true")
+                         (if is-fake "" " --isRemoveConsole=true")
                          (if public-root-path (concat " --publicPath=" public-root-path) "")
                          (if basepage-path (concat " --basepage=" basepage-path) "")                         
                          (if project-path (concat " --inputPath=" project-path) "")
