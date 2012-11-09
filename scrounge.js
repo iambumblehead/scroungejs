@@ -187,6 +187,7 @@ var scrounge = {
       treeArr.map(function (tree) {
         tree.reportMissingDependencyArr(missingDependencyArr);
       });
+      console.log('[!!!] missingDependencies: ' + missingDependencyArr);
       return funchandle(Message.stopping());
     } 
     funchandle(null);
