@@ -85,7 +85,7 @@
              (public-path (gethash focus-site *Project-Scrounge-Hash*))
              (public-root-path (gethash focus-site *Public-Root-Hash*))
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
-        (compile (concat "node " *Scrounge-Path* " -l --isRecursive=true --isTimestamped=true "
+        (compile (concat "node " *Scrounge-Path* " -l --isRecursive=true --isTimestamped=true --isRemoveRequires=true "
                          (if is-fake " --isCompressed=false" " --isCompressed=true")
                          (if is-fake " --isConcatenation=false" " --isConcatenation=true")
                          (if is-fake "" " --isRemoveConsole=true")
@@ -104,7 +104,7 @@
              (public-root-path (gethash focus-site *Public-Root-Hash*))
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
         (compile 
-         (concat "node " *Scrounge-Path* " -l --isRecursive=true --isBasepageSourcePaths=true "
+         (concat "node " *Scrounge-Path* " -l --isRecursive=true --isBasepageSourcePaths=true --isRemoveRequires=true "
                  (if basepage-path (concat " --basepage=" basepage-path) "")                         
                  (if project-path (concat " --inputPath=" project-path) "")
                  (if public-path (concat " --publicPath=" "/appSrc") ""))))))
@@ -119,7 +119,7 @@
              (public-path (gethash focus-site *Project-Scrounge-Hash*))
              (public-root-path (gethash focus-site *Public-Root-Hash*))
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
-        (compile (concat "node " *Scrounge-Path* " -l --isRecursive=true --isTimestamped=true --isWarning=true "
+        (compile (concat "node " *Scrounge-Path* " -l --isRecursive=true --isTimestamped=true --isWarning=true  --isRemoveRequires=true "
                          (if is-fake " --isCompressed=false ")
                          (if is-fake " --isConcatenation=false ")
                          (if public-root-path (concat " --publicPath=" public-root-path) "")
@@ -269,7 +269,7 @@
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
         (shell-command-to-string 
          (concat "node " *Scrounge-Path* 
-                 " -l --isRecursive=true --isTimestamped=true --isUpdateOnly=true --isSilent=true "
+                 " -l --isRecursive=true --isTimestamped=true --isUpdateOnly=true --isSilent=true --isRemoveRequires=true "
                  (if is-fake " --isCompressed=false ")
                  (if is-fake " --isConcatenation=false")
                  (if public-root-path (concat " --publicPath=" public-root-path) "")
