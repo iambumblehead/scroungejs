@@ -7,6 +7,7 @@
 (defvar *Basepage-Path-Hash* (make-hash-table :test 'equal))
 (defvar *Project-Root-Hash* (make-hash-table :test 'equal))
 (defvar *Public-Root-Hash* (make-hash-table :test 'equal))
+(defvar *Err-Log-Hash* (make-hash-table :test 'equal))
 
 (puthash "iammegumi" "~/Software/iammegumi.com/sources/appSrc" *Project-Source-Hash*)
 (puthash "iammegumi" "~/Software/iammegumi.com/sources/app" *Project-Scrounge-Hash*)
@@ -30,6 +31,7 @@
 (puthash "kuaweb" "~/Software/kuaweb/sources/app" *Project-Scrounge-Hash*)
 (puthash "kuaweb" "~/Software/kuaweb/sources/index.html" *Basepage-Path-Hash*)
 (puthash "kuaweb" "~/Software/kuaweb" *Project-Root-Hash*)
+(puthash "kuaweb" "~/Software/kuaweb/log/out.log" *Err-Log-Hash*)
 (puthash "kuaweb" "/app" *Public-Root-Hash*)
 
 (puthash "kuawebHTTP" "~/Software/kuaweb/sources/appSrc" *Project-Source-Hash*)
@@ -45,14 +47,7 @@
 (puthash "kuapayDemo" "/app" *Public-Root-Hash*)
 
 
-(defun Sass (&optional site) (interactive "sSingle-assemble which site?: ")
-  "calls mvn assembly process on specified directory path"
-  (let ((compile-dir (gethash focus-site *Devel-Root-Hash*))
-        (persist-dir default-directory))
-    (cd compile-dir)
-    (shell-command-to-string (concat "bash ./deploy.sh"))
-    (cd persist-dir)))
-
+;; FOCUS SITE
 (defvar focus-site "devilmaycare")
 
 (defun get-focus-sites() (interactive)
@@ -66,17 +61,42 @@
   "set a focus page for scrounge. page must be a key at scrounge hash."
   (setq focus-site site))
 
-
-
 (global-set-key (kbd "C-c f") 'set-focus-site)
 
 
+
+;; VALIDATE JSON
 (defun JSON () (interactive)
   (let ((file-name buffer-file-name))
     (shell-command (concat "node ~/Software/json-parse.js -i " file-name))))
 
 
 
+;; DEPLOY NODE
+(defun Deploy (&optional site) (interactive "sSingle-assemble which site?: ")
+  "calls mvn assembly process on specified directory path"
+  (let ((compile-dir (gethash focus-site *Project-Root-Hash*))
+        (persist-dir default-directory))
+    (cd compile-dir)
+    (shell-command-to-string (concat "bash ./bash/app_deploy.sh"))
+    (cd persist-dir)))
+
+(global-set-key (kbd "C-c s") (lambda() (interactive) (Deploy focus-site)))
+
+
+;; TAIL NODE
+(defun tailLog (&optional type) (interactive "sTail error log for which site?: ")
+  (let ((site (if type type focus-site))
+        (errlog (gethash focus-site *Err-Log-Hash*)))
+    (message (concat "Tail: " focus-site))
+    (if errlog
+        (shell-command (concat "tail -f " errlog "&"))
+      (message (concat "Unfamiliar log type. " focus-site)))))
+
+(global-set-key (kbd "C-c l") (lambda() (interactive) (tailLog focus-site)))
+
+
+;; SCROUNGE COMMANDS
 (defun Scrounge (&optional type is-fake) (interactive)
   "compress the buffer file with scrounge"
   (setq compilation-scroll-output t)
