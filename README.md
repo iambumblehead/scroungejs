@@ -2,6 +2,7 @@ Scrounge.js
 ===========
 **(c)[Bumblehead][0], 2012** [MIT-license](#license)  
 ![scrounge](http://github.com/iambumblehead/scroungejs/raw/master/img/hand3.png)
+
 ### OVERVIEW:
 
 
