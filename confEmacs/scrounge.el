@@ -40,11 +40,11 @@
 (puthash "kuawebHTTP" "~/Software/kuaweb" *Project-Root-Hash*)
 (puthash "kuawebHTTP" "/app" *Public-Root-Hash*)
 
-(puthash "kuapayDemo" "~/Software/kuapayDemo.com/sources/appSrc" *Project-Source-Hash*)
-(puthash "kuapayDemo" "~/Software/kuapayDemo.com/sources/app" *Project-Scrounge-Hash*)
-(puthash "kuapayDemo" "~/Software/kuapayDemo.com/sources/index.mustache" *Basepage-Path-Hash*)
-(puthash "kuapayDemo" "~/Software/kuapayDemo.com" *Project-Root-Hash*)
-(puthash "kuapayDemo" "/app" *Public-Root-Hash*)
+(puthash "cucumberWeb" "~/Software/cucumberWeb/sources/appSrc" *Project-Source-Hash*)
+(puthash "cucumberWeb" "~/Software/cucumberWeb/sources/app" *Project-Scrounge-Hash*)
+(puthash "cucumberWeb" "~/Software/cucumberWeb/sources/index.mustache" *Basepage-Path-Hash*)
+(puthash "cucumberWeb" "~/Software/cucumberWeb" *Project-Root-Hash*)
+(puthash "cucumberWeb" "/app" *Public-Root-Hash*)
 
 
 ;; FOCUS SITE
