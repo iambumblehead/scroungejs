@@ -88,8 +88,8 @@
   (let ((compile-dir (gethash focus-site *Project-Root-Hash*))
         (persist-dir default-directory))
     (cd compile-dir)
-    (print compile-dir)
-    (shell-command-to-string (concat "bash ./bash/app_deploy.sh"))
+    (setq compilation-scroll-output t)
+    (compile (concat "bash ./bash/app_deploy.sh"))
     (cd persist-dir)))
 
 (global-set-key (kbd "C-c s") (lambda() (interactive) (Deploy focus-site)))
