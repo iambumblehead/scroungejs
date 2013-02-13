@@ -6,6 +6,7 @@ var argv = require('optimist').argv,
     BMBLib = require('./lib/BMBLib.js'),
     Message = require('./lib/Message.js'),
     FileUtil = require('./lib/FileUtil.js'),
+    FilterTree = require('./lib/FilterTree.js'),
     BasepageUtil = require('./lib/BasepageUtil.js'),
     InfoTree = require('./lib/InfoTree.js'),
     InfoFile = require('./lib/InfoFile.js'),
@@ -202,6 +203,13 @@ var scrounge = {
         scrounge.getFileInfoObjArr(fileInfoArr, function (err, fileInfoObjArr) {
           if (err) return funchandle(err);          
 
+          if (opts.trees) {
+            if (!filters) {
+              filters = FilterTree.getNew();
+            }
+            filters.addTreeByFilename(opts.trees);              
+          }
+
           if (opts.isUpdateOnly) {
             treeObjArr = [InfoTree.getNew({
               fileObjArr : fileInfoObjArr,
@@ -209,7 +217,9 @@ var scrounge = {
             })];
           } else {
             treeObjArr = scrounge.getAsTrees(fileInfoObjArr, filters);            
+            console.log('filterTrees');
           }
+
           scrounge.treesInspect(treeObjArr, function (err) {
             if (err) return funchandle(err);
             scrounge.getAssociatedTrees((filters) ? filters.trees : null, treeObjArr, function (err, assocTreeArr) {
