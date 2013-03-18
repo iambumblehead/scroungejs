@@ -44,6 +44,7 @@
 (puthash "cucumberWeb" "~/Software/cucumberWeb/sources/app" *Project-Scrounge-Hash*)
 (puthash "cucumberWeb" "~/Software/cucumberWeb/sources/index.mustache" *Basepage-Path-Hash*)
 (puthash "cucumberWeb" "~/Software/cucumberWeb" *Project-Root-Hash*)
+(puthash "cucumberWeb" "~/Software/cucumberWeb/log/error.log" *Err-Log-Hash*)
 (puthash "cucumberWeb" "/app" *Public-Root-Hash*)
 
 
@@ -75,20 +76,25 @@
 ;; DEPLOY NODE
 (defun Deploy (&optional site) (interactive "sSingle-assemble which site?: ")
   "calls mvn assembly process on specified directory path"
+  (princ focus-site)
   (let ((compile-dir (gethash focus-site *Project-Root-Hash*))
         (persist-dir default-directory))
     (cd compile-dir)
-    (shell-command-to-string (concat "bash ./bash/app_deploy.sh"))
+    (compile (concat "bash ./bash/app_deploy.sh"))
+    ;;(shell-command-to-string (concat "bash ./bash/app_deploy.sh"))
     (cd persist-dir)))
 
 (global-set-key (kbd "C-c s") (lambda() (interactive) (Deploy focus-site)))
+
+
 
 
 ;; TAIL NODE
 (defun tailLog (&optional type) (interactive "sTail error log for which site?: ")
   (let ((site (if type type focus-site))
         (errlog (gethash focus-site *Err-Log-Hash*)))
-    (message (concat "Tail: " focus-site))
+;;    (message (concat "Tail: " focus-site))
+
     (if errlog
         (shell-command (concat "tail -f " errlog "&"))
       (message (concat "Unfamiliar log type. " focus-site)))))
