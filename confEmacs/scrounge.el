@@ -44,8 +44,17 @@
 (puthash "cucumberWeb" "~/Software/cucumberWeb/sources/app" *Project-Scrounge-Hash*)
 (puthash "cucumberWeb" "~/Software/cucumberWeb/sources/index.mustache" *Basepage-Path-Hash*)
 (puthash "cucumberWeb" "~/Software/cucumberWeb" *Project-Root-Hash*)
-(puthash "cucumberWeb" "~/Software/cucumberWeb/log/error.log" *Err-Log-Hash*)
+(puthash "cucumberWeb" "~/Software/cucumberWeb/log/out.log" *Err-Log-Hash*)
 (puthash "cucumberWeb" "/app" *Public-Root-Hash*)
+
+
+(puthash "briannarigg.com" "~/Software/briannarigg.com/sources/appSrc" *Project-Source-Hash*)
+(puthash "briannarigg.com" "~/Software/briannarigg.com/sources/app" *Project-Scrounge-Hash*)
+(puthash "briannarigg.com" "~/Software/briannarigg.com/sources/index.mustache" *Basepage-Path-Hash*)
+(puthash "briannarigg.com" "~/Software/briannarigg.com" *Project-Root-Hash*)
+(puthash "briannarigg.com" "~/Software/briannarigg.com/log/out.log" *Err-Log-Hash*)
+(puthash "briannarigg.com" "/app" *Public-Root-Hash*)
+
 
 
 ;; FOCUS SITE
@@ -80,11 +89,12 @@
   (let ((compile-dir (gethash focus-site *Project-Root-Hash*))
         (persist-dir default-directory))
     (cd compile-dir)
+    (setq compilation-scroll-output t)
     (compile (concat "bash ./bash/app_deploy.sh"))
-    ;;(shell-command-to-string (concat "bash ./bash/app_deploy.sh"))
     (cd persist-dir)))
 
 (global-set-key (kbd "C-c s") (lambda() (interactive) (Deploy focus-site)))
+;;(global-set-key (kbd "C-c s") (lambda() (interactive) (print "go")))
 
 
 
