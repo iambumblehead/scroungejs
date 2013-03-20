@@ -12,10 +12,10 @@ var argv = require('optimist').argv,
     InfoFile = require('./lib/InfoFile.js'),
     UserOptions = require('./lib/UserOptions.js'),
 
-    options = UserOptions.getNew(argv);
+    options;
 
 
-var scrounge = {
+var scrounge = module.exports = {
   getBasepageFilters : function (basepage, funchandle) {
     if (!basepage) return funchandle(null, null);
     basepage.readFilters(function (err, filters) {
@@ -196,6 +196,7 @@ var scrounge = {
 
   treesBuild : function (opts, basepage, funchandle) {
     var basepageUtil, fileObjBuilder, x, treeObjArr;
+
     FileUtil.getFiles(opts, function (err, fileInfoArr) {
       if (err) return funchandle(err);
       scrounge.getBasepageFilters(basepage, function (err, filters) {
@@ -217,7 +218,7 @@ var scrounge = {
             })];
           } else {
             treeObjArr = scrounge.getAsTrees(fileInfoObjArr, filters);            
-            console.log('filterTrees');
+    //        console.log('filterTrees', treeObjArr);
           }
 
           scrounge.treesInspect(treeObjArr, function (err) {
@@ -246,7 +247,7 @@ var scrounge = {
     });
   },
 
-  go : function (opts) {
+  go : function (opts, fn) {
     var bgnDateObj = new Date(), totalTime,
         basepage = (opts.basepage) ? BasepageUtil.getNew(opts.basepage) : null;
 
@@ -257,10 +258,18 @@ var scrounge = {
         Message.releaseMessages();
         totalTime = BMBLib.getElapsedTime(bgnDateObj, new Date());
         console.log(Message.finish(totalTime));
+        if (typeof fn === 'function') fn(null, totalTime);
       });
     });
   }
 };
 
-scrounge.go(options);
+
+// if called from command line...
+if (require.main === module) {
+  options = UserOptions.getNew(argv);
+  scrounge.go(options);    
+} 
+
+
 
