@@ -489,18 +489,19 @@ This is done through information added to each file.
 
 scroungejs may add include elements for the js and css files it processes. Only a basepage that contains one or more _scrounge elements_ will be modified.
 
-  > *example.html* 
+   > *example.html* 
 
-  > ```html
-    <!doctype html>
-    <html>
-      <head>
-        <!-- <scrounge.js> -->
-        <!-- </scrounge> -->
-      </head>
-      <body></body>
-    </html>
-    ```
+   > ```html
+     <!doctype html>
+     <html>
+       <head>
+         <!-- <scrounge.js> -->
+         <!-- </scrounge> -->
+       </head>
+       <body></body>
+     </html>
+     ```
+
 
 scroungejs adds js/css include elements in the body of scrounge elements. Something like the following could be added to the body of the scrounge element above.  
 
@@ -514,6 +515,7 @@ scroungejs adds js/css include elements in the body of scrounge elements. Someth
     <!-- </scrounge> -->
     ````
    
+   
 Each time that you modify a basepage with scroungejs, the body of the tags is remade by scroungejs.
 
 a 'tree' attribute will affect the body of the element produced by scroungejs.
@@ -526,6 +528,7 @@ a 'tree' attribute will affect the body of the element produced by scroungejs.
     <script src="cmpr/app2.js" type="text/javascript"></script>
     <!-- </scrounge> -->
     ```
+   
    
 example scrounge elements are given below
 
