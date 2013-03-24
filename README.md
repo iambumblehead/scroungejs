@@ -506,13 +506,13 @@ scroungejs adds js/css include elements in the body of scrounge elements. Someth
 
   > *example.html* 
 
-  > ```html
-    <!-- <scrounge.js> -->
-    <script src="cmpr/app1.js" type="text/javascript"></script>
-    <script src="cmpr/app2.js" type="text/javascript"></script>
-    <script src="cmpr/app3.js" type="text/javascript"></script>
-    <!-- </scrounge> -->
-    ````
+  ```html
+  <!-- <scrounge.js> -->
+  <script src="cmpr/app1.js" type="text/javascript"></script>
+  <script src="cmpr/app2.js" type="text/javascript"></script>
+  <script src="cmpr/app3.js" type="text/javascript"></script>
+  <!-- </scrounge> -->
+  ````
    
    
 Each time that you modify a basepage with scroungejs, the body of the tags is remade by scroungejs.
@@ -521,24 +521,26 @@ a 'tree' attribute will affect the body of the element produced by scroungejs.
 
   > *example.html*
 
-  > ```html
-    <!-- <scrounge.css tree="app1.js,app2"> -->
-    <script src="cmpr/app1.js" type="text/javascript"></script>
-    <script src="cmpr/app2.js" type="text/javascript"></script>
-    <!-- </scrounge> -->
-    ```
+  ```html
+  <!-- <scrounge.css tree="app1.js,app2"> -->
+  <script src="cmpr/app1.js" type="text/javascript"></script>
+  <script src="cmpr/app2.js" type="text/javascript"></script>
+  <!-- </scrounge> -->
+  ```
 
 
 example scrounge elements are given below
 
-  > ```html
-    <!-- <scrounge.css tree="Map.css,Main.js"> -->
-    <!-- </scrounge> -->
-    <!-- <scrounge.js tree="Main.js,Crypto.js"> -->
-    <!-- </scrounge> -->
-    <!-- <scrounge.css tree="Main.js"> -->
-    <!-- </scrounge> -->
-    ````
+  > *example.html*
+  
+  ```html
+  <!-- <scrounge.css tree="Map.css,Main.js"> -->
+  <!-- </scrounge> -->
+  <!-- <scrounge.js tree="Main.js,Crypto.js"> -->
+  <!-- </scrounge> -->
+  <!-- <scrounge.css tree="Main.js"> -->
+  <!-- </scrounge> -->
+  ````
 
 
 ---------------------------------------------------------
