@@ -199,7 +199,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
 
  ```bash
  $ node ./scrounge.js -i ./getStarted/app --isConcatenation=true \
-   --outputPath=./app/public/cmpr --isRecursive=true`
+   --outputPath=./app/public/cmpr --isRecursive=true
  [...] open: getStarted/app/app.js
  [...] open: getStarted/app/app2.js
  [...] open: getStarted/app/controls/CtrlA.js
@@ -239,7 +239,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
 
  ```bash
  $ node ./scrounge.js -i ./getStarted/app --isConcatenation=true \
-   --outputPath=./app/public/cmpr --isRecursive=true  --extensionType=js`
+   --outputPath=./app/public/cmpr --isRecursive=true  --extensionType=js
  [...] open: getStarted/app/app.js
  [...] open: getStarted/app/app2.js
  [...] open: getStarted/app/controls/CtrlA.js
@@ -371,16 +371,16 @@ Scroungejs may be downloaded directly or installed through `npm`.
    <!doctype html>  
    <html>  
      <head>  
-       <script src="/app/lib/library.js" type="text/javascript"></script>`      
+       <script src="/app/lib/library.js" type="text/javascript"></script>
      </head>  
      <body>  
        <!-- <scrounge.js> -->  
-       <script src="/cmpr/library.js" type="text/javascript"></script>`  
+       <script src="/cmpr/library.js" type="text/javascript"></script>
        <script src="/cmpr/app.js" type="text/javascript"></script>  
        <script src="/cmpr/app2.js" type="text/javascript"></script>  
        <!-- </scrounge> -->  
      </body>  
-   </html>`     
+   </html>
    ```
 
  13. **define tree attributes.**  
@@ -418,9 +418,9 @@ Scroungejs may be downloaded directly or installed through `npm`.
      <html>  
        <head>  
          <script src="/app/lib/library.js" type="text/javascript"></script>  
-         <!-- <scrounge.css trees="app.js"> -->`      
+         <!-- <scrounge.css trees="app.js"> -->
          <script src="/cmpr/app.css" type="text/javascript"></script>  
-         <!-- </scrounge> -->`      
+         <!-- </scrounge> -->     
        </head>  
        <body>  
          <!-- <scrounge.js trees="app.js"> -->  
@@ -443,23 +443,23 @@ Scroungejs may be downloaded directly or installed through `npm`.
 Each file processed by scroungejs may affect the build process.
 This is done through information added to each file.
 
-  > *./getStarted/app/views/ViewA.js*
+ > *./getStarted/app/views/ViewA.js*
 
-  > ```javascript
-    // Filename: ViewA.js
-    // Timestamp: 2011.06.03-22:10:20
-    // Author(s): Bumblehead (www.bumblehead.com)
-    // Requires: CtrlsAll.js, ModelA.js
-    ```
+ > ```javascript
+   // Filename: ViewA.js
+   // Timestamp: 2011.06.03-22:10:20
+   // Author(s): Bumblehead (www.bumblehead.com)
+   // Requires: CtrlsAll.js, ModelA.js
+   ```
 
-  > *./getStarted/app/views/ViewA.css*
+ > *./getStarted/app/views/ViewA.css*
 
-  > ```css
-    /* Filename: Main.css
-     * Timestamp: 2011.06.03-22:10:20
-     * Author(s): Bumblehead (www.bumblehead.com)
-     */
-    ```
+ > ```css
+   /* Filename: Main.css
+    * Timestamp: 2011.06.03-22:10:20
+    * Author(s): Bumblehead (www.bumblehead.com)
+    */
+   ```
 
 
   - `Filename:` _filename_  
@@ -502,7 +502,6 @@ scroungejs may add include elements for the js and css files it processes. Only 
     </html>
     ```
 
-
 scroungejs adds js/css include elements in the body of scrounge elements. Something like the following could be added to the body of the scrounge element above.  
 
   > *example.html* 
@@ -538,8 +537,6 @@ example scrounge elements are given below
     <!-- <scrounge.css tree="Main.js"> -->
     <!-- </scrounge> -->
     ````
-
-
 
 
 ---------------------------------------------------------
