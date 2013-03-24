@@ -491,16 +491,16 @@ scroungejs may add include elements for the js and css files it processes. Only 
 
    > *example.html* 
 
-   > ```html
-     <!doctype html>  
-     <html>  
-       <head>  
-         <!-- <scrounge.js> -->  
-         <!-- </scrounge> -->  
-       </head>  
-       <body></body>   
-     </html>  
-     ```
+   ```html
+   <!doctype html>  
+   <html>  
+     <head>  
+       <!-- <scrounge.js> -->  
+       <!-- </scrounge> -->  
+     </head>  
+     <body></body>   
+   </html>  
+   ```
 
 scroungejs adds js/css include elements in the body of scrounge elements. Something like the following could be added to the body of the scrounge element above.  
 
