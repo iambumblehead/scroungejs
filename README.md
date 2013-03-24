@@ -501,7 +501,7 @@ scroungejs may add include elements for the js and css files it processes. Only 
        <body></body>
      </html>
      ```
-
+     
 
 scroungejs adds js/css include elements in the body of scrounge elements. Something like the following could be added to the body of the scrounge element above.  
 
@@ -528,8 +528,8 @@ a 'tree' attribute will affect the body of the element produced by scroungejs.
     <script src="cmpr/app2.js" type="text/javascript"></script>
     <!-- </scrounge> -->
     ```
-   
-   
+
+
 example scrounge elements are given below
 
   > ```html
