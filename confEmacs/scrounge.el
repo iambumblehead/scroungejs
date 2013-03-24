@@ -76,9 +76,9 @@
 
 
 ;; VALIDATE JSON
-(defun JSON () (interactive)
-  (let ((file-name buffer-file-name))
-    (shell-command (concat "node ~/Software/json-parse.js -i " file-name))))
+;;(defun JSON () (interactive)
+;;  (let ((file-name buffer-file-name))
+;;    (shell-command (concat "node ~/Software/json-parse.js -i " file-name))))
 
 
 
