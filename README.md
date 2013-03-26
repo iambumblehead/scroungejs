@@ -299,31 +299,31 @@ Scroungejs may be downloaded directly or installed through `npm`.
  --outputPath=./app/public/cmpr
  ```
  
-   > *./getStarted/index.mustache* 
+ *./getStarted/index.mustache* 
 
-   > ```html
-   > <!doctype html>
-   > <html>
-   >   <head>
-   >     <script src="/app/lib/library.js" type="text/javascript"></script>
-   >   </head>
-   >   <body>
-   >     <!-- <scrounge.js> -->
-   >     <script src="/app/public/cmpr/library.js" type="text/javascript"></script>
-   >     <script src="/app/public/cmpr/app2.js" type="text/javascript"></script>
-   >     <script src="/app/public/cmpr/ModelB.js" type="text/javascript"></script>
-   >     <script src="/app/public/cmpr/CtrlB.js" type="text/javascript"></script>
-   >     <script src="/app/public/cmpr/ModelA.js" type="text/javascript"></script>
-   >     <script src="/app/public/cmpr/CtrlA.js" type="text/javascript"></script>
-   >     <script src="/app/public/cmpr/CtrlsAll.js" type="text/javascript"></script>
-   >     <script src="/app/public/cmpr/ViewB.js" type="text/javascript"></script>
-   >     <script src="/app/public/cmpr/ViewA.js" type="text/javascript"></script>
-   >     <script src="/app/public/cmpr/ViewsAll.js" type="text/javascript"></script>
-   >     <script src="/app/public/cmpr/app.js" type="text/javascript"></script>     
-   >     <!-- </scrounge> -->
-   >   </body>
-   > </html>
-   > ```
+ ```html
+ <!doctype html>
+ <html>
+   <head>
+     <script src="/app/lib/library.js" type="text/javascript"></script>
+   </head>
+   <body>
+     <!-- <scrounge.js> -->
+     <script src="/app/public/cmpr/library.js" type="text/javascript"></script>
+     <script src="/app/public/cmpr/app2.js" type="text/javascript"></script>
+     <script src="/app/public/cmpr/ModelB.js" type="text/javascript"></script>
+     <script src="/app/public/cmpr/CtrlB.js" type="text/javascript"></script>
+     <script src="/app/public/cmpr/ModelA.js" type="text/javascript"></script>
+     <script src="/app/public/cmpr/CtrlA.js" type="text/javascript"></script>
+     <script src="/app/public/cmpr/CtrlsAll.js" type="text/javascript"></script>
+     <script src="/app/public/cmpr/ViewB.js" type="text/javascript"></script>
+     <script src="/app/public/cmpr/ViewA.js" type="text/javascript"></script>
+     <script src="/app/public/cmpr/ViewsAll.js" type="text/javascript"></script>
+     <script src="/app/public/cmpr/app.js" type="text/javascript"></script>     
+     <!-- </scrounge> -->
+   </body>
+ </html>
+ ```
      
  13. **modify the basepage _index.mustache_ and use concatenation.**  
  
@@ -335,23 +335,23 @@ Scroungejs may be downloaded directly or installed through `npm`.
  --outputPath=./app/public/cmpr
  ```
  
- > *./getStarted/index.mustache* 
+ *./getStarted/index.mustache* 
      
- > ```html   
-   <!doctype html>  
-   <html>  
-     <head>  
-       <script src="/app/lib/library.js" type="text/javascript"></script>  
-     </head>  
-     <body>  
-       <!-- <scrounge.js> -->  
-       <script src="/app/public/cmpr/library.js" type="text/javascript"></script>  
-       <script src="/app/public/cmpr/app2.js" type="text/javascript"></script>  
-       <script src="/app/public/cmpr/app.js" type="text/javascript"></script>  
-       <!-- </scrounge> -->  
-     </body>  
-   </html>  
-   ```
+ ```html   
+ <!doctype html>  
+ <html>  
+   <head>  
+     <script src="/app/lib/library.js" type="text/javascript"></script>  
+   </head>  
+   <body>  
+     <!-- <scrounge.js> -->  
+     <script src="/app/public/cmpr/library.js" type="text/javascript"></script>  
+     <script src="/app/public/cmpr/app2.js" type="text/javascript"></script>  
+     <script src="/app/public/cmpr/app.js" type="text/javascript"></script>  
+     <!-- </scrounge> -->  
+   </body>  
+ </html>  
+ ```
 
  14. **define a public path and update _index.mustache_.**  
 
@@ -367,21 +367,21 @@ Scroungejs may be downloaded directly or installed through `npm`.
 
  > *./getStarted/index.mustache*  
 
- > ```html
-   <!doctype html>  
-   <html>  
-     <head>  
-       <script src="/app/lib/library.js" type="text/javascript"></script>
-     </head>  
-     <body>  
-       <!-- <scrounge.js> -->  
-       <script src="/cmpr/library.js" type="text/javascript"></script>
-       <script src="/cmpr/app.js" type="text/javascript"></script>  
-       <script src="/cmpr/app2.js" type="text/javascript"></script>  
-       <!-- </scrounge> -->  
-     </body>  
-   </html>
-   ```
+ ```html
+ <!doctype html>  
+ <html>  
+   <head>  
+     <script src="/app/lib/library.js" type="text/javascript"></script>
+   </head>  
+   <body>  
+     <!-- <scrounge.js> -->  
+     <script src="/cmpr/library.js" type="text/javascript"></script>
+     <script src="/cmpr/app.js" type="text/javascript"></script>  
+     <script src="/cmpr/app2.js" type="text/javascript"></script>  
+     <!-- </scrounge> -->  
+   </body>  
+ </html>
+ ```
 
  13. **define tree attributes.**  
  
@@ -389,46 +389,46 @@ Scroungejs may be downloaded directly or installed through `npm`.
  
  Trees may be defined in a scrounge element attribute or by using the `--trees` modifier. When trees are defined, scrounge will output the defined trees only.
 
-   > *./getStarted/index.mustache* 
+ > *./getStarted/index.mustache* 
 
-   > ```html
-     <!doctype html>  
-     <html>  
-       <head>  
-         <script src="/app/lib/library.js" type="text/javascript"></script>  
-         <!-- <scrounge.css trees="app.js"> -->     
-         <!-- </scrounge> -->  
-       </head>  
-       <body>  
-         <!-- <scrounge.js trees="app.js"> -->  
-         <!-- </scrounge> -->  
-       </body>  
-     </html>  
-     ```
+ ```html
+ <!doctype html>  
+ <html>  
+   <head>  
+     <script src="/app/lib/library.js" type="text/javascript"></script>  
+     <!-- <scrounge.css trees="app.js"> -->     
+     <!-- </scrounge> -->  
+   </head>  
+   <body>  
+     <!-- <scrounge.js trees="app.js"> -->  
+     <!-- </scrounge> -->  
+   </body>  
+ </html>  
+ ```
 
  ```bash
  $ node ./scrounge.js -s -i ./getStarted/app
    --basepage=./getStarted/index.mustache --isRecursive=true --publicPath=/cmpr
  ```
 
-   > *./getStarted/index.mustache* 
+ > *./getStarted/index.mustache* 
  
-   > ```html
-     <!doctype html>  
-     <html>  
-       <head>  
-         <script src="/app/lib/library.js" type="text/javascript"></script>  
-         <!-- <scrounge.css trees="app.js"> -->
-         <script src="/cmpr/app.css" type="text/javascript"></script>  
-         <!-- </scrounge> -->     
-       </head>  
-       <body>  
-         <!-- <scrounge.js trees="app.js"> -->  
-         <script src="/cmpr/app.js" type="text/javascript"></script>  
-         <!-- </scrounge> -->  
-       </body>  
-     </html>  
-     ```
+ ```html
+ <!doctype html>  
+ <html>  
+   <head>  
+     <script src="/app/lib/library.js" type="text/javascript"></script>  
+     <!-- <scrounge.css trees="app.js"> -->
+     <script src="/cmpr/app.css" type="text/javascript"></script>  
+     <!-- </scrounge> -->     
+   </head>  
+   <body>  
+     <!-- <scrounge.js trees="app.js"> -->  
+     <script src="/cmpr/app.js" type="text/javascript"></script>  
+     <!-- </scrounge> -->  
+   </body>  
+ </html>  
+ ```
 
  15. ## You are now ready to use scroungejs.
 

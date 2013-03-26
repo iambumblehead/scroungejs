@@ -16,12 +16,9 @@ var argv = require('optimist').argv,
 
 
 var scrounge = module.exports = {
-  getBasepageFilters : function (basepage, funchandle) {
-    if (!basepage) return funchandle(null, null);
-    basepage.readFilters(function (err, filters) {
-      if (err) return funchandle(err);
-      funchandle(null, filters);
-    });      
+  getBasepageFilters : function (basepage, fn) {
+    if (!basepage) return fn(null, null);
+    basepage.getFilters(fn);
   },
 
   writeBasepage : function (basepage, treeObjArr, opts, funchandle) {
