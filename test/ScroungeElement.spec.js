@@ -1,4 +1,3 @@
-
 var ScroungeElement = require('../lib/ScroungeElement'),
     BMBLib = require('../lib/BMBLib');
 

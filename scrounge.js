@@ -86,11 +86,18 @@ var scrounge = module.exports = {
       if (!x--) return funchandle(null, fileObjArr);
       if (!(filename = filenameArr[x])) return openNext(x);
       console.log(Message.openFile(filename));
+      InfoFile.getFromFile(filename, function (err, infoFileObj) {
+        if (err) return funchandle(err);        
+        fileObjArr.push(infoFileObj);
+        openNext(x);
+      });
+      /*
       fs.readFile(filename, 'ascii', function(err, fd) {
         if (err) return funchandle(err);
         fileObjArr.push(InfoFile.getFromFile(fd, filename));
         openNext(x);
       });
+       */
     }(filenameArr.length));      
   },
 
@@ -109,7 +116,12 @@ var scrounge = module.exports = {
       }
 
       filename = fileObj.filename.replace(/\.js$/, '.css');
-
+      InfoFile.getFromFile(filename, function (err, infoFileObj) {
+        if (err) return funchandle(err);        
+        newFileObjArr.push(infoFileObj);
+        getNext(x);
+      });
+      /*
       FileUtil.getFile(filename, function (err, fd, nfileObj) {
         if (err) return getNext(x);
 
@@ -117,6 +129,7 @@ var scrounge = module.exports = {
         newFileObjArr.push(nfileObj);
         getNext(x);
       });
+       */
     }(treeObj.fileObjArr.length));
   },
 
