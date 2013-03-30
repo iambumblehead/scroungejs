@@ -79,8 +79,12 @@ describe("InfoFile.getFromFile", function () {
 });
 
 
-//describe("infoFileObj.getBasenameStr", function () {  
-//});
+describe("infoFileObj.getBasenameStr", function () {  
+  
+  it("should return the basename of the file", function (done) {  
+    expect( true ).toBe( true );
+  });
+});
 
 
 //describe("infoFile.getMintFilename", function () {
