@@ -67,7 +67,6 @@ describe("InfoFile.getFromFile", function () {
       expect( res.type ).toBe( '.js' );
       expect( PkLib.isArray( res.dependencyArr) ).toBe( true );
       expect( res.dependencyArr[0] ).toBe( 'PkLib.js' );
-      console.log(res.dependencyArr);
       expect( res.dependencyArr[6] ).toBe( 'ViewNavTop.js' );
       expect( typeof res.timestamp ).toBe( 'object' );
       expect( res.authors[0] ).toBe( 'Bumblehead (www.bumblehead.com)' );
@@ -80,12 +79,65 @@ describe("InfoFile.getFromFile", function () {
 
 
 describe("infoFileObj.getBasenameStr", function () {  
+  var infoFile;
+
+  it("should return the basename of the file", function () {  
+    infoFile = InfoFile.getNew({ filename : "/path/to/script.js" });
+    expect( infoFile.getBaseNameStr() ).toBe( "script.js" );
+  });
   
-  it("should return the basename of the file", function (done) {  
-    expect( true ).toBe( true );
+  it("should return the basename of the file, w/out `_mint` affix", function () {  
+    infoFile = InfoFile.getNew({ filename : "/path/to/script_mint.js" });
+    expect( infoFile.getBaseNameStr() ).toBe( "script.js" );
+  });
+
+  it("should return the basename of the file, w/out `_cmpr` affix", function () {  
+    infoFile = InfoFile.getNew({ filename : "/path/to/script_mint.js" });
+    expect( infoFile.getBaseNameStr() ).toBe( "script.js" );
+  });
+
+});
+
+describe("infoFile.getFileNameMintStr", function () {
+  var infoFile;
+  it("should return the `_mint` affixed name of the file", function () {  
+    infoFile = InfoFile.getNew({ filename : "/path/to/script.js" });
+    expect( infoFile.getFileNameMintStr() ).toBe( "script_mint.js" );
+  });
+});
+
+describe("infoFile.getFileNameCmprStr", function () {
+  var infoFile, params, isTimestamped, result,
+      dateRe = new RegExp('\\d{4}\\.\\\d{2}\\.\\d{2}'),
+      timeRe = new RegExp('\\d{2}:\\d{2}:\\d{2}');
+
+  it("should return the vanilla filename of the file, if no timestamp", function () {  
+    infoFile = InfoFile.getNew({ filename : "/path/to/script.js" });
+    params = {};
+    expect( infoFile.getFileNameCmprStr(params) ).toBe( "script.js" );
+  });
+
+  it("should return the timestamp filename of the file, if timestamp", function () {  
+    infoFile = InfoFile.getNew({ filename : "/path/to/script.js" });
+    params = { 
+      isTimestamped : true 
+    };
+    result = infoFile.getFileNameCmprStr(params);
+    isTimestamped = result.match(dateRe) && 
+                    result.match(timeRe) ? true : false;
+
+    expect( isTimestamped ).toBe( true );
+  });
+
+  it("should return the timestamp filename of the file, if timestamp is forced", function () {  
+    infoFile = InfoFile.getNew({ filename : "/path/to/script.js" });
+    params = { 
+      isTimestamped : true,
+      forceTimestamp : 'forced' 
+    };
+    result = infoFile.getFileNameCmprStr(params);
+    expect( result ).toBe( "script_forced.js" );
   });
 });
 
 
-//describe("infoFile.getMintFilename", function () {
-//});
