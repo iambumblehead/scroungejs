@@ -15,11 +15,13 @@
 (puthash "iammegumi" "~/Software/iammegumi.com" *Project-Root-Hash*)
 (puthash "iammegumi" "/app" *Public-Root-Hash*)
 
-(puthash "scroungejs" "~/Software/scroungejs.com/sources/appSrc" *Project-Source-Hash*)
-(puthash "scroungejs" "~/Software/scroungejs.com/sources/app" *Project-Scrounge-Hash*)
-(puthash "scroungejs" "~/Software/scroungejs.com/sources/index.mustache" *Basepage-Path-Hash*)
-(puthash "scroungejs" "~/Software/scroungejs.com" *Project-Root-Hash*)
-(puthash "scroungejs" "/app" *Public-Root-Hash*)
+;;(puthash "scroungejs" "~/Software/scroungejs.com/sources/appSrc" *Project-Source-Hash*)
+;;(puthash "scroungejs" "~/Software/scroungejs.com/sources/app" *Project-Scrounge-Hash*)
+;;(puthash "scroungejs" "~/Software/scroungejs.com/sources/index.mustache" *Basepage-Path-Hash*)
+;;(puthash "scroungejs" "~/Software/scroungejs.com" *Project-Root-Hash*)
+;;(puthash "scroungejs" "/app" *Public-Root-Hash*)
+
+(puthash "scroungejs" "~/Software/scroungejs" *Project-Root-Hash*)
 
 (puthash "kuaadmin" "~/Software/kuaweb/sources/appSrc" *Project-Source-Hash*)
 (puthash "kuaadmin" "~/Software/kuaweb/sources/app" *Project-Scrounge-Hash*)
@@ -110,6 +112,19 @@
       (message (concat "Unfamiliar log type. " focus-site)))))
 
 (global-set-key (kbd "C-c l") (lambda() (interactive) (tailLog focus-site)))
+
+(defun Unit-Tests () (interactive)
+  "unit test the focus site"
+  (let ((compile-dir (gethash focus-site *Project-Root-Hash*))
+        (persist-dir default-directory))
+    (cd compile-dir)
+    (setq compilation-scroll-output t)
+    (ansi-color-for-comint-mode-on)
+    (shell-command "npm test")
+    (cd persist-dir)))
+
+;;(global-set-key (kbd "C-c u") (lambda() (interactive) (tailLog focus-site)))
+(global-set-key (kbd "C-c u") 'Unit-Tests)
 
 
 ;; SCROUNGE COMMANDS
@@ -341,4 +356,11 @@
              (update-buffer-file)
              nil))
              
-             
+(add-hook 'shell-mode-hook 
+          'ansi-color-for-comint-mode-on)
+
+(add-hook 'compilation-mode-hook 
+          'ansi-color-for-comint-mode-on)
+
+(add-hook 'c-mode-hook 
+          'ansi-color-for-comint-mode-on)

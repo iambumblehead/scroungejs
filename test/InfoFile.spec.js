@@ -98,15 +98,15 @@ describe("infoFileObj.getBasenameStr", function () {
 
 });
 
-describe("infoFile.getFileNameMintStr", function () {
+describe("infoFile.getMintNameStr", function () {
   var infoFile;
   it("should return the `_mint` affixed name of the file", function () {  
     infoFile = InfoFile.getNew({ filename : "/path/to/script.js" });
-    expect( infoFile.getFileNameMintStr() ).toBe( "script_mint.js" );
+    expect( infoFile.getMintNameStr() ).toBe( "script_mint.js" );
   });
 });
 
-describe("infoFile.getFileNameCmprStr", function () {
+describe("infoFile.getCmprNameStr", function () {
   var infoFile, params, isTimestamped, result,
       dateRe = new RegExp('\\d{4}\\.\\\d{2}\\.\\d{2}'),
       timeRe = new RegExp('\\d{2}:\\d{2}:\\d{2}');
@@ -114,7 +114,7 @@ describe("infoFile.getFileNameCmprStr", function () {
   it("should return the vanilla filename of the file, if no timestamp", function () {  
     infoFile = InfoFile.getNew({ filename : "/path/to/script.js" });
     params = {};
-    expect( infoFile.getFileNameCmprStr(params) ).toBe( "script.js" );
+    expect( infoFile.getCmprNameStr(params) ).toBe( "script.js" );
   });
 
   it("should return the timestamp filename of the file, if timestamp", function () {  
@@ -122,7 +122,7 @@ describe("infoFile.getFileNameCmprStr", function () {
     params = { 
       isTimestamped : true 
     };
-    result = infoFile.getFileNameCmprStr(params);
+    result = infoFile.getCmprNameStr(params);
     isTimestamped = result.match(dateRe) && 
                     result.match(timeRe) ? true : false;
 
@@ -135,9 +135,39 @@ describe("infoFile.getFileNameCmprStr", function () {
       isTimestamped : true,
       forceTimestamp : 'forced' 
     };
-    result = infoFile.getFileNameCmprStr(params);
+    result = infoFile.getCmprNameStr(params);
     expect( result ).toBe( "script_forced.js" );
   });
 });
 
+describe("infoFile.getPublicPathStr", function () {
+  var infoFile, params, result;
+
+  it("should return path of file, when public path is undefined", function () {  
+    infoFile = InfoFile.getNew({ filename : "/path/to/script.js" });
+    params = {};
+    result = infoFile.getPublicPathStr(params);
+    expect( result ).toBe( "script.js" );
+  });
+
+  it("should return path of file, when public path is defined", function () {  
+    infoFile = InfoFile.getNew({ filename : "/path/to/script.js" });
+    params = { outputPath : '/output/path'};
+    result = infoFile.getPublicPathStr(params);
+    expect( result ).toBe( "/output/path/script.js" );
+  });
+});
+
+
+describe("infoFile.getFilenameRe", function () {
+  var infoFile, params, result;
+
+  it("should return a RE for matching filename", function () {  
+    infoFile = InfoFile.getNew({ filename : "/path/to/script.js" });
+    params = { forceTimestamp : 'FORCE'};
+    result = infoFile.getFilenameRe(params);
+//    console.log('our re ', result);
+//    expect( result ).toBe( "/output/path/script.js" );
+  });
+});
 
