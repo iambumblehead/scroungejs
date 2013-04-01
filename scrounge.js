@@ -105,31 +105,18 @@ var scrounge = module.exports = {
   getAssociatedCSSTree : function (treeObj, fn) {
     var newFileObjArr = [];
 
-    if (!treeObj.fileObjArr || !treeObj.fileObjArr.length) return fn();
-
     (function getNext(x, fileObj, filename) {
       if (!x--) return fn(null, newFileObjArr);
-      fileObj = BMBLib.clone(treeObj.fileObjArr[x]);
-      
-      if (!fileObj.filename) {
-         console.log(Message.missingDependency(treeObj.fileInfoObj.treename,  treeObj.fileObjArr[x].treename));
-      }
-
+      fileObj = Object.create(treeObj.fileObjArr[x]);
       filename = fileObj.filename.replace(/\.js$/, '.css');
-      InfoFile.getFromFile(filename, function (err, infoFileObj) {
-        if (err) return fn(err);        
-        newFileObjArr.push(infoFileObj);
-        getNext(x);
-      });
-      /*
-      FileUtil.getFile(filename, function (err, fd, nfileObj) {
-        if (err) return getNext(x);
 
-        nfileObj = InfoFile.getFromFile(fd, filename);
-        newFileObjArr.push(nfileObj);
+      InfoFile.getFromFile(filename, function (err, infoFileObj) {
+        // ignore error... perhaps the file doesn't exist
+        if (typeof infoFileObj === 'object') {
+          newFileObjArr.push(infoFileObj);
+        }
         getNext(x);
       });
-       */
     }(treeObj.fileObjArr.length));
   },
 
@@ -143,12 +130,12 @@ var scrounge = module.exports = {
             // find trees matching filter name -convert them
             return (function getNextTree(y, tree) {
               if (!y--) return fn(null, assocTreeArr);
-              that.getAssociatedCSSTree(treeObjArr[y], function (err, newTreeObj) {
+              that.getAssociatedCSSTree(treeObjArr[y], function (err, newFileObjArr) {
                 var tree = BMBLib.clone(treeObjArr[y]);
                 tree.fileInfoObj = BMBLib.clone(tree.fileInfoObj);
                 tree.fileInfoObj.filename = tree.fileInfoObj.filename.replace(/\.js$/, '.css');
                 tree.fileInfoObj.type = 'css';
-                tree.fileObjArr = newTreeObj;
+                tree.fileObjArr = newFileObjArr;
 
                 assocTreeArr.push(tree);
 
@@ -198,7 +185,7 @@ var scrounge = module.exports = {
       treeArr.map(function (tree) {
         tree.reportMissingDependencyArr(missingDependencyArr);
       });
-      console.log('[!!!] missingDependencies: ' + missingDependencyArr);
+      console.log(Message.missingDependencyArr(missingDependencyArr));
       return fn(Message.stopping());
     } 
     fn(null);
@@ -228,7 +215,6 @@ var scrounge = module.exports = {
             })];
           } else {
             treeObjArr = scrounge.getAsTrees(fileInfoObjArr, filters);            
-    //        console.log('filterTrees', treeObjArr);
           }
 
           scrounge.treesInspect(treeObjArr, function (err) {
