@@ -1,4 +1,4 @@
-var InfoFile = require('../lib/InfoFile'),
+var InfoFile = require('../lib/fileInfo/fileInfoNode'),
     PkLib = require('../lib/BMBLib');
 
 describe("InfoFile.getNew", function () {
@@ -11,7 +11,7 @@ describe("InfoFile.getNew", function () {
       type : 'type',
       dependencyArr : ['one', 'two'],
       timestamp : new Date(),
-      authors : 'authors'
+      authorsArr : 'authors'
     });
 
     expect( typeof infoFileObj ).toBe( 'object' );
@@ -22,7 +22,7 @@ describe("InfoFile.getNew", function () {
     expect( infoFileObj.dependencyArr[0] ).toBe( 'one' );
     expect( infoFileObj.dependencyArr[1] ).toBe( 'two' );
     expect( typeof infoFileObj.timestamp ).toBe( 'object' );
-    expect( infoFileObj.authors ).toBe( 'authors' );
+    expect( infoFileObj.authorsArr ).toBe( 'authors' );
   });
 
   it("should construct an object with params, none", function () {
@@ -35,10 +35,12 @@ describe("InfoFile.getNew", function () {
     expect( PkLib.isArray(infoFileObj.dependencyArr) ).toBe( true );
     expect( infoFileObj.dependencyArr.length ).toBe( 0 );
     expect( typeof infoFileObj.timestamp ).toBe( 'object' );
-    expect( infoFileObj.authors ).toBe( null );
+    expect( infoFileObj.authorsArr.length ).toBe( 0 );
   });
 
 });
+
+
 
 describe("InfoFile.getFromFile", function () {  
   // clone info file to allow safe definition of `readFile` used by this method
@@ -69,7 +71,7 @@ describe("InfoFile.getFromFile", function () {
       expect( res.dependencyArr[0] ).toBe( 'PkLib.js' );
       expect( res.dependencyArr[6] ).toBe( 'ViewNavTop.js' );
       expect( typeof res.timestamp ).toBe( 'object' );
-      expect( res.authors[0] ).toBe( 'Bumblehead (www.bumblehead.com)' );
+      expect( res.authorsArr[0] ).toBe( 'Bumblehead (www.bumblehead.com)' );
 
       done();
     });
@@ -160,14 +162,24 @@ describe("infoFile.getPublicPathStr", function () {
 
 
 describe("infoFile.getFilenameRe", function () {
-  var infoFile, params, result;
+  var infoFile, params, result, resultExpected;
 
   it("should return a RE for matching filename", function () {  
     infoFile = InfoFile.getNew({ filename : "/path/to/script.js" });
-    params = { forceTimestamp : 'FORCE'};
     result = infoFile.getFilenameRe(params);
-//    console.log('our re ', result);
-//    expect( result ).toBe( "/output/path/script.js" );
+    resultExpected = new RegExp(/[/"']script.js/);        
+    expect( result.toString() ).toBe( resultExpected.toString() );
   });
+
+  it("should return a RE for matching filename, with timestamp", function () {  
+    infoFile = InfoFile.getNew({ filename : "/path/to/script.js" });
+    params = { isTimestamped : true };
+    result = infoFile.getFilenameRe(params);
+    resultExpected = new RegExp(/[/"']script_\d{4}\.\d{2}\.\d{2}-\d{2}:\d{2}:\d{2}.js/);    
+    expect( result.toString() ).toBe( resultExpected.toString() );
+  });
+
+
 });
+
 

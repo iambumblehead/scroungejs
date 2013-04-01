@@ -1,4 +1,4 @@
-var BasepageUtil = require('../lib/BasepageUtil');
+var BasepageUtil = require('../lib/fileInfo/fileInfoBasepage');
 
 var basepageStr_valid = 'string';
 
