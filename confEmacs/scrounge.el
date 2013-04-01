@@ -23,32 +23,12 @@
 
 (puthash "scroungejs" "~/Software/scroungejs" *Project-Root-Hash*)
 
-(puthash "kuaadmin" "~/Software/kuaweb/sources/appSrc" *Project-Source-Hash*)
-(puthash "kuaadmin" "~/Software/kuaweb/sources/app" *Project-Scrounge-Hash*)
-(puthash "kuaadmin" "~/Software/kuaweb/sources/admin.html" *Basepage-Path-Hash*)
-(puthash "kuaadmin" "~/Software/kuaweb" *Project-Root-Hash*)
-(puthash "kuaadmin" "/app" *Public-Root-Hash*)
-
-(puthash "kuaweb" "~/Software/kuaweb/sources/appSrc" *Project-Source-Hash*)
-(puthash "kuaweb" "~/Software/kuaweb/sources/app" *Project-Scrounge-Hash*)
-(puthash "kuaweb" "~/Software/kuaweb/sources/index.html" *Basepage-Path-Hash*)
-(puthash "kuaweb" "~/Software/kuaweb" *Project-Root-Hash*)
-(puthash "kuaweb" "~/Software/kuaweb/log/out.log" *Err-Log-Hash*)
-(puthash "kuaweb" "/app" *Public-Root-Hash*)
-
-(puthash "kuawebHTTP" "~/Software/kuaweb/sources/appSrc" *Project-Source-Hash*)
-(puthash "kuawebHTTP" "~/Software/kuaweb/sources/app" *Project-Scrounge-Hash*)
-(puthash "kuawebHTTP" "~/Software/kuaweb/sources/indexHTTP.html" *Basepage-Path-Hash*)
-(puthash "kuawebHTTP" "~/Software/kuaweb" *Project-Root-Hash*)
-(puthash "kuawebHTTP" "/app" *Public-Root-Hash*)
-
 (puthash "cucumberWeb" "~/Software/cucumberWeb/sources/appSrc" *Project-Source-Hash*)
 (puthash "cucumberWeb" "~/Software/cucumberWeb/sources/app" *Project-Scrounge-Hash*)
 (puthash "cucumberWeb" "~/Software/cucumberWeb/sources/index.mustache" *Basepage-Path-Hash*)
 (puthash "cucumberWeb" "~/Software/cucumberWeb" *Project-Root-Hash*)
 (puthash "cucumberWeb" "~/Software/cucumberWeb/log/out.log" *Err-Log-Hash*)
 (puthash "cucumberWeb" "/app" *Public-Root-Hash*)
-
 
 (puthash "briannarigg.com" "~/Software/briannarigg.com/sources/appSrc" *Project-Source-Hash*)
 (puthash "briannarigg.com" "~/Software/briannarigg.com/sources/app" *Project-Scrounge-Hash*)
@@ -119,11 +99,9 @@
         (persist-dir default-directory))
     (cd compile-dir)
     (setq compilation-scroll-output t)
-    (ansi-color-for-comint-mode-on)
-    (shell-command "npm test")
+    (compile "npm test")
     (cd persist-dir)))
 
-;;(global-set-key (kbd "C-c u") (lambda() (interactive) (tailLog focus-site)))
 (global-set-key (kbd "C-c u") 'Unit-Tests)
 
 
@@ -243,7 +221,8 @@
           (substring match p (match-end 0))))))
 
 (defun is-scrounge-file (file-name) ()
-  "is the buffer file a scrounge file? is `Filename: $name` on first line?"
+  "is the buffer file a scrounge file? 
+is `Filename: $name` on first line?"
   (let* ((extn (file-name-extension buffer-file-name)))
     (if (or (equal extn "js") 
             (equal extn "css"))
