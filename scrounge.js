@@ -16,15 +16,6 @@ var argv = require('optimist').argv,
 
 
 var scrounge = module.exports = {
-  getBasepageFilters : function (basepage, fn) {
-    if (!basepage) return fn(null, null);
-    basepage.getFilters(fn);
-  },
-
-  writeBasepage : function (basepage, treeObjArr, opts, fn) {
-    if (!basepage) return fn(null, null);
-    basepage.writeTrees(treeObjArr, opts, fn);
-  },
 
   // copies each tree item to timestamped file in final dir
   writeFilesTreeArr : function (treeObjArr, opts, fn) {
@@ -77,23 +68,6 @@ var scrounge = module.exports = {
     }
   },
 
-  // async access of files as fileinfo objs
-  getFileInfoObjArr : function (filenameArr, fn) {
-    var fileObjArr = [], that = this;
-
-    if (!filenameArr.length) return fn(null, fileObjArr);
-    (function openNext(x, filename) {
-      if (!x--) return fn(null, fileObjArr);
-      if (!(filename = filenameArr[x])) return openNext(x);
-      console.log(Message.openFile(filename));
-      InfoFile.getFromFile(filename, function (err, infoFileObj) {
-        if (err) return fn(err);        
-        fileObjArr.push(infoFileObj);
-        openNext(x);
-      });
-    }(filenameArr.length));      
-  },
-
   // build a new tree with associated files of different extension
   getAssociatedCSSTree : function (treeObj, fn) {
     var newFileObjArr = [];
@@ -113,9 +87,19 @@ var scrounge = module.exports = {
     }(treeObj.fileObjArr.length));
   },
 
+  
+
   getAssociatedTrees : function (filters, treeObjArr, fn) {
     var assocTreeArr = [], x, filtername, y, type, that = this;
 
+    // if css filters exist, 
+    //  loop through each css filter,
+    //  identify any matching js filter,
+    //    
+    // strategy create a method in filters object
+    //   filters.getAssociatedFilers?
+    //   scrounge.css tree=main.js
+    //   where filter is css and it matches a js name
     if (filters && filters.css) {
       for (x = filters.css.length; x--;) {
         if ((filtername = filters.css[x])) {
@@ -187,11 +171,11 @@ var scrounge = module.exports = {
   treesBuild : function (opts, basepage, fn) {
     var basepageUtil, fileObjBuilder, x, treeObjArr;
 
-    FileUtil.getFiles(opts, function (err, fileInfoArr) {
+    FileUtil.getFiles(opts, function (err, filenameArr) {
       if (err) return fn(err);
-      scrounge.getBasepageFilters(basepage, function (err, filters) {
+      basepage.getFilters(function (err, filters) {
         if (err) return fn(err);
-        scrounge.getFileInfoObjArr(fileInfoArr, function (err, fileInfoObjArr) {
+        InfoFile.getFromFileArr(filenameArr, function (err, fileInfoObjArr) {
           if (err) return fn(err);          
 
           if (opts.trees) {
@@ -229,19 +213,15 @@ var scrounge = module.exports = {
     if (!treeObjArr.length) return Message.noTreesFound();
     scrounge.writeCompressedTrees(treeObjArr, opts, function (err, compressed) {
       if (err) return fn(err);
-      scrounge.writeBasepage(basepage, treeObjArr, opts, function (err) {
-        if (err) return fn(err);        
-        fn(null);
-      });
+      basepage.writeTrees(treeObjArr, opts, fn);
     });
   },
 
   go : function (opts, fn) {
     var bgnDateObj = new Date(), totalTime,
-        basepage = (opts.basepage) ? BasepageUtil.getNew(opts.basepage) : null;
+        basepage = BasepageUtil.getNew(opts);
 
     scrounge.treesBuild(opts, basepage, function (err, treeArr) {
-      console.log('treesBuild', treeArr);
       if (err) return console.log(err);
       scrounge.treesApply(treeArr, opts, basepage, function (err) {
         if (err) return console.log(err);
