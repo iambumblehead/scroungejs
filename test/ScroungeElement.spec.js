@@ -1,4 +1,7 @@
 var ScroungeElement = require('../lib/ScroungeElement'),
+    FileInfoTree = require('../lib/fileInfo/fileInfoTree'),
+    FileInfoNode = require('../lib/fileInfo/fileInfoNode'),
+    UserOptions = require('../lib/UserOptions'),
     BMBLib = require('../lib/BMBLib');
 
 var markupStr_scroungeElements_treesNone_typeJS_valid = '' +
@@ -28,7 +31,7 @@ describe("ScroungeElement.getFromMarkup", function () {
     expect( scroungeElemObj.elem ).toBe( str );
     expect( BMBLib.isArray(scroungeElemObj.trees) ).toBe( true );
     expect( scroungeElemObj.trees.length ).toBe( 0 );
-    expect( scroungeElemObj.type ).toBe( 'js' );
+    expect( scroungeElemObj.type ).toBe( '.js' );
   });
 
 
@@ -45,7 +48,7 @@ describe("ScroungeElement.getFromMarkup", function () {
     expect( scroungeElemObj.elem ).toBe( str );
     expect( BMBLib.isArray(scroungeElemObj.trees) ).toBe( true );
     expect( scroungeElemObj.trees.length ).toBe( 2 );
-    expect( scroungeElemObj.type ).toBe( 'js' );
+    expect( scroungeElemObj.type ).toBe( '.js' );
   });
 });
 
@@ -75,7 +78,7 @@ describe("getElemIncludeTplStr", function () {
   it("should return correct script include element, js", function () {
     var str = markupStr_scroungeElements_treesNone_typeJS_valid,
         scroungeElemObj = ScroungeElement.getNew({
-          type : 'js'
+          type : '.js'
         }),
         includeTplStr = scroungeElemObj.getElemIncludeTplStr(),
         includeTplStrJS = '<script src="$" type="text/javascript"></script>';
@@ -86,7 +89,7 @@ describe("getElemIncludeTplStr", function () {
   it("should return correct script include element, css", function () {
     var str = markupStr_scroungeElements_treesNone_typeJS_valid,
         scroungeElemObj = ScroungeElement.getNew({
-          type : 'css'
+          type : '.css'
         }),
         includeTplStr = scroungeElemObj.getElemIncludeTplStr(),
         includeTplStrCSS = '<link href="$" rel="stylesheet" type="text/css">';
@@ -102,7 +105,7 @@ describe("getScroungeElemTplStr", function () {
   it("should return correct scrounge element, js", function () {
     var str = markupStr_scroungeElements_treesNone_typeJS_valid,
         scroungeElemObj = ScroungeElement.getNew({
-          type : 'js'
+          type : '.js'
         }),
         scroungeElemTplStr = scroungeElemObj.getScroungeElemTplStr(),
         scroungeElemTplStrFin = '<!-- <scrounge.js$tree> -->',
@@ -114,7 +117,7 @@ describe("getScroungeElemTplStr", function () {
   it("should return correct scrounge element, css", function () {
     var str = markupStr_scroungeElements_treesNone_typeJS_valid,
         scroungeElemObj = ScroungeElement.getNew({
-          type : 'css'
+          type : '.css'
         }),
         scroungeElemTplStr = scroungeElemObj.getScroungeElemTplStr(),
         scroungeElemTplStrFin = '<!-- <scrounge.css$tree> -->',
@@ -197,13 +200,13 @@ describe("isTreeMatch", function () {
   
   scroungeElemObj = ScroungeElement.getNew({
     trees : ['treeOne', 'treeTwo'],
-    type : 'css'
+    type : '.css'
   });
 
   it("should return false when treename not defined in scroungeElem", function () {
     treeObj = {
       treename : 'treeThree',
-      type : 'css'
+      type : '.css'
     };
 
     expect( scroungeElemObj.isTreeMatch(treeObj) ).toBe(false);
@@ -213,7 +216,7 @@ describe("isTreeMatch", function () {
   it("should return true when treename is defined in scroungeElem", function () {
     treeObj = {
       treename : 'treeTwo',
-      type : 'css'
+      type : '.css'
     };
 
     expect( scroungeElemObj.isTreeMatch(treeObj) ).toBe(true);
@@ -222,7 +225,7 @@ describe("isTreeMatch", function () {
   it("should return false when type is not defined in scroungeElem", function () {
     treeObj = {
       treename : 'treeTwo',
-      type : 'js'
+      type : '.js'
     };
 
     expect( scroungeElemObj.isTreeMatch(treeObj) ).toBe(false);
@@ -264,11 +267,11 @@ describe("getTreeAttributeStr", function () {
 
 });
 
-describe("getScroungeElemStr", function () {
+describe("scroungeElement.getScroungeElemStr", function () {
   var scroungeElemObj, scroungeElemStr, finStr;
   it("should return a correct element with includeElemsStr", function () {
     scroungeElemObj = ScroungeElement.getNew({
-      type : 'js'
+      type : '.js'
     });
 
     scroungeElemStr = scroungeElemObj.getScroungeElemStr('__str__');
@@ -283,7 +286,7 @@ describe("getScroungeElemStr", function () {
 
   it("should return a correct element without includeElemsStr", function () {
     scroungeElemObj = ScroungeElement.getNew({
-      type : 'js'
+      type : '.js'
     });
 
     scroungeElemStr = scroungeElemObj.getScroungeElemStr('');
@@ -297,4 +300,195 @@ describe("getScroungeElemStr", function () {
 
 });
 
+describe("scroungeElement.getIncludeTag", function () {
+  var fileInfoNode, scroungeElemObj, result, resultExpected;
+  
+  it("should return a correctly formatted js include element", function () {
+    fileInfoNode = FileInfoNode.getNew({
+      filename: 'sources/appSrc/Main.js',
+      treename: 'Main.js',
+      type: '.js',
+      dependencyArr: [],
+      timestamp: Date.now(),
+      authorsArr: ['author1']      
+    });
+    
+    scroungeElemObj = ScroungeElement.getNew({
+      type : '.js'
+    });
+
+    result = scroungeElemObj.getIncludeTag(fileInfoNode, {});
+    resultExpected =
+      '<script src="Main.js" type="text/javascript"></script>';
+    
+    expect( result ).toBe( resultExpected );
+  });
+
+  it("should return a correctly formatted css include element", function () {
+    fileInfoNode = FileInfoNode.getNew({
+      filename: 'sources/appSrc/Main.css',
+      treename: 'Main.css',
+      type: '.css',
+      dependencyArr: [],
+      timestamp: Date.now(),
+      authorsArr: ['author1']      
+    });
+    
+    scroungeElemObj = ScroungeElement.getNew({
+      type : '.css'
+    });
+
+    result = scroungeElemObj.getIncludeTag(fileInfoNode, {});
+    resultExpected =
+      '<link href="Main.css" rel="stylesheet" type="text/css">';
+    
+    expect( result ).toBe( resultExpected );
+  });
+
+});
+
+
+describe("scroungeElement.getIncludeTagArr", function () {
+  var fileInfoTree, fileInfoNode, scroungeElemObj, result, resultExpected, opts;
+
+  it("should return an array of js include elements, unconcatenated", function () {
+    fileInfoTree = FileInfoTree.getNew({
+      fileInfoObj : FileInfoNode.getNew({
+        filename: 'sources/appSrc/dep1.js',
+        treename: 'Main.js',
+        type: '.js',
+        dependencyArr : [],
+        timestamp: Date.now(),
+        authorsArr: ['author1']
+      }),
+      fileObjArr : [
+        FileInfoNode.getNew({
+          filename: 'sources/appSrc/dep1.js',
+          treename: 'Main.js',
+          type: '.js',
+          dependencyArr: [],
+          timestamp: Date.now(),
+          authorsArr: ['author1']      
+        }),
+        FileInfoNode.getNew({
+          filename: 'sources/appSrc/dep2.js',
+          treename: 'Main.js',
+          type: '.js',
+          dependencyArr: [],
+          timestamp: Date.now(),
+          authorsArr: ['author1']      
+        })
+      ]
+    });
+    scroungeElemObj = ScroungeElement.getNew({
+      type : '.js'
+    });
+
+    opts = UserOptions.getNew({});
+    result = scroungeElemObj.getIncludeTagArr([fileInfoTree], opts);
+    resultExpected = [
+      '<script src="cmpr/dep1.js" type="text/javascript"></script>',
+      '<script src="cmpr/dep2.js" type="text/javascript"></script>'
+    ];
+
+    expect( result[0] ).toBe( resultExpected[0] );
+    expect( result[1] ).toBe( resultExpected[1] );
+  });
+
+
+  it("should return an array of js include elements, concatenated", function () {
+    fileInfoTree = FileInfoTree.getNew({
+      fileInfoObj : FileInfoNode.getNew({
+        filename: 'sources/appSrc/dep1.js',
+        treename: 'Main.js',
+        type: '.js',
+        dependencyArr : [],
+        timestamp: Date.now(),
+        authorsArr: ['author1']
+      }),
+      fileObjArr : [
+        FileInfoNode.getNew({
+          filename: 'sources/appSrc/dep1.js',
+          treename: 'Main.js',
+          type: '.js',
+          dependencyArr: [],
+          timestamp: Date.now(),
+          authorsArr: ['author1']      
+        }),
+        FileInfoNode.getNew({
+          filename: 'sources/appSrc/dep2.js',
+          treename: 'Main.js',
+          type: '.js',
+          dependencyArr: [],
+          timestamp: Date.now(),
+          authorsArr: ['author1']      
+        })
+      ]
+    });
+    scroungeElemObj = ScroungeElement.getNew({
+      type : '.js'
+    });
+
+    opts = UserOptions.getNew({ isConcatenation : true });
+    result = scroungeElemObj.getIncludeTagArr([fileInfoTree], opts);
+    resultExpected = [
+      '<script src="cmpr/dep1.js" type="text/javascript"></script>'
+    ];
+
+    expect( result[0] ).toBe( resultExpected[0] );
+    expect( result[1] ).toBe( resultExpected[1] );
+  });
+
+});
+
+describe("scroungeElement.getTreeArrAsScroungeElemStr", function () {
+  var fileInfoTree, fileInfoNode, scroungeElemObj, result, resultExpected, opts;
+
+
+  it("should return a correctly formatted scrounge element", function () {
+
+    fileInfoTree = FileInfoTree.getNew({
+      fileInfoObj : FileInfoNode.getNew({
+        filename: 'sources/appSrc/dep1.js',
+        treename: 'dep1.js',
+        type: '.js',
+        dependencyArr : [],
+        timestamp: Date.now(),
+        authorsArr: ['author1']
+      }),
+      fileObjArr : [
+        FileInfoNode.getNew({
+          filename: 'sources/appSrc/dep1.js',
+          treename: 'Main.js',
+          type: '.js',
+          dependencyArr: [],
+          timestamp: Date.now(),
+          authorsArr: ['author1']      
+        }),
+        FileInfoNode.getNew({
+          filename: 'sources/appSrc/dep2.js',
+          treename: 'Main.js',
+          type: '.js',
+          dependencyArr: [],
+          timestamp: Date.now(),
+          authorsArr: ['author1']      
+        })
+      ]
+    });
+
+    scroungeElemObj = ScroungeElement.getNew({
+      type : '.js'
+    });
+
+    opts = UserOptions.getNew({ isConcatenation : true });
+    result = scroungeElemObj.getTreeArrAsScroungeElemStr([fileInfoTree], opts);
+    resultExpected =
+      '<!-- <scrounge.js> -->\n' + 
+      '<script src="cmpr/dep1.js" type="text/javascript"></script>\n' + 
+      '<!-- </scrounge> -->';
+
+    expect( result ).toBe( resultExpected );
+
+  });
+});
 

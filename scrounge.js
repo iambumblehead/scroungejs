@@ -91,13 +91,6 @@ var scrounge = module.exports = {
         fileObjArr.push(infoFileObj);
         openNext(x);
       });
-      /*
-      fs.readFile(filename, 'ascii', function(err, fd) {
-        if (err) return fn(err);
-        fileObjArr.push(InfoFile.getFromFile(fd, filename));
-        openNext(x);
-      });
-       */
     }(filenameArr.length));      
   },
 
@@ -134,7 +127,7 @@ var scrounge = module.exports = {
                 var tree = BMBLib.clone(treeObjArr[y]);
                 tree.fileInfoObj = BMBLib.clone(tree.fileInfoObj);
                 tree.fileInfoObj.filename = tree.fileInfoObj.filename.replace(/\.js$/, '.css');
-                tree.fileInfoObj.type = 'css';
+                tree.fileInfoObj.type = '.css';
                 tree.fileObjArr = newFileObjArr;
 
                 assocTreeArr.push(tree);
@@ -248,6 +241,7 @@ var scrounge = module.exports = {
         basepage = (opts.basepage) ? BasepageUtil.getNew(opts.basepage) : null;
 
     scrounge.treesBuild(opts, basepage, function (err, treeArr) {
+      console.log('treesBuild', treeArr);
       if (err) return console.log(err);
       scrounge.treesApply(treeArr, opts, basepage, function (err) {
         if (err) return console.log(err);

@@ -2,10 +2,10 @@ var BasepageUtil = require('../lib/fileInfo/fileInfoBasepage');
 
 var basepageStr_valid = 'string';
 
-describe("BasepageUtil.getScroungeElementObjArr", function () {
+describe("fileInfoBasepage.getScroungeElementObjArr", function () {
   var basepageUtil = BasepageUtil.getNew({ basepage : 'testbasepage' });
   
-  basepageUtil.getBasepageStr = function (fn) {
+  basepageUtil.getContentStr = function (fn) {
     fn(null, basepageStr_valid);
   };
 

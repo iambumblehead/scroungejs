@@ -96,10 +96,20 @@ describe("FileInfoParser.getDependencies", function () {
     '// Requires: file1.js, file2.js',
     '// Requires: file1.js ',
     '// Requires: file1.js',
-    ''
+    '',
+    '// Requires: file1.js,\n' +
+    '// file2.js'
+  ],
+  displayStrArr = [
+    '// Requires: file1.js, file2.js  ',
+    '// Requires: file1.js, file2.js',
+    '// Requires: file1.js ',
+    '// Requires: file1.js',
+    '',
+    '// Requires: file1.js,\\n// file2.js'
   ];
 
-  it("should discover dependencies for `" + testStrArr[0] + "`", function () {
+  it("should discover dependencies for `" + displayStrArr[0] + "`", function () {
     result = FileInfoParser.getDependencies(testStrArr[0]);
 
     expect( BMBLib.isArray(result) ).toBe( true );    
@@ -107,32 +117,39 @@ describe("FileInfoParser.getDependencies", function () {
     expect( result[1] ).toBe( 'file2.js' );    
   });
 
-  it("should discover dependencies for `" + testStrArr[1] + "`", function () {
+  it("should discover dependencies for `" + displayStrArr[1] + "`", function () {
     result = FileInfoParser.getDependencies(testStrArr[1]);
 
     expect( BMBLib.isArray(result) ).toBe( true );    
     expect( result[0] ).toBe( 'file1.js' );    
   });
 
-  it("should discover dependencies for `" + testStrArr[2] + "`", function () {
+  it("should discover dependencies for `" + displayStrArr[2] + "`", function () {
     result = FileInfoParser.getDependencies(testStrArr[2]);
 
     expect( BMBLib.isArray(result) ).toBe( true );    
     expect( result[0] ).toBe( 'file1.js' );    
   });
 
-  it("should discover dependencies for `" + testStrArr[3] + "`", function () {
+  it("should discover dependencies for `" + displayStrArr[3] + "`", function () {
     result = FileInfoParser.getDependencies(testStrArr[3]);
 
     expect( BMBLib.isArray(result) ).toBe( true );    
     expect( result[0] ).toBe( 'file1.js' );    
   });
 
-  it("should not discover dependencies for `" + testStrArr[4] + "`", function () {
+  it("should not discover dependencies for `" + displayStrArr[4] + "`", function () {
     result = FileInfoParser.getDependencies(testStrArr[4]);
 
     expect( BMBLib.isArray(result) ).toBe( true );    
     expect( result.length ).toBe( 0 );    
+  });
+
+  it("should discover dependencies for `" + displayStrArr[5] + "`", function () {
+    result = FileInfoParser.getDependencies(testStrArr[5]);
+
+    expect( BMBLib.isArray(result) ).toBe( true );    
+    expect( result.length ).toBe( 2 );    
   });
 });
 
