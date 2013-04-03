@@ -20,8 +20,7 @@ var scrounge = module.exports = {
   // copies each tree item to timestamped file in final dir
   writeFilesTreeArr : function (treeObjArr, opts, fn) {
     var that = this, output = opts.outputPath;
-
-    if (!treeObjArr || !treeObjArr.length) return fn(null, 'success');
+    //if (!treeObjArr || !treeObjArr.length) return fn(null, 'success');
     (function copyNextTreeObj(x, treeObj) {
       if (!x--) return fn(null, 'success');    
       treeObjArr[x].writeInfoFiles(output, opts, function(err, res) {
@@ -33,8 +32,7 @@ var scrounge = module.exports = {
 
   writeTreesTreeArr : function (treeObjArr, opts, fn) {
     var that = this, output = opts.outputPath;
-
-    if (!treeObjArr || !treeObjArr.length) return fn(null, 'success');
+    //if (!treeObjArr || !treeObjArr.length) return fn(null, 'success');
     (function copyNextTreeObj(x, treeObj) {
       if (!x--) return fn(null, 'success');    
       treeObjArr[x].writeInfoTree(output, opts, function(err, res) {
@@ -68,62 +66,23 @@ var scrounge = module.exports = {
     }
   },
 
-  // build a new tree with associated files of different extension
-  getAssociatedCSSTree : function (treeObj, fn) {
-    var newFileObjArr = [];
-
-    (function getNext(x, fileObj, filename) {
-      if (!x--) return fn(null, newFileObjArr);
-      fileObj = Object.create(treeObj.fileObjArr[x]);
-      filename = fileObj.filename.replace(/\.js$/, '.css');
-
-      InfoFile.getFromFile(filename, function (err, infoFileObj) {
-        // ignore error... perhaps the file doesn't exist
-        if (typeof infoFileObj === 'object') {
-          newFileObjArr.push(infoFileObj);
-        }
-        getNext(x);
-      });
-    }(treeObj.fileObjArr.length));
-  },
-
-  
-
   getAssociatedTrees : function (filters, treeObjArr, fn) {
-    var assocTreeArr = [], x, filtername, y, type, that = this;
+    var hostTreeNameArr = filters.getHostTreeNameArr(),
+        assocTreeArr = [], x, hostTreeObjArr;
 
-    // if css filters exist, 
-    //  loop through each css filter,
-    //  identify any matching js filter,
-    //    
-    // strategy create a method in filters object
-    //   filters.getAssociatedFilers?
-    //   scrounge.css tree=main.js
-    //   where filter is css and it matches a js name
-    if (filters && filters.css) {
-      for (x = filters.css.length; x--;) {
-        if ((filtername = filters.css[x])) {
-          if (filtername.match(/js$/)) {
-            // find trees matching filter name -convert them
-            return (function getNextTree(y, tree) {
-              if (!y--) return fn(null, assocTreeArr);
-              that.getAssociatedCSSTree(treeObjArr[y], function (err, newFileObjArr) {
-                var tree = BMBLib.clone(treeObjArr[y]);
-                tree.fileInfoObj = BMBLib.clone(tree.fileInfoObj);
-                tree.fileInfoObj.filename = tree.fileInfoObj.filename.replace(/\.js$/, '.css');
-                tree.fileInfoObj.type = '.css';
-                tree.fileObjArr = newFileObjArr;
+    hostTreeObjArr = treeObjArr.filter(function (treeObj) {
+      return hostTreeNameArr.indexOf(treeObj.fileInfoObj.treename) !== -1;
+    });
 
-                assocTreeArr.push(tree);
-
-                getNextTree(y);
-              });              
-            }(treeObjArr.length));
-          }
-        }
-      }
-    }
-    fn(null, assocTreeArr);
+    (function next(x, treeObj) {
+      if (!x--) return fn(null, assocTreeArr);
+      treeObj = hostTreeObjArr[x];
+      treeObj.getAssociatedTree(function (err, assocTree) {
+        if (err) return fn(err);
+        assocTreeArr.push(assocTree);
+        next(x);        
+      });
+    }(hostTreeObjArr.length));
   },
 
   getAsTrees : function (fileInfoObjArr, filters) {
@@ -196,8 +155,10 @@ var scrounge = module.exports = {
 
           scrounge.treesInspect(treeObjArr, function (err) {
             if (err) return fn(err);
-            scrounge.getAssociatedTrees((filters) ? filters.trees : null, treeObjArr, function (err, assocTreeArr) {
+            //scrounge.getAssociatedTrees((filters) ? filters.trees : null, treeObjArr, function (err, assocTreeArr) {
+            scrounge.getAssociatedTrees(filters, treeObjArr, function (err, assocTreeArr) {
               if (err) return fn(err);              
+
               for (x = assocTreeArr.length; x--;) {
                 treeObjArr.push(assocTreeArr[x]);
               }
