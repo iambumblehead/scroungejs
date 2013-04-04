@@ -137,10 +137,14 @@ var scrounge = module.exports = {
         InfoFile.getFromFileArr(filenameArr, function (err, fileInfoObjArr) {
           if (err) return fn(err);          
 
+          if (!filters) {
+            filters = FilterTree.getNew();
+          }
+
           if (opts.trees) {
-            if (!filters) {
-              filters = FilterTree.getNew();
-            }
+//            if (!filters) {
+//              filters = FilterTree.getNew();
+//            }
             filters.addTreeByFilename(opts.trees);              
           }
 
@@ -155,7 +159,6 @@ var scrounge = module.exports = {
 
           scrounge.treesInspect(treeObjArr, function (err) {
             if (err) return fn(err);
-            //scrounge.getAssociatedTrees((filters) ? filters.trees : null, treeObjArr, function (err, assocTreeArr) {
             scrounge.getAssociatedTrees(filters, treeObjArr, function (err, assocTreeArr) {
               if (err) return fn(err);              
 
