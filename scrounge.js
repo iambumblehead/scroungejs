@@ -20,7 +20,6 @@ var scrounge = module.exports = {
   // copies each tree item to timestamped file in final dir
   writeFilesTreeArr : function (treeObjArr, opts, fn) {
     var that = this, output = opts.outputPath;
-    //if (!treeObjArr || !treeObjArr.length) return fn(null, 'success');
     (function copyNextTreeObj(x, treeObj) {
       if (!x--) return fn(null, 'success');    
       treeObjArr[x].writeInfoFiles(output, opts, function(err, res) {
@@ -32,7 +31,6 @@ var scrounge = module.exports = {
 
   writeTreesTreeArr : function (treeObjArr, opts, fn) {
     var that = this, output = opts.outputPath;
-    //if (!treeObjArr || !treeObjArr.length) return fn(null, 'success');
     (function copyNextTreeObj(x, treeObj) {
       if (!x--) return fn(null, 'success');    
       treeObjArr[x].writeInfoTree(output, opts, function(err, res) {
@@ -48,19 +46,19 @@ var scrounge = module.exports = {
         unconcatArr = [], x, forceTypes;
 
     // do not compress or copy files if basepage uses source paths.
-    if (opts.isBasepageSourcePaths) return  fn(null);
+    if (opts.isBasepageSourcePaths) return fn(null);
 
     if (opts.isConcatenation) {
-      this.writeTreesTreeArr(treeObjArr, opts, fn);
+      that.writeTreesTreeArr(treeObjArr, opts, fn);
     } else {
-      for (x = treeObjArr.length; x--;) {
-        if (opts.isForceConcatenatedType(treeObjArr[x].fileInfoObj)) {
-          concatArr.push(treeObjArr[x]);
+      treeObjArr.map(function (treeObj) {
+        if (opts.isForceConcatenatedType(treeObj.fileInfoObj)) {
+          concatArr.push(treeObj);
         } else {
-          unconcatArr.push(treeObjArr[x]);
-        }
-      }
-      this.writeTreesTreeArr(concatArr, opts, function () {
+          unconcatArr.push(treeObj);
+        }        
+      });
+      that.writeTreesTreeArr(concatArr, opts, function () {
         that.writeFilesTreeArr(unconcatArr, opts, fn);
       });
     }
@@ -141,12 +139,9 @@ var scrounge = module.exports = {
             filters = FilterTree.getNew();
           }
 
-          if (opts.trees) {
-//            if (!filters) {
-//              filters = FilterTree.getNew();
-//            }
-            filters.addTreeByFilename(opts.trees);              
-          }
+          opts.trees.map(function (treename) {
+            filters.addTreeByFilename(treename);              
+          });
 
           if (opts.isUpdateOnly) {
             treeObjArr = [InfoTree.getNew({
