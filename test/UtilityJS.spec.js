@@ -15,6 +15,6 @@ describe("infoFile.rmConsole", function () {
   it("should return a string w/ console calls replaced", function () {  
     str = '  var req = 4; \n console.log( "x: " + x + ""); \nvanilla';
     result = UtilityJS.rmConsole(str);
-    expect( result ).toBe( '  var req = 4; \n console.log(""); \nvanilla' );
+    expect( result ).toBe( '  var req = 4; \n "0"; \nvanilla' );
   });
 });
