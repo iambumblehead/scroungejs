@@ -1,6 +1,6 @@
 {
   "name": "scroungejs",
-  "version": "0.3.2",
+  "version": "0.3.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/iambumblehead/scroungejs.git"
@@ -13,10 +13,10 @@
     "deploy"
   ],
   "dependencies": {
-    "optimist": "0.3.0",
-    "uglify-js": "1.2.0",
-    "clean-css": "0.5.0",
-    "node-fs" : "0.1.5"
+    "optimist": ">=0.3.0",
+    "uglify-js": ">=2.0.0",
+    "clean-css": ">=0.5.0",
+    "node-fs" : ">=0.1.5"
   },
   "devDependencies" : {
       "jasmine-node" : ">=1.3.0"

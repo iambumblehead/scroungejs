@@ -18,13 +18,13 @@ Scroungejs provides advantages over other deployment tools:
  - by default, it does not add javascript to files it generates.  
  - it is packaged with an emacs config file.
  
-Scroungejs relies on other packages, notably: [css-clean][1] and [js-uglify][2].
+Scroungejs relies on other packages, notably: [css-clean][1] and [UglifyJS2][2].
 
 Read about [how it works](#how-it-works) to learn more, or [get started](#get-started) with scroungejs.
 
 [0]: http://www.bumblehead.com                            "bumblehead"
 [1]: http://github.com/GoalSmashers/clean-css              "css-clean"
-[2]: http://github.com/mishoo/UglifyJS                     "js-uglify"
+[2]: http://github.com/mishoo/UglifyJS2                    "js-uglify"
 
 ---------------------------------------------------------
 #### <a id="how-it-works"></a>HOW IT WORKS:
@@ -600,8 +600,9 @@ example scrounge elements are given below
  - `--isRemoveRequires=`_bool_  
    remove 'requires' statements from javascript files. `true` by default.
    
- - `--isRemoveConsole=`_bool_  
-   remove 'console' statements from javascript files. `false` by default.   
+ - `--isRemoveConsole=`_bool_ (_`false`_)  
+   remove 'console.log' statements from javascript files.
+   uses UglifyJS2 ast to comprehensively remove console.log
    
  - `--isUpdateOnly=`_bool_  
    modify include tags in a basepage only. do not build scrounge elements.
