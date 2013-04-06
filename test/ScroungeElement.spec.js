@@ -1,26 +1,26 @@
-var ScroungeElement = require('../lib/ScroungeElement'),
+var ScroungeElem = require('../lib/ScroungeElem'),
     FileInfoTree = require('../lib/fileInfo/fileInfoTree'),
     FileInfoNode = require('../lib/fileInfo/fileInfoNode'),
     UserOptions = require('../lib/UserOptions'),
     BMBLib = require('../lib/BMBLib');
 
-var markupStr_scroungeElements_treesNone_typeJS_valid = '' +
+var markupStr_scroungeElems_treesNone_typeJS_valid = '' +
   '   <!-- <scrounge.js> -->' + 
   '\n   <!-- </scrounge> -->';
 
-var markupStr_scroungeElements_treesTwo_typeJS_valid = '' +
+var markupStr_scroungeElems_treesTwo_typeJS_valid = '' +
   '   <!-- <scrounge.js trees="one,two"> -->' + 
   '\n   <!-- </scrounge> -->';
 
-var markupStr_scroungeElements_treesNone_typeCSS_valid = '' +
+var markupStr_scroungeElems_treesNone_typeCSS_valid = '' +
   '   <!-- <scrounge.css> -->' + 
   '\n   <!-- </scrounge> -->';
 
-describe("ScroungeElement.getFromMarkup", function () {
+describe("ScroungeElem.getFromMarkup", function () {
   
-  it("should return objArr from scroungeElements_treesNone_typeJS_valid", function () {
-    var str = markupStr_scroungeElements_treesNone_typeJS_valid,
-        scroungeElemObjArr = ScroungeElement.getFromStrScroungeElemObjArr(str),
+  it("should return objArr from scroungeElems_treesNone_typeJS_valid", function () {
+    var str = markupStr_scroungeElems_treesNone_typeJS_valid,
+        scroungeElemObjArr = ScroungeElem.getFromStrScroungeElemObjArr(str),
         scroungeElemObj;
 
     expect( BMBLib.isArray(scroungeElemObjArr) ).toBe( true );
@@ -35,9 +35,9 @@ describe("ScroungeElement.getFromMarkup", function () {
   });
 
 
-  it("should return objArr from scroungeElements_treesTwo_typeJS_valid", function () {
-    var str = markupStr_scroungeElements_treesTwo_typeJS_valid,
-        scroungeElemObjArr = ScroungeElement.getFromStrScroungeElemObjArr(str),
+  it("should return objArr from scroungeElems_treesTwo_typeJS_valid", function () {
+    var str = markupStr_scroungeElems_treesTwo_typeJS_valid,
+        scroungeElemObjArr = ScroungeElem.getFromStrScroungeElemObjArr(str),
         scroungeElemObj;
 
     expect( BMBLib.isArray(scroungeElemObjArr) ).toBe( true );
@@ -53,10 +53,10 @@ describe("ScroungeElement.getFromMarkup", function () {
 });
 
 
-describe("getElemIndentation", function () {
+describe("scroungeElem.getElemIndentation", function () {
   it("should return whitespace indentation", function () {
-    var str = markupStr_scroungeElements_treesNone_typeJS_valid,
-        scroungeElemObj = ScroungeElement.getNew({
+    var str = markupStr_scroungeElems_treesNone_typeJS_valid,
+        scroungeElemObj = ScroungeElem.getNew({
           elem : '   <!-- <scrounge.js> -->'
         });
 
@@ -64,8 +64,8 @@ describe("getElemIndentation", function () {
   });
 
   it("should return whitespace indentation", function () {
-    var str = markupStr_scroungeElements_treesNone_typeJS_valid,
-        scroungeElemObj = ScroungeElement.getNew({
+    var str = markupStr_scroungeElems_treesNone_typeJS_valid,
+        scroungeElemObj = ScroungeElem.getNew({
           elem : '<!-- <scrounge.js> -->'
         });
 
@@ -73,11 +73,11 @@ describe("getElemIndentation", function () {
   });
 });
 
-describe("getElemIncludeTplStr", function () {
+describe("scroungeElem.getElemIncludeTplStr", function () {
 
   it("should return correct script include element, js", function () {
-    var str = markupStr_scroungeElements_treesNone_typeJS_valid,
-        scroungeElemObj = ScroungeElement.getNew({
+    var str = markupStr_scroungeElems_treesNone_typeJS_valid,
+        scroungeElemObj = ScroungeElem.getNew({
           type : '.js'
         }),
         includeTplStr = scroungeElemObj.getElemIncludeTplStr(),
@@ -87,8 +87,8 @@ describe("getElemIncludeTplStr", function () {
   });
 
   it("should return correct script include element, css", function () {
-    var str = markupStr_scroungeElements_treesNone_typeJS_valid,
-        scroungeElemObj = ScroungeElement.getNew({
+    var str = markupStr_scroungeElems_treesNone_typeJS_valid,
+        scroungeElemObj = ScroungeElem.getNew({
           type : '.css'
         }),
         includeTplStr = scroungeElemObj.getElemIncludeTplStr(),
@@ -100,11 +100,11 @@ describe("getElemIncludeTplStr", function () {
 });
 
 
-describe("getScroungeElemTplStr", function () {
+describe("scroungeElem.getScroungeElemTplStr", function () {
 
   it("should return correct scrounge element, js", function () {
-    var str = markupStr_scroungeElements_treesNone_typeJS_valid,
-        scroungeElemObj = ScroungeElement.getNew({
+    var str = markupStr_scroungeElems_treesNone_typeJS_valid,
+        scroungeElemObj = ScroungeElem.getNew({
           type : '.js'
         }),
         scroungeElemTplStr = scroungeElemObj.getScroungeElemTplStr(),
@@ -115,8 +115,8 @@ describe("getScroungeElemTplStr", function () {
   });
 
   it("should return correct scrounge element, css", function () {
-    var str = markupStr_scroungeElements_treesNone_typeJS_valid,
-        scroungeElemObj = ScroungeElement.getNew({
+    var str = markupStr_scroungeElems_treesNone_typeJS_valid,
+        scroungeElemObj = ScroungeElem.getNew({
           type : '.css'
         }),
         scroungeElemTplStr = scroungeElemObj.getScroungeElemTplStr(),
@@ -128,7 +128,7 @@ describe("getScroungeElemTplStr", function () {
 
 
   it("should return correctly indented scrounge element", function () {
-    var scroungeElemObj = ScroungeElement.getFromStrScroungeElemObj('   <!-- <scrounge.js> --->'),
+    var scroungeElemObj = ScroungeElem.getFromStrScroungeElemObj('   <!-- <scrounge.js> --->'),
         scroungeElemTplStr = scroungeElemObj.getScroungeElemTplStr(),
         scroungeElemTplStrFin = '' +
           '   <!-- <scrounge.js$tree> -->' +
@@ -137,7 +137,7 @@ describe("getScroungeElemTplStr", function () {
 
     expect( scroungeElemTplStr ).toBe( scroungeElemTplStrFin );    
 
-    scroungeElemObj = ScroungeElement.getFromStrScroungeElemObj(' <!-- <scrounge.js> --->');
+    scroungeElemObj = ScroungeElem.getFromStrScroungeElemObj(' <!-- <scrounge.js> --->');
     scroungeElemTplStr = scroungeElemObj.getScroungeElemTplStr();
     scroungeElemTplStrFin = '' +
       ' <!-- <scrounge.js$tree> -->' +
@@ -151,7 +151,7 @@ describe("getScroungeElemTplStr", function () {
 });
 
 
-describe("getFromStrTreesArr", function () {
+describe("ScroungeElem.getFromStrTreesArr", function () {
 
   var strTrees_attrNone_treeNone = '' +
     '   <!-- <scrounge.js> -->\n' +
@@ -173,32 +173,33 @@ describe("getFromStrTreesArr", function () {
       treeArr;
 
   it("should return 1 trees from string with 1 scrounge elements, 1 trees", function () {
-    treeArr = ScroungeElement.getFromStrTreesArr(strTrees_attrOne_treeOne);
+    treeArr = ScroungeElem.getFromStrTreesArr(strTrees_attrOne_treeOne);
     expect( treeArr[0] === 'one').toBe(true);
   });
 
   it("should return 2 trees from string with 2 scrounge elements, 2 trees", function () {
-    treeArr = ScroungeElement.getFromStrTreesArr(strTrees_attrTwo_treeTwo);
-    expect( treeArr[0] === 'one' && treeArr[1] === 'two').toBe(true);
+    treeArr = ScroungeElem.getFromStrTreesArr(strTrees_attrTwo_treeTwo);
+    expect( treeArr.indexOf('one') !== -1 && 
+            treeArr.indexOf('two') !== -1);
   });
 
   it("should return 0 trees from string with 2 scrounge elements, 0 trees", function () {
-    treeArr = ScroungeElement.getFromStrTreesArr(strTrees_attrOne_treeNone);
+    treeArr = ScroungeElem.getFromStrTreesArr(strTrees_attrOne_treeNone);
     expect( treeArr.length === 0 ).toBe(true);
   });
 
   it("should return 0 trees from string with 1 scrounge elements, 0 trees", function () {
-    treeArr = ScroungeElement.getFromStrTreesArr(strTrees_attrOne_treeNone);
+    treeArr = ScroungeElem.getFromStrTreesArr(strTrees_attrOne_treeNone);
     expect( treeArr.length === 0 ).toBe(true);
   });
 
 });
 
 
-describe("isTreeMatch", function () {
+describe("scroungeElem.isTreeMatch", function () {
   var scroungeElemObj, treeObj;
   
-  scroungeElemObj = ScroungeElement.getNew({
+  scroungeElemObj = ScroungeElem.getNew({
     trees : ['treeOne', 'treeTwo'],
     type : '.css'
   });
@@ -232,11 +233,11 @@ describe("isTreeMatch", function () {
   });
 });
 
-describe("getTreeAttributeStr", function () {
+describe("scroungeElem.getTreeAttributeStr", function () {
   var scroungeElemObj, treeAttr;
 
   it("should return a correct treeAttribute for 2 trees", function () {
-    scroungeElemObj = ScroungeElement.getNew({
+    scroungeElemObj = ScroungeElem.getNew({
       trees : ['treeOne', 'treeTwo']
     });  
 
@@ -246,7 +247,7 @@ describe("getTreeAttributeStr", function () {
   });
 
   it("should return a correct treeAttribute for 1 trees", function () {
-    scroungeElemObj = ScroungeElement.getNew({
+    scroungeElemObj = ScroungeElem.getNew({
       trees : ['treeOne']
     });  
 
@@ -256,7 +257,7 @@ describe("getTreeAttributeStr", function () {
   });
 
   it("should return a correct treeAttribute for 0 trees", function () {
-    scroungeElemObj = ScroungeElement.getNew({
+    scroungeElemObj = ScroungeElem.getNew({
       trees : []
     });  
 
@@ -267,10 +268,10 @@ describe("getTreeAttributeStr", function () {
 
 });
 
-describe("scroungeElement.getScroungeElemStr", function () {
+describe("scroungeElem.getScroungeElemStr", function () {
   var scroungeElemObj, scroungeElemStr, finStr;
   it("should return a correct element with includeElemsStr", function () {
-    scroungeElemObj = ScroungeElement.getNew({
+    scroungeElemObj = ScroungeElem.getNew({
       type : '.js'
     });
 
@@ -285,7 +286,7 @@ describe("scroungeElement.getScroungeElemStr", function () {
 
 
   it("should return a correct element without includeElemsStr", function () {
-    scroungeElemObj = ScroungeElement.getNew({
+    scroungeElemObj = ScroungeElem.getNew({
       type : '.js'
     });
 
@@ -300,7 +301,7 @@ describe("scroungeElement.getScroungeElemStr", function () {
 
 });
 
-describe("scroungeElement.getIncludeTag", function () {
+describe("scroungeElem.getIncludeTag", function () {
   var fileInfoNode, scroungeElemObj, result, resultExpected;
   
   it("should return a correctly formatted js include element", function () {
@@ -313,7 +314,7 @@ describe("scroungeElement.getIncludeTag", function () {
       authorsArr: ['author1']      
     });
     
-    scroungeElemObj = ScroungeElement.getNew({
+    scroungeElemObj = ScroungeElem.getNew({
       type : '.js'
     });
 
@@ -334,7 +335,7 @@ describe("scroungeElement.getIncludeTag", function () {
       authorsArr: ['author1']      
     });
     
-    scroungeElemObj = ScroungeElement.getNew({
+    scroungeElemObj = ScroungeElem.getNew({
       type : '.css'
     });
 
@@ -348,7 +349,7 @@ describe("scroungeElement.getIncludeTag", function () {
 });
 
 
-describe("scroungeElement.getIncludeTagArr", function () {
+describe("scroungeElem.getIncludeTagArr", function () {
   var fileInfoTree, fileInfoNode, scroungeElemObj, result, resultExpected, opts;
 
   it("should return an array of js include elements, unconcatenated", function () {
@@ -380,7 +381,7 @@ describe("scroungeElement.getIncludeTagArr", function () {
         })
       ]
     });
-    scroungeElemObj = ScroungeElement.getNew({
+    scroungeElemObj = ScroungeElem.getNew({
       type : '.js'
     });
 
@@ -425,7 +426,7 @@ describe("scroungeElement.getIncludeTagArr", function () {
         })
       ]
     });
-    scroungeElemObj = ScroungeElement.getNew({
+    scroungeElemObj = ScroungeElem.getNew({
       type : '.js'
     });
 
@@ -441,7 +442,7 @@ describe("scroungeElement.getIncludeTagArr", function () {
 
 });
 
-describe("scroungeElement.getTreeArrAsScroungeElemStr", function () {
+describe("scroungeElem.getTreeArrAsScroungeElemStr", function () {
   var fileInfoTree, fileInfoNode, scroungeElemObj, result, resultExpected, opts;
 
 
@@ -476,7 +477,7 @@ describe("scroungeElement.getTreeArrAsScroungeElemStr", function () {
       ]
     });
 
-    scroungeElemObj = ScroungeElement.getNew({
+    scroungeElemObj = ScroungeElem.getNew({
       type : '.js'
     });
 
