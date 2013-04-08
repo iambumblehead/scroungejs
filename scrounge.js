@@ -1,6 +1,7 @@
 var argv = require('optimist').argv,
     fs = require('fs'),
     path = require('path'),
+    SimpleTime = require('simpletime'),
 
     Graph = require('./lib/DAG.js'),
     BMBLib = require('./lib/BMBLib.js'),
@@ -185,7 +186,7 @@ var scrounge = module.exports = {
       scrounge.treesApply(treeArr, opts, basepage, function (err) {
         if (err) return console.log(err);
         Message.releaseMessages();
-        totalTime = BMBLib.getElapsedTime(bgnDateObj, new Date());
+        totalTime = SimpleTime.getElapsedTimeFormatted(bgnDateObj, new Date());
         console.log(Message.finish(totalTime));
         if (typeof fn === 'function') fn(null, totalTime);
       });

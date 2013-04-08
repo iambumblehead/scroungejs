@@ -22,6 +22,7 @@
 ;;(puthash "scroungejs" "/app" *Public-Root-Hash*)
 
 (puthash "scroungejs" "~/Software/scroungejs" *Project-Root-Hash*)
+(puthash "simpleTime" "~/Software/simpleTime" *Project-Root-Hash*)
 
 (puthash "cucumberWeb" "~/Software/cucumberWeb/sources/appSrc" *Project-Source-Hash*)
 (puthash "cucumberWeb" "~/Software/cucumberWeb/sources/app" *Project-Scrounge-Hash*)
