@@ -6,11 +6,14 @@ var argv = require('optimist').argv,
     Graph = require('./lib/DAG.js'),
     BMBLib = require('./lib/BMBLib.js'),
     Message = require('./lib/Message.js'),
+
     FileUtil = require('./lib/FileUtil.js'),
     FilterTree = require('./lib/FilterTree.js'),
-    BasepageUtil = require('./lib/fileInfo/fileInfoBasepage.js'),
+
+    InfoBasepage = require('./lib/fileInfo/fileInfoBasepage.js'),
     InfoTree = require('./lib/fileInfo/fileInfoTree.js'),
-    InfoFile = require('./lib/fileInfo/fileInfoNode.js'),
+    InfoNode = require('./lib/fileInfo/fileInfoNode.js'),
+
     UserOptions = require('./lib/UserOptions.js'),
 
     options;
@@ -21,22 +24,22 @@ var scrounge = module.exports = {
   // copies each tree item to timestamped file in final dir
   writeFilesTreeArr : function (treeObjArr, opts, fn) {
     var that = this, output = opts.outputPath;
-    (function copyNextTreeObj(x, treeObj) {
+    (function next(x, treeObj) {
       if (!x--) return fn(null, 'success');    
-      treeObjArr[x].writeInfoFiles(output, opts, function(err, res) {
+      treeObjArr[x].writeInfoNodes(output, opts, function(err, res) {
         if (err) return fn(err);
-        copyNextTreeObj(x);        
+        next(x);        
       });
     }(treeObjArr.length));
   },
 
   writeTreesTreeArr : function (treeObjArr, opts, fn) {
     var that = this, output = opts.outputPath;
-    (function copyNextTreeObj(x, treeObj) {
+    (function next(x, treeObj) {
       if (!x--) return fn(null, 'success');    
       treeObjArr[x].writeInfoTree(output, opts, function(err, res) {
         if (err) return fn(err);
-        copyNextTreeObj(x);        
+        next(x);        
       });
     }(treeObjArr.length));
   },
@@ -126,14 +129,14 @@ var scrounge = module.exports = {
     fn(null);
   },
 
-  treesBuild : function (opts, basepage, fn) {
+  treesBuild : function (opts, infoBasepage, fn) {
     var basepageUtil, fileObjBuilder, x, treeObjArr;
 
     FileUtil.getFiles(opts, function (err, filenameArr) {
       if (err) return fn(err);
-      basepage.getFilters(function (err, filters) {
+      infoBasepage.getFilters(function (err, filters) {
         if (err) return fn(err);
-        InfoFile.getFromFileArr(filenameArr, function (err, fileInfoObjArr) {
+        InfoNode.getFromFileArr(filenameArr, function (err, fileInfoObjArr) {
           if (err) return fn(err);          
 
           if (!filters) {
@@ -169,21 +172,21 @@ var scrounge = module.exports = {
     });
   },
   
-  treesApply : function (treeObjArr, opts, basepage, fn) {
+  treesApply : function (treeObjArr, opts, infoBasepage, fn) {
     if (!treeObjArr.length) return Message.noTreesFound();
     scrounge.writeCompressedTrees(treeObjArr, opts, function (err, compressed) {
       if (err) return fn(err);
-      basepage.writeTrees(treeObjArr, opts, fn);
+      infoBasepage.writeTrees(treeObjArr, opts, fn);
     });
   },
 
   go : function (opts, fn) {
     var bgnDateObj = new Date(), totalTime,
-        basepage = BasepageUtil.getNew(opts);
+        infoBasepage = InfoBasepage.getNew(opts);
 
-    scrounge.treesBuild(opts, basepage, function (err, treeArr) {
+    scrounge.treesBuild(opts, infoBasepage, function (err, treeArr) {
       if (err) return console.log(err);
-      scrounge.treesApply(treeArr, opts, basepage, function (err) {
+      scrounge.treesApply(treeArr, opts, infoBasepage, function (err) {
         if (err) return console.log(err);
         Message.releaseMessages();
         totalTime = SimpleTime.getElapsedTimeFormatted(bgnDateObj, new Date());
