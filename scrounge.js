@@ -132,7 +132,8 @@ var scrounge = module.exports = {
   treesBuild : function (opts, infoBasepage, fn) {
     var basepageUtil, fileObjBuilder, x, treeObjArr;
 
-    FileUtil.getFiles(opts, function (err, filenameArr) {
+    //FileUtil.getFiles(opts, function (err, filenameArr) {
+    FileUtil.getTreeFiles(opts, function (err, filenameArr) {
       if (err) return fn(err);
       infoBasepage.getFilters(function (err, filters) {
         if (err) return fn(err);
@@ -171,6 +172,13 @@ var scrounge = module.exports = {
       });
     });
   },
+
+  // copy all files specified by `copyAll` modifier
+  copyAll : function (opts, fn) {
+    FileUtil.getCopyAllFiles(opts, function () {
+      fn(null, '');
+    });
+  },
   
   treesApply : function (treeObjArr, opts, infoBasepage, fn) {
     if (!treeObjArr.length) return Message.noTreesFound();
@@ -188,10 +196,13 @@ var scrounge = module.exports = {
       if (err) return console.log(err);
       scrounge.treesApply(treeArr, opts, infoBasepage, function (err) {
         if (err) return console.log(err);
-        Message.releaseMessages();
-        totalTime = SimpleTime.getElapsedTimeFormatted(bgnDateObj, new Date());
-        console.log(Message.finish(totalTime));
-        if (typeof fn === 'function') fn(null, totalTime);
+        scrounge.copyAll(opts, function (err, res) {
+          if (err) return console.log(err);
+          Message.releaseMessages();
+          totalTime = SimpleTime.getElapsedTimeFormatted(bgnDateObj, new Date());
+          console.log(Message.finish(totalTime));
+          if (typeof fn === 'function') fn(null, totalTime);
+        });
       });
     });
   }
