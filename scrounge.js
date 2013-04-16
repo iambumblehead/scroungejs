@@ -37,7 +37,10 @@ var scrounge = module.exports = {
     var that = this, output = opts.outputPath;
     (function next(x, treeObj) {
       if (!x--) return fn(null, 'success');    
-      treeObjArr[x].writeInfoTree(output, opts, function(err, res) {
+      treeObj = treeObjArr[x];
+
+      console.log(Message.joiningTreeFiles(treeObj));      
+      treeObj.writeInfoTree(output, opts, function(err, res) {
         if (err) return fn(err);
         next(x);        
       });
@@ -159,14 +162,14 @@ var scrounge = module.exports = {
 
           scrounge.treesInspect(treeObjArr, function (err) {
             if (err) return fn(err);
-            scrounge.getAssociatedTrees(filters, treeObjArr, function (err, assocTreeArr) {
-              if (err) return fn(err);              
+//            scrounge.getAssociatedTrees(filters, treeObjArr, function (err, assocTreeArr) {
+//              if (err) return fn(err);              
 
-              for (x = assocTreeArr.length; x--;) {
-                treeObjArr.push(assocTreeArr[x]);
-              }
+//              for (x = assocTreeArr.length; x--;) {
+//                treeObjArr.push(assocTreeArr[x]);
+//              }
               fn(null, treeObjArr);
-            });
+//            });
           });
         });
       });
