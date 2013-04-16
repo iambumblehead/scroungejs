@@ -194,15 +194,15 @@ var scrounge = module.exports = {
 
     scrounge.treesBuild(opts, infoBasepage, function (err, treeArr) {
       if (err) return console.log(err);
-      scrounge.copyAll(opts, function (err, res) {
-        if (err) return console.log(err);     
+//      scrounge.copyAll(opts, function (err, res) {
+//        if (err) return console.log(err);     
         scrounge.treesApply(treeArr, opts, infoBasepage, function (err) {
           if (err) return console.log(err);
           Message.releaseMessages();
           totalTime = SimpleTime.getElapsedTimeFormatted(bgnDateObj, new Date());
           console.log(Message.finish(totalTime));
           if (typeof fn === 'function') fn(null, totalTime);
-        });
+//        });
       });
     });
   }
