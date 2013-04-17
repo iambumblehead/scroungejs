@@ -40,7 +40,7 @@ var scrounge = module.exports = {
       treeObj = treeObjArr[x];
 
       console.log(Message.joiningTreeFiles(treeObj));      
-      treeObj.writeInfoTree(output, opts, function(err, res) {
+      treeObj.writeAllTrees(output, opts, function(err, res) {
         if (err) return fn(err);
         next(x);        
       });
@@ -71,6 +71,7 @@ var scrounge = module.exports = {
     }
   },
 
+  /*
   getAssociatedTrees : function (filters, treeObjArr, fn) {
     var hostTreeNameArr = filters.getHostTreeNameArr(),
         assocTreeArr = [], x, hostTreeObjArr;
@@ -89,6 +90,7 @@ var scrounge = module.exports = {
       });
     }(hostTreeObjArr.length));
   },
+   */
 
   getAsTrees : function (fileInfoObjArr, filters) {
     var treeFilters, graph = Graph.get(),
@@ -98,7 +100,12 @@ var scrounge = module.exports = {
       treeArr = filters.getFilteredTreeArr(treeArr);    
     }
 
+    
+
     treeArr = treeArr.map(function (tree) {
+      console.log('-=-');
+      //console.log(graph.getAsArchyTree(tree));
+      console.log(Message.getAsArchyStr(graph.getAsArchyTree(tree)));      
       return InfoTree.getNew({
         fileObjArr : graph.getSorted(tree),
         fileInfoObj : tree
