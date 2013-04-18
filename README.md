@@ -152,7 +152,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
  Dependency-related files are recognized as a _tree_. A tree is composed of one file that depends on other files 'and so on. A file that begins a dependency is a tree _source_ file. Here, _fileB.js_ is a source file. 
 
  ```bash
- $ node ./scrounge.js -i ./getStarted --isConcatenation=true
+ $ node ./scrounge.js -i ./getStarted --isConcatenated=true
  [...] open: getStarted/fileB.js
  [...] open: getStarted/fileA.js
  [...] ugly: (fileB.js 1/2) getStarted/fileA.js
@@ -183,7 +183,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
  If it does not exist, the output path is created.
 
  ```bash
- $ node ./scrounge.js -i ./getStarted --isConcatenation=true \
+ $ node ./scrounge.js -i ./getStarted --isConcatenated=true \
   --outputPath=./app/public/cm
  [...] open: getStarted/fileB.js
  [...] open: getStarted/fileA.js
@@ -198,7 +198,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
  Multiple trees may be discovered and concatenated and .css files that associate with a tree are concatenated as well.
 
  ```bash
- $ node ./scrounge.js -i ./getStarted/app --isConcatenation=true \
+ $ node ./scrounge.js -i ./getStarted/app --isConcatenated=true \
    --outputPath=./app/public/cmpr --isRecursive=true
  [...] open: getStarted/app/app.js
  [...] open: getStarted/app/app2.js
@@ -238,7 +238,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
  _Other modifiers are explained in section [Modifiers](#modifiers)._
 
  ```bash
- $ node ./scrounge.js -i ./getStarted/app --isConcatenation=true \
+ $ node ./scrounge.js -i ./getStarted/app --isConcatenated=true \
    --outputPath=./app/public/cmpr --isRecursive=true  --extensionType=js
  [...] open: getStarted/app/app.js
  [...] open: getStarted/app/app2.js
@@ -330,7 +330,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
  Call scroungejs with concatenation on this _basepage_. scroungejs correctly modifies the basepage for concatenated files.
 
  ```bash
- $ node ./scrounge.js -s -i ./getStarted/app --isConcatenation=true \
+ $ node ./scrounge.js -s -i ./getStarted/app --isConcatenated=true \
  --basepage=./getStarted/index.mustache --isRecursive=true \
  --outputPath=./app/public/cmpr
  ```
@@ -360,7 +360,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
  Scroungejs will modify a basepage to reference scripts from a _publicPath_.
 
  ```bash
- $ node ./scrounge.js -s -i ./getStarted/app --isConcatenation=true \
+ $ node ./scrounge.js -s -i ./getStarted/app --isConcatenated=true \
    --basepage=./getStarted/index.mustache --isRecursive=true \
    --outputPath=./app/public/cmpr --publicPath=/cmpr
  ```

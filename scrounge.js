@@ -29,8 +29,11 @@ var scrounge = module.exports = {
       treeArr = filters.getFilteredTreeArr(treeArr);    
     }
 
-    treeArr = treeArr.map(function (tree) {
-      console.log(Message.getAsArchyStr(graph.getAsArchyTree(tree)));      
+    treeArr = treeArr.map(function (tree) { 
+      if (tree.dependencyArr.length) {
+        console.log('\n' + Message.getAsArchyStr(graph.getAsArchyTree(tree)));              
+      }
+
       return InfoTree.getNew({
         fileObjArr : graph.getSorted(tree),
         fileInfoObj : tree
