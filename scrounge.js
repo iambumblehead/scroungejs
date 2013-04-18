@@ -21,77 +21,6 @@ var argv = require('optimist').argv,
 
 var scrounge = module.exports = {
 
-  // copies each tree item to timestamped file in final dir
-  writeFilesTreeArr : function (treeObjArr, opts, fn) {
-    var that = this, output = opts.outputPath;
-    (function next(x, treeObj) {
-      if (!x--) return fn(null, 'success');    
-      treeObjArr[x].writeInfoNodes(output, opts, function(err, res) {
-        if (err) return fn(err);
-        next(x);        
-      });
-    }(treeObjArr.length));
-  },
-
-  writeTreesTreeArr : function (treeObjArr, opts, fn) {
-    var that = this, output = opts.outputPath;
-    (function next(x, treeObj) {
-      if (!x--) return fn(null, 'success');    
-      treeObj = treeObjArr[x];
-
-      console.log(Message.joiningTreeFiles(treeObj));      
-      treeObj.writeAllTrees(output, opts, function(err, res) {
-        if (err) return fn(err);
-        next(x);        
-      });
-    }(treeObjArr.length));
-  },
-
-  // write the compressd output of all trees in the collection
-  writeCompressedTrees : function (treeObjArr, opts, fn) {
-    var concatArr = [], that = this,
-        unconcatArr = [], x, forceTypes;
-
-    // do not compress or copy files if basepage uses source paths.
-    if (opts.isBasepageSourcePaths) return fn(null);
-
-    if (opts.isConcatenation) {
-      that.writeTreesTreeArr(treeObjArr, opts, fn);
-    } else {
-      treeObjArr.map(function (treeObj) {
-        if (opts.isForceConcatenatedType(treeObj.fileInfoObj)) {
-          concatArr.push(treeObj);
-        } else {
-          unconcatArr.push(treeObj);
-        }        
-      });
-      that.writeTreesTreeArr(concatArr, opts, function () {
-        that.writeFilesTreeArr(unconcatArr, opts, fn);
-      });
-    }
-  },
-
-  /*
-  getAssociatedTrees : function (filters, treeObjArr, fn) {
-    var hostTreeNameArr = filters.getHostTreeNameArr(),
-        assocTreeArr = [], x, hostTreeObjArr;
-
-    hostTreeObjArr = treeObjArr.filter(function (treeObj) {
-      return hostTreeNameArr.indexOf(treeObj.fileInfoObj.treename) !== -1;
-    });
-
-    (function next(x, treeObj) {
-      if (!x--) return fn(null, assocTreeArr);
-      treeObj = hostTreeObjArr[x];
-      treeObj.getAssociatedTree(function (err, assocTree) {
-        if (err) return fn(err);
-        assocTreeArr.push(assocTree);
-        next(x);        
-      });
-    }(hostTreeObjArr.length));
-  },
-   */
-
   getAsTrees : function (fileInfoObjArr, filters) {
     var treeFilters, graph = Graph.get(),
         treeArr = graph.addFileInfoArr(fileInfoObjArr).getSourceArr();
@@ -100,11 +29,7 @@ var scrounge = module.exports = {
       treeArr = filters.getFilteredTreeArr(treeArr);    
     }
 
-    
-
     treeArr = treeArr.map(function (tree) {
-      console.log('-=-');
-      //console.log(graph.getAsArchyTree(tree));
       console.log(Message.getAsArchyStr(graph.getAsArchyTree(tree)));      
       return InfoTree.getNew({
         fileObjArr : graph.getSorted(tree),
@@ -169,14 +94,7 @@ var scrounge = module.exports = {
 
           scrounge.treesInspect(treeObjArr, function (err) {
             if (err) return fn(err);
-//            scrounge.getAssociatedTrees(filters, treeObjArr, function (err, assocTreeArr) {
-//              if (err) return fn(err);              
-
-//              for (x = assocTreeArr.length; x--;) {
-//                treeObjArr.push(assocTreeArr[x]);
-//              }
-              fn(null, treeObjArr);
-//            });
+            fn(null, treeObjArr);
           });
         });
       });
@@ -189,12 +107,18 @@ var scrounge = module.exports = {
       fn(null, '');
     });
   },
-  
+
+  // associated trees are fetched first and used
+  // to construct scrounge elements for an existing basepage
   treesApply : function (treeObjArr, opts, infoBasepage, fn) {
     if (!treeObjArr.length) return Message.noTreesFound();
-    scrounge.writeCompressedTrees(treeObjArr, opts, function (err, compressed) {
-      if (err) return fn(err);
-      infoBasepage.writeTrees(treeObjArr, opts, fn);
+
+    InfoTree.getTreeArrAsAssocTreeArr(treeObjArr, opts, function (err, treeArr) {
+      if (err) return fn(err);  
+      InfoTree.writeTreeArr(treeArr, opts, function () {
+        if (err) return fn(err);
+        infoBasepage.writeTrees(treeArr, opts, fn);        
+      });
     });
   },
 
@@ -204,15 +128,15 @@ var scrounge = module.exports = {
 
     scrounge.treesBuild(opts, infoBasepage, function (err, treeArr) {
       if (err) return console.log(err);
-//      scrounge.copyAll(opts, function (err, res) {
-//        if (err) return console.log(err);     
+      scrounge.copyAll(opts, function (err, res) {
+        if (err) return console.log(err);     
         scrounge.treesApply(treeArr, opts, infoBasepage, function (err) {
           if (err) return console.log(err);
           Message.releaseMessages();
           totalTime = SimpleTime.getElapsedTimeFormatted(bgnDateObj, new Date());
           console.log(Message.finish(totalTime));
           if (typeof fn === 'function') fn(null, totalTime);
-//        });
+        });
       });
     });
   }
