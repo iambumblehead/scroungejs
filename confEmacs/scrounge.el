@@ -115,7 +115,8 @@
              (public-path (gethash focus-site *Project-Scrounge-Hash*))
              (public-root-path (gethash focus-site *Public-Root-Hash*))
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
-        (compile (concat "node " *Scrounge-Path* " -l "
+        (compile (concat "node " *Scrounge-Path* 
+                         " -isLines=true "
                          "--isRecursive=true "
                          "--isTimestamped=true "
                          "--isRemoveRequires=true "
@@ -137,7 +138,8 @@
              (public-root-path (gethash focus-site *Public-Root-Hash*))
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
         (compile 
-         (concat "node " *Scrounge-Path* " -l "
+         (concat "node " *Scrounge-Path*
+                 " -isLines=true "
                  "--isRecursive=true "
                  "--isBasepageSourcePaths=true "
                  "--isRemoveRequires=true "
@@ -155,7 +157,8 @@
              (public-path (gethash focus-site *Project-Scrounge-Hash*))
              (public-root-path (gethash focus-site *Public-Root-Hash*))
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
-        (compile (concat "node " *Scrounge-Path* " -l "
+        (compile (concat "node " *Scrounge-Path*
+                         " -isLines=true "
                          "--isRecursive=true "
                          "--isTimestamped=true "
                          "--isWarning=true "
@@ -302,7 +305,7 @@ is `Filename: $name` on first line?"
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
         (shell-command-to-string 
          (concat "node " *Scrounge-Path* 
-                 " -l "
+                 " -isLines=true "
                  "--isRecursive=true "
                  "--isTimestamped=true "
                  "--isUpdateOnly=true "

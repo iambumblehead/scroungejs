@@ -38,6 +38,7 @@ var scrounge = module.exports = {
         fileObjArr : graph.getSorted(tree),
         fileInfoObj : tree
       });
+      
     });
 
     return treeArr;
