@@ -68,17 +68,17 @@
 ;; DEPLOY NODE
 (defun Deploy (&optional site) (interactive "sSingle-assemble which site?: ")
   "calls mvn assembly process on specified directory path"
+  
   (princ focus-site)
   (let ((compile-dir (gethash focus-site *Project-Root-Hash*))
         (persist-dir default-directory))
     (cd compile-dir)
     (setq compilation-scroll-output t)
     (compile (concat "bash ./bash/app_deploy.sh"))
+    ;;(compile (concat "npm start"))
     (cd persist-dir)))
 
 (global-set-key (kbd "C-c s") (lambda() (interactive) (Deploy focus-site)))
-;;(global-set-key (kbd "C-c s") (lambda() (interactive) (print "go")))
-
 
 
 
@@ -115,9 +115,12 @@
              (public-path (gethash focus-site *Project-Scrounge-Hash*))
              (public-root-path (gethash focus-site *Public-Root-Hash*))
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
-        (compile (concat "node " *Scrounge-Path* " -l --isRecursive=true --isTimestamped=true --isRemoveRequires=true "
+        (compile (concat "node " *Scrounge-Path* " -l "
+                         "--isRecursive=true "
+                         "--isTimestamped=true "
+                         "--isRemoveRequires=true "
                          (if is-fake " --isCompressed=false" " --isCompressed=true")
-                         (if is-fake " --isConcatenation=false" " --isConcatenation=true")
+                         (if is-fake " --isConcatenated=false" " --isConcatenated=true")
                          (if is-fake "" " --isRemoveConsole=true")
                          (if public-root-path (concat " --publicPath=" public-root-path) "")
                          (if basepage-path (concat " --basepage=" basepage-path) "")                         
@@ -134,7 +137,10 @@
              (public-root-path (gethash focus-site *Public-Root-Hash*))
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
         (compile 
-         (concat "node " *Scrounge-Path* " -l --isRecursive=true --isBasepageSourcePaths=true --isRemoveRequires=true "
+         (concat "node " *Scrounge-Path* " -l "
+                 "--isRecursive=true "
+                 "--isBasepageSourcePaths=true "
+                 "--isRemoveRequires=true "
                  (if basepage-path (concat " --basepage=" basepage-path) "")                         
                  (if project-path (concat " --inputPath=" project-path) "")
                  (if public-path (concat " --publicPath=" "/appSrc") ""))))))
@@ -149,9 +155,13 @@
              (public-path (gethash focus-site *Project-Scrounge-Hash*))
              (public-root-path (gethash focus-site *Public-Root-Hash*))
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
-        (compile (concat "node " *Scrounge-Path* " -l --isRecursive=true --isTimestamped=true --isWarning=true  --isRemoveRequires=true "
+        (compile (concat "node " *Scrounge-Path* " -l "
+                         "--isRecursive=true "
+                         "--isTimestamped=true "
+                         "--isWarning=true "
+                         "--isRemoveRequires=true "
                          (if is-fake " --isCompressed=false ")
-                         (if is-fake " --isConcatenation=false ")
+                         (if is-fake " --isConcatenated=false ")
                          (if public-root-path (concat " --publicPath=" public-root-path) "")
                          (if basepage-path (concat " --basepage=" basepage-path) "")                         
                          (if project-path (concat " --inputPath=" project-path) "")
@@ -187,14 +197,6 @@
 (global-set-key (kbd "C-c m") (lambda() (interactive) (Cmpr-fake)))
 (global-set-key (kbd "C-c c") (lambda() (interactive) (Cmpr-warn)))
 
-
-(defun concat-all-css () (interactive)
-  (let
-      ((bashScriptsDir
-       (gethash focus-site *Scrounge-BashScripts-Syspath-Hash*))
-       (views-dir (gethash focus-site *Scrounge-Mint-Syspath-Hash*)))
-    (shell-command-to-string 
-     (concat "bash " bashScriptsDir "/build_css.sh -i " views-dir "/ -o " views-dir "/../css/Main_concat.css"))))
 
 (defun string-replace (from to string &optional re)
   (let ((pos 0)
@@ -300,9 +302,14 @@ is `Filename: $name` on first line?"
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
         (shell-command-to-string 
          (concat "node " *Scrounge-Path* 
-                 " -l --isRecursive=true --isTimestamped=true --isUpdateOnly=true --isSilent=true --isRemoveRequires=true "
+                 " -l "
+                 "--isRecursive=true "
+                 "--isTimestamped=true "
+                 "--isUpdateOnly=true "
+                 "--isSilent=true "
+                 "--isRemoveRequires=true "
                  (if is-fake " --isCompressed=false ")
-                 (if is-fake " --isConcatenation=false")
+                 (if is-fake " --isConcatenated=false")
                  (if public-root-path (concat " --publicPath=" public-root-path) "")
                  (if basepage-path (concat " --basepage=" basepage-path) "")                         
                  (if project-path (concat " --inputPath=" buffer-file-name) "")
