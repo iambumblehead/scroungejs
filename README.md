@@ -70,7 +70,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
 
  1. **Before Starting...**   
 
- 'Examples demonstrate usage from a shell and from a javascript file. Each environment uses the same modifiers. Only the syntax is different. 'Both examples would produce the same output.
+ 'Examples demonstrate usage from a shell but scroungejs is also usable from a javascript file. Each environment uses the same modifiers. Only the syntax is different. 'Both examples would produce the same output.
  
  > *shell*
 
@@ -94,38 +94,41 @@ Scroungejs may be downloaded directly or installed through `npm`.
      console.log('finished!')
    });
    ```
+   
+ 2. **Visit the scroungejs directory.**  
+ 
+ ```bash
+ $ cd /path/to/scroungejs
+ ```
 
- 2. **Call scroungejs with node.**  
+ 3. **Call scroungejs with node.**  
 
  ```bash
  $ node ./scrounge.js
- [...] open: index.js
- [...] open: scrounge.js
+ [...] read: files (2/2)
  [...] write: cmpr/scrounge.js
  [...] write: cmpr/index.js
  [...] finish: 00:00:23 (mm:ss:ms)
  ```
 
- 3. **Specify an input path.**  
+ 4. **Specify an input path.**  
+ 
+ _The directory named 'getStarted' and its contents are provided with the [Scrounge][3] package._ 
 
  ```bash
  $ node ./scrounge.js -i ./getStarted
- [...] open: getStarted/fileB.js
- [...] open: getStarted/fileA.js
+ [...] read: files (2/2) 
  [...] write: getStarted/cmpr/fileB.js
  [...] write: getStarted/cmpr/fileA.js
  [...] finish: 00:00:25 (mm:ss:ms)
  ```
  
- _The directory named 'getStarted' and its contents are provided with the [Scrounge][3] package._ 
-
- 4. **Use compression and timestamping modifiers.**  
-
+ 5. **Use compression and timestamping modifiers.**  
+ 
  ```bash
  $ node ./scrounge.js -i ./getStarted \
     --isTimestamped=true --isCompressed=true
- [...] open: getStarted/fileB.js
- [...] open: getStarted/fileA.js
+ [...] read: files (2/2) 
  [...] ugly: (1/2) getStarted/fileB.js
  [...] write: getStarted/cmpr/fileB_2012.07.07-15:25:57.js
  [...] ugly: (2/2) getStarted/fileA.js
@@ -133,7 +136,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
  [...] finish: 00:00:25 (mm:ss:ms)
  ```
 
- 5. **Define a dependency in _fileB.js_.**  
+ 6. **Define a dependency in _fileB.js_.**  
  
  scroungejs will concatenate dependency-related files. Dependencies are defined in .js and .css files using the 'Requires' property.  
  
@@ -147,16 +150,28 @@ Scroungejs may be downloaded directly or installed through `npm`.
  
  _File properties are explained in section [File Properties](#file-properties)._
 
- 6. **Concatenate files**
+ 7. **Concatenate files**
  
- Dependency-related files are recognized as a _tree_. A tree is composed of one file that depends on other files 'and so on. A file that begins a dependency is a tree _source_ file. Here, _fileB.js_ is a source file. 
+ Dependency-related files are recognized as a _tree_. A tree is composed of one file that depends on other files 'and so on. Here _fileB.js_ is a _source_ file that begins a dependency tree. 
+
+ <!--
+  http://htmlentities.net/ 
+  gfm will not convert the bars:
+  
+  fileB.js
+  └── fileA.js
+ -->
 
  ```bash
  $ node ./scrounge.js -i ./getStarted --isConcatenated=true
- [...] open: getStarted/fileB.js
- [...] open: getStarted/fileA.js
- [...] ugly: (fileB.js 1/2) getStarted/fileA.js
- [...] ugly: (fileB.js 2/2) getStarted/fileB.js
+ [...] read: files (2/2)  
+ ```
+  `fileB.js`
+  &#9492;&#9472;&#9472; `fileA.js`  
+ 
+ ```bash
+ [...] join: tree: fileB.js, type: .js
+ [...] [=============================] 100% (2/2)
  [...] write: getStarted/cmpr/fileB.js
  [...] finish: 00:00:27 (mm:ss:ms)
  ```
@@ -540,20 +555,22 @@ example scrounge elements are given below
   <!-- </scrounge> -->
   <!-- <scrounge.css tree="Main.js"> -->
   <!-- </scrounge> -->
-  ````
+  ```
 
 
 ---------------------------------------------------------
 
 #### <a id="modifiers">MODIFIERS:
 
- - `--inputPath=`_inputpath_, `-i` _inputpath_  
-   a systempath to a directory or file. the default inputpath value is './'.
-
- - `--outputPath=`_outputpath_, `-o` _outputpath_  
-   a systempath to a directory or file. the default outpupath value is './cmpr'.
+ - **--inputPath=_path_**, **-i _path_**, _default: ./_  
    
- - `--publicPath=`_public/path/to/files_, `-p` _public/path/to/files_  
+   a systempath to a directory or file.
+
+ - **--outputPath=_path_**, **-o _path_**, _default: ./cmpr_  
+ 
+   a systempath to a directory or file.
+   
+ - **--publicPath=_path_**, **-p _path_**, _default: null_  
    a path to the files created by scrounge.
    
    a valid public path is discoverable on the full system path to the file. for example, `/cmpr` is found on the path `./getStarted/app/cmpr/app.js`.   
@@ -562,7 +579,7 @@ example scrounge elements are given below
    
    a public path is not useful without a `-basepage` argument as it affects only paths generated for the specified basepage.   
   
- - `--isBasepageSourcePaths=`_bool_  
+ - **--isBasepageSourcePaths=_bool_**, _default: false_  
    basepage include tags will reference scripts in source directory.
    disables compression, concatenation and copying of files. uses `publicPath`
        
@@ -573,53 +590,47 @@ example scrounge elements are given below
      --inputPath=~/Software/kuaweb/sources/appSrc --publicPath=/appSrc
    ```
 
- - `--isCompressed=`_bool_  
+ - **--isCompressed=_bool_**, _default: false_  
    compress all files and trees before writing them to disk.
 
- - `--isRecursive=`_bool_  
+ - **--isRecursive=_bool_**, _default: false_  
    discover files in nested directories on the given path.
    
- - `--isWarning=`_bool_  
+ - **--isWarning=_bool_**, _default: false_  
    raise warnings around trace statements.
 
- - `--isLines=`_bool_  
+ - **--isLines=_bool_**, _default: false_  
    each compressed script on its own line.
 
- - `--isClosure=`_bool_  
+ - **--isClosure=_bool_**, _default: false_  
    compressed js code will added in the body of anonymous self-calling function.
 
- - `--isSilent=`_bool_, `-s`  
+ - **--isSilent=_bool_**, **-s**, _default: false_  
    supress console messages.
    
- - `--isMintFilter=`_bool_  
+ - **--isMintFilter=_bool_**, _default: false_  
    only process files that include `_mint` in their filename. this should only be used for the special case when a build directory has many files that should not be included in the build process. `_mint` distinguishes a file that _should_ be included in the build process from a file that _should not_ be included in the build process.
 
- - `--isTimestamped=`_bool_  
+ - **--isTimestamped=_bool_**, _default: false_  
    add a timestamp to name of the output files.
 
- - `--isRemoveRequires=`_bool_  
+ - **--isRemoveRequires=_bool_**, _default: true_  
    remove 'requires' statements from javascript files. `true` by default.
    
- - `--isRemoveConsole=`_bool_ (_`false`_)  
+ - **--isRemoveConsole=_bool_**, _default: false_  
    remove 'console.log' statements from javascript files.
    uses UglifyJS2 ast to comprehensively remove console.log
    
- - `--isUpdateOnly=`_bool_  
+ - **--isUpdateOnly=_bool_**, _default: false_  
    modify include tags in a basepage only. do not build scrounge elements.
 
- - `--extensionType=`_type_, `-t` _type_   
+ - **--extensionType=_type_**, **-t _type_**, _default: ''_   
    process files of one type only, `js` or `css`.
    
- - `--forceConcatenateTrees=`_tree1,tree2_  
-   force the concatenation of specified trees.
-   
- - `--forceConcatenateTypes=`_type1,type2_  
-   force the concatenation of `js` and/or `css` files.  
-   
- - `--forceTimestamp=`_timestamp_  
+ - **--forceTimestamp=_timestamp_**, _default: null_  
    all timestamped files will use the given timestamp.
    
- - `--basepage=`_basepage_, `-b` _basepage_  
+ - **--basepage=_basepage_**, **-b _basepage_**, _default: ''_  
    update scrounge tags in the defined basepage.
    
    scroungejs will not modify or process a file that does not contain scrounge tags.
