@@ -148,19 +148,13 @@ Scroungejs may be downloaded directly or installed through `npm`.
    // Requires: fileA.js
    ```
  
+ Add '`// Requires: fileB.js`' to a file to create a dependency on `fileB.js`.
+
  _File properties are explained in section [File Properties](#file-properties)._
 
  7. **Concatenate files**
  
  Dependency-related files are recognized as a _tree_. A tree is composed of one file that depends on other files 'and so on. Here _fileB.js_ is a _source_ file that begins a dependency tree. 
-
- <!--
-  http://htmlentities.net/ 
-  gfm will not convert the bars:
-  
-  fileB.js
-  └── fileA.js
- -->
 
  ```bash
  $ node ./scrounge.js -i ./getStarted --isConcatenated=true
@@ -175,34 +169,20 @@ Scroungejs may be downloaded directly or installed through `npm`.
  [...] finish: 00:00:27 (mm:ss:ms)
  ```
 
- 7. **More File Properties.**  
- 
- Define a few more properties at the top of the file
- 
- > *./getStarted/fileB.js:*
-
- > ```javascript
-   // Filename: fileB.js
-   // Timestamp: 2011.06.03
-   // Author(s): Bumblehead
-   // Requires: fileA.js
-   ```
- 
- Add '`// Requires: fileB.js`' to a file to create a dependency on `fileB.js`.
-
- _File properties are explained in section [File Properties](#file-properties)._  
-
  8. **Specify an Output Directory**
  
  If it does not exist, the output path is created.
 
  ```bash
  $ node ./scrounge.js -i ./getStarted --isConcatenated=true \
-  --outputPath=./app/public/cm
- [...] open: getStarted/fileB.js
- [...] open: getStarted/fileA.js
- [...] ugly: (fileB.js 1/2) getStarted/fileA.js
- [...] ugly: (fileB.js 2/2) getStarted/fileB.js
+  --outputPath=./app/public/cmpr
+ [...] read: files (2/2)  
+  
+ fileB.js  
+  └── fileA.js  
+  
+ [...] join: tree: fileB.js, type: .js
+ [...] [=============================] 100% (2/2)
  [...] write: app/public/cmpr/fileB.js
  [...] finish: 00:00:27 (mm:ss:ms)
  ```
@@ -214,35 +194,37 @@ Scroungejs may be downloaded directly or installed through `npm`.
  ```bash
  $ node ./scrounge.js -i ./getStarted/app --isConcatenated=true \
    --outputPath=./app/public/cmpr --isRecursive=true
- [...] open: getStarted/app/app.js
- [...] open: getStarted/app/app2.js
- [...] open: getStarted/app/controls/CtrlA.js
- [...] open: getStarted/app/controls/CtrlB.js
- [...] open: getStarted/app/controls/CtrlsAll.js
- [...] open: getStarted/app/lib/library.js
- [...] open: getStarted/app/models/ModelA.js
- [...] open: getStarted/app/models/ModelB.js
- [...] open: getStarted/app/views/ViewA.css
- [...] open: getStarted/app/views/ViewA.js
- [...] open: getStarted/app/views/ViewB.js
- [...] open: getStarted/app/views/ViewsAll.js
- [...] join: (app.js 1/9) getStarted/app/models/ModelB.js
- [...] join: (app.js 2/9) getStarted/app/controls/CtrlB.js
- [...] join: (app.js 3/9) getStarted/app/models/ModelA.js
- [...] join: (app.js 4/9) getStarted/app/controls/CtrlA.js
- [...] join: (app.js 5/9) getStarted/app/controls/CtrlsAll.js
- [...] join: (app.js 6/9) getStarted/app/views/ViewB.js
- [...] join: (app.js 7/9) getStarted/app/views/ViewA.js
- [...] join: (app.js 8/9) getStarted/app/views/ViewsAll.js
- [...] join: (app.js 9/9) getStarted/app/app.js
+ [...] read: files (12)  
+  
+ app.js
+ └─┬ ViewsAll.js
+   ├─┬ ViewB.js
+   │ └─┬ CtrlsAll.js
+   │   ├─┬ CtrlB.js
+   │   │ └── ModelB.js
+   │   └─┬ CtrlA.js
+   │     └── ModelA.js
+   └── ViewA.js  
+  
+ [...] join: tree: app.js, type: .css
+ [...] [=============================] 100% (1/1)
+ [...] write: app/public/cmpr/app.css
+ [...] join: tree: app.js, type: .js
+ [...] [=============================] 100% (9/9)
  [...] write: app/public/cmpr/app.js
- [...] join: (app2.js 1/1) getStarted/app/app2.js
+ [...] join: tree: app2.js, type: .js
+ [...] [=============================] 100% (1/1)
  [...] write: app/public/cmpr/app2.js
- [...] join: (library.js 1/1) getStarted/app/lib/library.js
+ [...] join: tree: library.js, type: .js
+ [...] [=============================] 100% (1/1)
  [...] write: app/public/cmpr/library.js
- [...] join: (ViewA.css 1/1) getStarted/app/views/ViewA.css
+ [...] join: tree: ViewA.css, type: .css
+ [...] [=============================] 100% (1/1)
  [...] write: app/public/cmpr/ViewA.css
- [...] finish: 00:00:13 (mm:ss:ms)
+ [...] join: tree: ViewA.css, type: .css
+ [...] [=============================] 100% (1/1)
+ [...] write: app/public/cmpr/ViewA.css
+ [...] finish: 00:00:55 (mm:ss:ms)
  ```
 
  10. **Define filters for the build process.**  
