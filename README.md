@@ -165,8 +165,10 @@ Scroungejs may be downloaded directly or installed through `npm`.
  ```bash
  $ node ./scrounge.js -i ./getStarted --isConcatenated=true
  [...] read: files (2/2)  
- fileB.js
-  └── fileA.js
+  
+ fileB.js  
+  └── fileA.js  
+  
  [...] join: tree: fileB.js, type: .js
  [...] [=============================] 100% (2/2)
  [...] write: getStarted/cmpr/fileB.js
