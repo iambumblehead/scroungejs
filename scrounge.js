@@ -21,7 +21,7 @@ var argv = require('optimist').argv,
 
 var scrounge = module.exports = {
 
-  getAsTrees : function (fileInfoObjArr, filters) {
+  getAsTrees : function (fileInfoObjArr, filters, opts) {
     var treeFilters, graph = Graph.get(),
         treeArr = graph.addFileInfoArr(fileInfoObjArr).getSourceArr();
 
@@ -29,21 +29,52 @@ var scrounge = module.exports = {
       treeArr = filters.getFilteredTreeArr(treeArr);    
     }
 
-    treeArr = treeArr.map(function (tree) { 
-      if (tree.dependencyArr.length) {
-        console.log('\n' + Message.getAsArchyStr(graph.getAsArchyTree(tree)));              
-      }
 
+    /*
+    treeArr = treeArr.filter(function (tree) { 
+      return FilterTree.isTreePassingFilters(tree, filters, opts);
+      //filters.getRemoveNodesTreeArr();
+    });
+
+    treeArr = treeArr.map(function (tree) { 
       return InfoTree.getNew({
         fileObjArr : graph.getSorted(tree),
         fileInfoObj : tree
       });
-      
+    });
+    
+    treeArr = treeArr.filter(function (tree) {
+      return FilterTree.isTreeInfoNodeInTreeArr(tree, treeArr);
     });
 
+    treeArr.map(function (tree) {
+      if (opts.isConcatenated && tree.dependencyArr.length) {
+        console.log('\n' + Message.getAsArchyStr(graph.getAsArchyTree(tree.treename)));              
+      }
+    });
+     */
+
+    ////////////////////////
+    /////// pending removal
+    treeArr = treeArr.map(function (tree) { 
+      if ((filters['.js'] || 
+           filters['.css'] ||
+           opts.isConcatenated === true)) {
+        if (tree.dependencyArr.length) {
+          console.log('\n' + Message.getAsArchyStr(graph.getAsArchyTree(tree)));              
+        }
+
+        return InfoTree.getNew({
+          fileObjArr : graph.getSorted(tree),
+          fileInfoObj : tree
+        });
+      }
+      
+    });
     return treeArr;
   },
 
+  /*
   getMissingDependencyArr : function (treeArr) {
     var missingDependencyArr = [], missingTreeInfoArr, x, y;
     for (x = treeArr.length; x--;) {
@@ -53,6 +84,17 @@ var scrounge = module.exports = {
         }
     }
     return missingDependencyArr;
+  },
+   */
+
+  getMissingDependencyArr : function (treeArr) {
+    var missingDepArr = [];
+
+    treeArr.map(function (tree) {
+      missingDepArr = missingDepArr.concat(tree.getMissingDependencyArr());
+    });
+
+    return missingDepArr;
   },
 
   // check each tree for missing dependencies
@@ -93,7 +135,7 @@ var scrounge = module.exports = {
               fileInfoObj : fileInfoObjArr[0] 
             })];
           } else {
-            treeObjArr = scrounge.getAsTrees(fileInfoObjArr, filters);            
+            treeObjArr = scrounge.getAsTrees(fileInfoObjArr, filters, opts);            
           }
 
           scrounge.treesInspect(treeObjArr, function (err) {

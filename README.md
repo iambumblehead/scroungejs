@@ -156,6 +156,8 @@ Scroungejs may be downloaded directly or installed through `npm`.
  
  Dependency-related files are recognized as a _tree_. A tree is composed of one file that depends on other files 'and so on. Here _fileB.js_ is a _source_ file that begins a dependency tree. 
 
+ When tree information is collected a visual representation of each tree is printed.
+
  ```bash
  $ node ./scrounge.js -i ./getStarted --isConcatenated=true
  [...] read: files (2/2)  
@@ -171,7 +173,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
 
  8. **Specify an Output Directory**
  
- If it does not exist, the output path is created.
+ If a specified output directory does not exist it is created.
 
  ```bash
  $ node ./scrounge.js -i ./getStarted --isConcatenated=true \
@@ -191,10 +193,12 @@ Scroungejs may be downloaded directly or installed through `npm`.
  
  Multiple trees may be discovered and concatenated and .css files that associate with a tree are concatenated as well.
 
+ <!-- should be 3 js bars -one css bar -->
+
  ```bash
  $ node ./scrounge.js -i ./getStarted/app --isConcatenated=true \
    --outputPath=./app/public/cmpr --isRecursive=true
- [...] read: files (12)  
+ [...] read: files (12/12)  
   
  app.js
  └─┬ ViewsAll.js
