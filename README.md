@@ -166,7 +166,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
  [...] read: files (2/2)  
   
  fileB.js  
-  └── fileA.js  
+ └── fileA.js  
   
  [...] join: (fileA.js, .js, 1/2) getStarted/fileA.js
  [...] join: (fileB.js, .js, 2/2) getStarted/fileB.js
@@ -184,7 +184,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
  [...] read: files (2/2)  
   
  fileB.js  
-  └── fileA.js  
+ └── fileA.js  
   
  [...] join: (fileA.js, .js, 1/2) getStarted/fileA.js
  [...] join: (fileB.js, .js, 2/2) getStarted/fileB.js
@@ -196,21 +196,12 @@ Scroungejs may be downloaded directly or installed through `npm`.
  
  Multiple trees may be discovered and concatenated and .css files that associate with a tree will be discovered as well.
 
+ _npmjs and github do not display the tree correctly_
+
  ```bash
  $ node ./scrounge.js -i ./getStarted/app --isConcatenated=true \
    --outputPath=./app/public/cmpr --isRecursive=true --trees=app.js
  [...] read: files (12/12)  
-  
- beep
- ├── ity
- └─┬ boop
-   ├─┬ o_O
-   │ ├─┬ oh
-   │ │ ├── hello
-   │ │ └── puny
-   │ └── human
-   └── party
-       time!  
   
  app.js
  └─┬ ViewsAll.js
