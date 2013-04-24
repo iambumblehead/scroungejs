@@ -199,6 +199,9 @@ Scroungejs may be downloaded directly or installed through `npm`.
  ```bash
  $ node ./scrounge.js -i ./getStarted/app --isConcatenated=true \
    --outputPath=./app/public/cmpr --isRecursive=true --trees=app.js
+ ```
+ 
+ ```
  [...] read: files (12/12)  
   
  app.js
