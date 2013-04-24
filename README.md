@@ -204,6 +204,17 @@ Scroungejs may be downloaded directly or installed through `npm`.
  ```
  [...] read: files (12/12)  
   
+ beep
+ ├── ity
+ └─┬ boop
+   ├─┬ o_O
+   │ ├─┬ oh
+   │ │ ├── hello
+   │ │ └── puny
+   │ └── human
+   └── party
+       time!  
+  
  app.js
  └─┬ ViewsAll.js
    ├─┬ ViewB.js
