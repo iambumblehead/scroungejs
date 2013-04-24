@@ -94,13 +94,15 @@ Scroungejs may be downloaded directly or installed through `npm`.
      console.log('finished!')
    });
    ```
-   
+
+
 2. **Visit the scroungejs directory.**  
  
 ```bash
 $ cd /path/to/scroungejs
 ```
-  
+
+
 3. **Call scroungejs with node.**  
 
 ```bash
