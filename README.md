@@ -196,61 +196,45 @@ Scroungejs may be downloaded directly or installed through `npm`.
  
  Multiple trees may be discovered and concatenated and .css files that associate with a tree will be discovered as well.
 
- ```bash
- $ node ./scrounge.js -i ./getStarted/app --isConcatenated=true \
-   --outputPath=./app/public/cmpr --isRecursive=true --trees=app.js
- ```
- 
+```bash
+$ node ./scrounge.js -i ./getStarted/app --isConcatenated=true \
+  --outputPath=./app/public/cmpr --isRecursive=true --trees=app.js
+[...] read: files (12/12)  
+  
+beep
+├── ity
+└─┬ boop
+  ├─┬ o_O
+  │ ├─┬ oh
+  │ │ ├── hello
+  │ │ └── puny
+  │ └── human
+  └── party
+      time!  
+  
+app.js
+└─┬ ViewsAll.js
+  ├─┬ ViewB.js
+  │ └─┬ CtrlsAll.js
+  │   ├─┬ CtrlB.js
+  │   │ └── ModelB.js
+  │   └─┬ CtrlA.js
+  │     └── ModelA.js
+  └── ViewA.js  
+  
+[...] join: (app.js, .css, 1/1) getStarted/app/views/ViewA.css
+[...] write: app/public/cmpr/app.css
+[...] join: (app.js, .js, 1/9) getStarted/app/models/ModelB.js
+[...] join: (app.js, .js, 2/9) getStarted/app/controls/CtrlB.js
+[...] join: (app.js, .js, 3/9) getStarted/app/models/ModelA.js
+[...] join: (app.js, .js, 4/9) getStarted/app/controls/CtrlA.js
+[...] join: (app.js, .js, 5/9) getStarted/app/controls/CtrlsAll.js
+[...] join: (app.js, .js, 6/9) getStarted/app/views/ViewB.js
+[...] join: (app.js, .js, 7/9) getStarted/app/views/ViewA.js
+[...] join: (app.js, .js, 8/9) getStarted/app/views/ViewsAll.js
+[...] join: (app.js, .js, 9/9) getStarted/app/app.js
+[...] write: app/public/cmpr/app.js
 ```
-beep
-├── ity
-└─┬ boop
-  ├─┬ o_O
-  │ ├─┬ oh
-  │ │ ├── hello
-  │ │ └── puny
-  │ └── human
-  └── party
-      time!  
-```      
-
- ```
- [...] read: files (12/12)  
-  
-beep
-├── ity
-└─┬ boop
-  ├─┬ o_O
-  │ ├─┬ oh
-  │ │ ├── hello
-  │ │ └── puny
-  │ └── human
-  └── party
-      time!  
-  
- app.js
- └─┬ ViewsAll.js
-   ├─┬ ViewB.js
-   │ └─┬ CtrlsAll.js
-   │   ├─┬ CtrlB.js
-   │   │ └── ModelB.js
-   │   └─┬ CtrlA.js
-   │     └── ModelA.js
-   └── ViewA.js  
-  
- [...] join: (app.js, .css, 1/1) getStarted/app/views/ViewA.css
- [...] write: app/public/cmpr/app.css
- [...] join: (app.js, .js, 1/9) getStarted/app/models/ModelB.js
- [...] join: (app.js, .js, 2/9) getStarted/app/controls/CtrlB.js
- [...] join: (app.js, .js, 3/9) getStarted/app/models/ModelA.js
- [...] join: (app.js, .js, 4/9) getStarted/app/controls/CtrlA.js
- [...] join: (app.js, .js, 5/9) getStarted/app/controls/CtrlsAll.js
- [...] join: (app.js, .js, 6/9) getStarted/app/views/ViewB.js
- [...] join: (app.js, .js, 7/9) getStarted/app/views/ViewA.js
- [...] join: (app.js, .js, 8/9) getStarted/app/views/ViewsAll.js
- [...] join: (app.js, .js, 9/9) getStarted/app/app.js
- [...] write: app/public/cmpr/app.js
- ```
 
  10. **Define filters for the build process.**  
 
