@@ -388,8 +388,8 @@ describe("scroungeElem.getIncludeTagArr", function () {
     opts = UserOptions.getNew({});
     result = scroungeElemObj.getIncludeTagArr([fileInfoTree], opts);
     resultExpected = [
-      '<script src="cmpr/dep1.js" type="text/javascript"></script>',
-      '<script src="cmpr/dep2.js" type="text/javascript"></script>'
+      '<script src="cmpr/dep2.js" type="text/javascript"></script>',
+      '<script src="cmpr/dep1.js" type="text/javascript"></script>'
     ];
 
     expect( result[0] ).toBe( resultExpected[0] );
@@ -430,7 +430,7 @@ describe("scroungeElem.getIncludeTagArr", function () {
       type : '.js'
     });
 
-    opts = UserOptions.getNew({ isConcatenation : true });
+    opts = UserOptions.getNew({ isConcatenated : true });
     result = scroungeElemObj.getIncludeTagArr([fileInfoTree], opts);
     resultExpected = [
       '<script src="cmpr/dep1.js" type="text/javascript"></script>'
@@ -441,6 +441,7 @@ describe("scroungeElem.getIncludeTagArr", function () {
   });
 
 });
+
 
 describe("scroungeElem.getTreeArrAsScroungeElemStr", function () {
   var fileInfoTree, fileInfoNode, scroungeElemObj, result, resultExpected, opts;
@@ -481,7 +482,7 @@ describe("scroungeElem.getTreeArrAsScroungeElemStr", function () {
       type : '.js'
     });
 
-    opts = UserOptions.getNew({ isConcatenation : true });
+    opts = UserOptions.getNew({ isConcatenated : true });
     result = scroungeElemObj.getTreeArrAsScroungeElemStr([fileInfoTree], opts);
     resultExpected =
       '<!-- <scrounge.js> -->\n' + 
@@ -492,4 +493,5 @@ describe("scroungeElem.getTreeArrAsScroungeElemStr", function () {
 
   });
 });
+
 

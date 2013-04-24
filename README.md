@@ -35,7 +35,7 @@ Scroungejs handles burdensome tasks related to web application development and d
 
  * Update an html-formatted file to include references to web application files. 
 
- * Concatenate files. When an html file is updated, it will be be updated with references to the resulting concatenated or unconcatenated files.
+ * Concatenate files. When an html file is updated, it will be updated with references to the resulting concatenated or unconcatenated files.
 
  * Timestamp files. Scroungejs will write files that have a timestamp in the filename. When an html file is updated, it will be updated with references to the resulting timestamped filenames. _Timestamped filenames ease development and deployment -no need to clear the browser cache to use the most recent file. An updated timestamp yields a unique filename and so a cached version of the file will not be used by a web browser._
 
@@ -129,9 +129,9 @@ Scroungejs may be downloaded directly or installed through `npm`.
  $ node ./scrounge.js -i ./getStarted \
     --isTimestamped=true --isCompressed=true
  [...] read: files (2/2) 
- [...] ugly: (1/2) getStarted/fileB.js
+ [...] ugly: (fileA.js, .js, 1/2) getStarted/fileB.js
  [...] write: getStarted/cmpr/fileB_2012.07.07-15:25:57.js
- [...] ugly: (2/2) getStarted/fileA.js
+ [...] ugly: (fileB.js, .js, 2/2) getStarted/fileA.js
  [...] write: getStarted/cmpr/fileA_2012.07.07-15:25:46.js
  [...] finish: 00:00:25 (mm:ss:ms)
  ```
@@ -158,6 +158,9 @@ Scroungejs may be downloaded directly or installed through `npm`.
 
  When tree information is collected a visual representation of each tree is printed.
 
+ `isConcatenated` may be defined as true or false or it may be defined with comma separated names of trees or extension types, such as '.js'. Only matching files will be concatenated.
+
+
  ```bash
  $ node ./scrounge.js -i ./getStarted --isConcatenated=true
  [...] read: files (2/2)  
@@ -165,8 +168,8 @@ Scroungejs may be downloaded directly or installed through `npm`.
  fileB.js  
   └── fileA.js  
   
- [...] join: tree: fileB.js, type: .js
- [...] [=============================] 100% (2/2)
+ [...] join: (fileA.js, .js, 1/2) getStarted/fileA.js
+ [...] join: (fileB.js, .js, 2/2) getStarted/fileB.js
  [...] write: getStarted/cmpr/fileB.js
  [...] finish: 00:00:27 (mm:ss:ms)
  ```
@@ -183,8 +186,8 @@ Scroungejs may be downloaded directly or installed through `npm`.
  fileB.js  
   └── fileA.js  
   
- [...] join: tree: fileB.js, type: .js
- [...] [=============================] 100% (2/2)
+ [...] join: (fileA.js, .js, 1/2) getStarted/fileA.js
+ [...] join: (fileB.js, .js, 2/2) getStarted/fileB.js
  [...] write: app/public/cmpr/fileB.js
  [...] finish: 00:00:27 (mm:ss:ms)
  ```
@@ -192,8 +195,6 @@ Scroungejs may be downloaded directly or installed through `npm`.
  9. **Build a larger tree found in _./getStarted/app/_.**  
  
  Multiple trees may be discovered and concatenated and .css files that associate with a tree will be discovered as well.
-
- <!-- should be 3 js bars -one css bar -->
 
  ```bash
  $ node ./scrounge.js -i ./getStarted/app --isConcatenated=true \
@@ -210,13 +211,18 @@ Scroungejs may be downloaded directly or installed through `npm`.
    │     └── ModelA.js
    └── ViewA.js  
   
- [...] join: tree: app.js, type: .css
- [...] [=============================] 100% (1/1)
+ [...] join: (app.js, .css, 1/1) getStarted/app/views/ViewA.css
  [...] write: app/public/cmpr/app.css
- [...] join: tree: app.js, type: .js
- [...] [=============================] 100% (9/9)
+ [...] join: (app.js, .js, 1/9) getStarted/app/models/ModelB.js
+ [...] join: (app.js, .js, 2/9) getStarted/app/controls/CtrlB.js
+ [...] join: (app.js, .js, 3/9) getStarted/app/models/ModelA.js
+ [...] join: (app.js, .js, 4/9) getStarted/app/controls/CtrlA.js
+ [...] join: (app.js, .js, 5/9) getStarted/app/controls/CtrlsAll.js
+ [...] join: (app.js, .js, 6/9) getStarted/app/views/ViewB.js
+ [...] join: (app.js, .js, 7/9) getStarted/app/views/ViewA.js
+ [...] join: (app.js, .js, 8/9) getStarted/app/views/ViewsAll.js
+ [...] join: (app.js, .js, 9/9) getStarted/app/app.js
  [...] write: app/public/cmpr/app.js
- [...] finish: 00:00:55 (mm:ss:ms)
  ```
 
  10. **Define filters for the build process.**  
@@ -241,35 +247,46 @@ Scroungejs may be downloaded directly or installed through `npm`.
    │     └── ModelA.js
    └── ViewA.js  
   
- [...] open: getStarted/app/app.js
- [...] open: getStarted/app/app2.js
- [...] open: getStarted/app/controls/CtrlA.js
- [...] open: getStarted/app/controls/CtrlB.js
- [...] open: getStarted/app/controls/CtrlsAll.js
- [...] open: getStarted/app/lib/library.js
- [...] open: getStarted/app/models/ModelA.js
- [...] open: getStarted/app/models/ModelB.js
- [...] open: getStarted/app/views/ViewA.js
- [...] open: getStarted/app/views/ViewB.js
- [...] open: getStarted/app/views/ViewsAll.js
- [...] join: (app.js 1/9) getStarted/app/models/ModelB.js
- [...] join: (app.js 2/9) getStarted/app/controls/CtrlB.js
- [...] join: (app.js 3/9) getStarted/app/models/ModelA.js
- [...] join: (app.js 4/9) getStarted/app/controls/CtrlA.js
- [...] join: (app.js 5/9) getStarted/app/controls/CtrlsAll.js
- [...] join: (app.js 6/9) getStarted/app/views/ViewB.js
- [...] join: (app.js 7/9) getStarted/app/views/ViewA.js
- [...] join: (app.js 8/9) getStarted/app/views/ViewsAll.js
- [...] join: (app.js 9/9) getStarted/app/app.js
+ [...] join: (app.js, .css, 1/1) getStarted/app/views/ViewA.css
+ [...] write: app/public/cmpr/app.css
+ [...] join: (app.js, .js, 1/9) getStarted/app/models/ModelB.js
+ [...] join: (app.js, .js, 2/9) getStarted/app/controls/CtrlB.js
+ [...] join: (app.js, .js, 3/9) getStarted/app/models/ModelA.js
+ [...] join: (app.js, .js, 4/9) getStarted/app/controls/CtrlA.js
+ [...] join: (app.js, .js, 5/9) getStarted/app/controls/CtrlsAll.js
+ [...] join: (app.js, .js, 6/9) getStarted/app/views/ViewB.js
+ [...] join: (app.js, .js, 7/9) getStarted/app/views/ViewA.js
+ [...] join: (app.js, .js, 8/9) getStarted/app/views/ViewsAll.js
+ [...] join: (app.js, .js, 9/9) getStarted/app/app.js
  [...] write: app/public/cmpr/app.js
- [...] join: (app2.js 1/1) getStarted/app/app2.js
- [...] write: app/public/cmpr/app2.js
- [...] join: (library.js 1/1) getStarted/app/lib/library.js
- [...] write: app/public/cmpr/library.js
+ [...] finish: 00:00:17 (mm:ss:ms)
  [...] finish: 00:00:12 (mm:ss:ms)
  ```
+ 11. **Controlling the tree display.**  
+ 
+ To make scroungejs display the tree and stop, use the modifier `stop=tree`
+ 
+ By default, each dependency is only displayed once. This makes the tree smaller when, for example, a library is required by many files. To view the entire tree, use the modifier `treeView=full`
 
- 11. **Update _index.mustache_ using scroungejs.**  
+ ```bash
+ $ node ./scrounge.js -i ./getStarted/app --isConcatenated=true \
+   --isRecursive=true --stop=tree --treeView=full
+ [...] read: files (12/12)  
+  
+ app.js
+ └─┬ ViewsAll.js
+   ├─┬ ViewB.js
+   │ └─┬ CtrlsAll.js
+   │   ├─┬ CtrlB.js
+   │   │ └── ModelB.js
+   │   └─┬ CtrlA.js
+   │     └── ModelA.js
+   └─┬ ViewA.js
+     └── CtrlsAll.js  
+  
+ ```
+ 
+ 12. **Update _index.mustache_ using scroungejs.**  
 
  The index file contains a _scrounge_ element.
  
@@ -288,7 +305,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
   > </html>
   > ```
      
- 12. **modify the _basepage_ `index.mustache` with scroungejs**  
+ 13. **modify the _basepage_ `index.mustache` with scroungejs**  
  
  Call scroungejs without concatenation on the _basepage_.
  
@@ -384,7 +401,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
  </html>
  ```
 
- 13. **define tree attributes.**  
+ 15. **define tree attributes.**  
  
  If a tree attribute is defined in a scrounge element, only the file or files that result from the named tree are added to the scrounge element.  
  
@@ -431,7 +448,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
  </html>  
  ```
 
- 15. ## You are now ready to use scroungejs.
+ 16. ## You are now ready to use scroungejs.
 
  ![scrounge](http://github.com/iambumblehead/scroungejs/raw/master/img/hand10.png) 
 
@@ -548,15 +565,15 @@ example scrounge elements are given below
 
 #### <a id="modifiers">MODIFIERS:
 
- - **--inputPath=**___path___, **-i _path_**, _default: ./_  
+ - **--inputPath= _path_**, **-i _path_**, _default: ./_  
    
    a systempath to a directory or file.
 
- - **--outputPath=_path_**, **-o _path_**, _default: ./cmpr_  
+ - **--outputPath= _path_**, **-o _path_**, _default: ./cmpr_  
  
    a systempath to a directory or file.
    
- - **--publicPath=_path_**, **-p _path_**, _default: null_  
+ - **--publicPath= _path_**, **-p _path_**, _default: null_  
    a path to the files created by scrounge.
    
    a valid public path is discoverable on the full system path to the file. for example, `/cmpr` is found on the path `./getStarted/app/cmpr/app.js`.   
@@ -565,58 +582,62 @@ example scrounge elements are given below
    
    a public path is not useful without a `-basepage` argument as it affects only paths generated for the specified basepage.   
   
- - **--isBasepageSourcePaths=_bool_**, _default: false_  
+ - **--isBasepageSourcePaths= _bool_**, _default: false_  
    basepage include tags will reference scripts in source directory.
    disables compression, concatenation and copying of files. uses `publicPath`
        
    ex.  
    ```bash
-   $ node scrounge.js -l --isRecursive=true --isBasepageSourcePaths=true \  
+   $ node scrounge.js -l --isRecursive=true \        
+     --isBasepageSourcePaths=true \  
      --basepage=~/Software/kuaweb/sources/index.html \  
      --inputPath=~/Software/kuaweb/sources/appSrc --publicPath=/appSrc
    ```
 
- - **--isCompressed=_bool_**, _default: false_  
-   compress all files and trees before writing them to disk.
+ - **--isCompressed= _bool_, _extension_, _tree_**, _default: false_  
+   compress all files and/or trees before writing them to disk. If an extension or a treename are given only files that associate with the treename or extension will be compressed.
 
- - **--isRecursive=_bool_**, _default: false_  
+ - **--isConcatenated= _bool_, _extension_, _tree_**, _default: false_  
+   concatenate all js/css files that form a tree before writing them to disk. If an extension or a treename are given only files that associate with the treename or extension will be concatenated.
+
+ - **--isRecursive= _bool_**, _default: false_  
    discover files in nested directories on the given path.
    
- - **--isWarning=_bool_**, _default: false_  
+ - **--isWarning= _bool_**, _default: false_  
    raise warnings around trace statements.
 
- - **--isLines=_bool_**, _default: false_  
+ - **--isLines= _bool_**, _default: false_  
    each compressed script on its own line.
 
- - **--isClosure=_bool_**, _default: false_  
+ - **--isClosure= _bool_**, _default: false_  
    compressed js code will added in the body of anonymous self-calling function.
 
- - **--isSilent=_bool_**, **-s**, _default: false_  
+ - **--isSilent= _bool_**, **-s**, _default: false_  
    supress console messages.
    
- - **--isMintFilter=_bool_**, _default: false_  
+ - **--isMintFilter= _bool_**, _default: false_  
    only process files that include `_mint` in their filename. this should only be used for the special case when a build directory has many files that should not be included in the build process. `_mint` distinguishes a file that _should_ be included in the build process from a file that _should not_ be included in the build process.
 
- - **--isTimestamped=_bool_**, _default: false_  
-   add a timestamp to name of the output files.
+ - **--isTimestamped= _bool_, _extension_, _tree_**, _default: false_  
+   add a timestamp to name of the output files. If an extension or treename are given only files that associate with the treename or extension will be timestamped
 
- - **--isRemoveRequires=_bool_**, _default: true_  
+ - **--isRemoveRequires= _bool_**, _default: true_  
    remove 'requires' statements from javascript files. `true` by default.
    
- - **--isRemoveConsole=_bool_**, _default: false_  
+ - **--isRemoveConsole= _bool_**, _default: false_  
    remove 'console.log' statements from javascript files.
    uses UglifyJS2 ast to comprehensively remove console.log
    
- - **--isUpdateOnly=_bool_**, _default: false_  
+ - **--isUpdateOnly= _bool_**, _default: false_  
    modify include tags in a basepage only. do not build scrounge elements.
 
- - **--extensionType=_type_**, **-t _type_**, _default: ''_   
+ - **--extensionType= _type_**, **-t _type_**, _default: null_   
    process files of one type only, `js` or `css`.
    
- - **--forceTimestamp=_timestamp_**, _default: null_  
+ - **--forceTimestamp= _timestamp_**, _default: null_  
    all timestamped files will use the given timestamp.
    
- - **--basepage=_basepage_**, **-b _basepage_**, _default: ''_  
+ - **--basepage= _basepage_**, **-b _basepage_**, _default: null_  
    update scrounge tags in the defined basepage.
    
    scroungejs will not modify or process a file that does not contain scrounge tags.

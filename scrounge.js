@@ -29,27 +29,12 @@ var scrounge = module.exports = {
       treeArr = filters.getFilteredTreeArr(treeArr);    
     }
 
-/*
-    treeArr = treeArr.filter(function (tree) { 
-      return FilterTree.isTreePassingFilters(tree, filters, opts);
-      //filters.getRemoveNodesTreeArr();
-    });
-
-    treeArr = treeArr.map(function (tree) { 
-      return InfoTree.getNew({
-        fileObjArr : graph.getSorted(tree),
-        fileInfoObj : tree
-      });
-    });
-    
-    treeArr = treeArr.filter(function (tree) {
-      return FilterTree.isTreeInfoNodeInTreeArr(tree, treeArr);
-    });
-*/
-
+    //if (opts.trees.length) {
+    //  treeArr = FilterTree.getFilteredByNodeInTreeArr(opts.trees, treeArr);
+    //}
     treeArr.map(function (tree) {
       if (opts.isConcatenated && tree.dependencyArr.length) {
-        console.log('\n' + Message.getAsArchyStr(graph.getAsArchyTree(tree)));              
+        console.log('\n' + Message.getAsArchyStr(graph.getAsArchyTree(tree, opts)));
       }
     });
 
@@ -154,10 +139,18 @@ var scrounge = module.exports = {
 
   go : function (opts, fn) {
     var bgnDateObj = new Date(), totalTime,
-        infoBasepage = InfoBasepage.getNew(opts);
+        infoBasepage = InfoBasepage.getNew(opts),
+        cb = function (err, res) { 
+          if (typeof fn === 'function') fn(err, res);
+        };
 
     scrounge.treesBuild(opts, infoBasepage, function (err, treeArr) {
       if (err) return console.log(err);
+
+      if (opts.stop === 'tree') {
+        return cb(null, '');
+      }
+
       scrounge.copyAll(opts, function (err, res) {
         if (err) return console.log(err);     
         scrounge.treesApply(treeArr, opts, infoBasepage, function (err) {
@@ -165,7 +158,7 @@ var scrounge = module.exports = {
           Message.releaseMessages();
           totalTime = SimpleTime.getElapsedTimeFormatted(bgnDateObj, new Date());
           console.log(Message.finish(totalTime));
-          if (typeof fn === 'function') fn(null, totalTime);
+          cb(null, totalTime);
         });
       });
     });

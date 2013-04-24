@@ -1,4 +1,4 @@
-var UtilityJS = require('../lib/UtilityJS');
+var UtilityJS = require('../lib/fileUtility/fileUtilityJS');
 
 describe("UtilityJS.rmRequires", function () {
   var infoFile, str, result;
