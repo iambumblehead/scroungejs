@@ -68,7 +68,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
 
 #### <a id="get-started">GET STARTED:
 
-1. **Before Starting...**   
+ 1. **Before Starting...**   
 
  'Examples demonstrate usage from a shell but scroungejs is also usable from a javascript file. Each environment uses the same modifiers. Only the syntax is different. 'Both examples would produce the same output.
  
@@ -94,51 +94,49 @@ Scroungejs may be downloaded directly or installed through `npm`.
      console.log('finished!')
    });
    ```
-
-
-2. **Visit the scroungejs directory.**  
+   
+ 2. **Visit the scroungejs directory.**  
  
-```bash
-$ cd /path/to/scroungejs
-```
+ ```bash
+ $ cd /path/to/scroungejs
+ ```
 
+ 3. **Call scroungejs with node.**  
 
-3. **Call scroungejs with node.**  
+ ```bash
+ $ node ./scrounge.js
+ [...] read: files (2/2)
+ [...] write: cmpr/scrounge.js
+ [...] write: cmpr/index.js
+ [...] finish: 00:00:23 (mm:ss:ms)
+ ```
 
-```bash
-$ node ./scrounge.js
-[...] read: files (2/2)
-[...] write: cmpr/scrounge.js
-[...] write: cmpr/index.js
-[...] finish: 00:00:23 (mm:ss:ms)
-```
-  
-4. **Specify an input path.**  
+ 4. **Specify an input path.**  
  
  _The directory named 'getStarted' and its contents are provided with the [Scrounge][3] package._ 
 
-```bash
-$ node ./scrounge.js -i ./getStarted
-[...] read: files (2/2) 
-[...] write: getStarted/cmpr/fileB.js
-[...] write: getStarted/cmpr/fileA.js
-[...] finish: 00:00:25 (mm:ss:ms)
-```
-  
-5. **Use compression and timestamping modifiers.**  
+ ```bash
+ $ node ./scrounge.js -i ./getStarted
+ [...] read: files (2/2) 
+ [...] write: getStarted/cmpr/fileB.js
+ [...] write: getStarted/cmpr/fileA.js
+ [...] finish: 00:00:25 (mm:ss:ms)
+ ```
  
-```bash
-$ node ./scrounge.js -i ./getStarted \
-   --isTimestamped=true --isCompressed=true
-[...] read: files (2/2) 
-[...] ugly: (fileA.js, .js, 1/2) getStarted/fileB.js
-[...] write: getStarted/cmpr/fileB_2012.07.07-15:25:57.js
-[...] ugly: (fileB.js, .js, 2/2) getStarted/fileA.js
-[...] write: getStarted/cmpr/fileA_2012.07.07-15:25:46.js
-[...] finish: 00:00:25 (mm:ss:ms)
-```
+ 5. **Use compression and timestamping modifiers.**  
+ 
+ ```bash
+ $ node ./scrounge.js -i ./getStarted \
+    --isTimestamped=true --isCompressed=true
+ [...] read: files (2/2) 
+ [...] ugly: (fileA.js, .js, 1/2) getStarted/fileB.js
+ [...] write: getStarted/cmpr/fileB_2012.07.07-15:25:57.js
+ [...] ugly: (fileB.js, .js, 2/2) getStarted/fileA.js
+ [...] write: getStarted/cmpr/fileA_2012.07.07-15:25:46.js
+ [...] finish: 00:00:25 (mm:ss:ms)
+ ```
 
-6. **Define a dependency in _fileB.js_.**  
+ 6. **Define a dependency in _fileB.js_.**  
  
  scroungejs will concatenate dependency-related files. Dependencies are defined in .js and .css files using the 'Requires' property.  
  
@@ -154,7 +152,7 @@ $ node ./scrounge.js -i ./getStarted \
 
  _File properties are explained in section [File Properties](#file-properties)._
 
-7. **Concatenate files**
+ 7. **Concatenate files**
  
  Dependency-related files are recognized as a _tree_. A tree is composed of one file that depends on other files 'and so on. Here _fileB.js_ is a _source_ file that begins a dependency tree. 
 
@@ -163,18 +161,18 @@ $ node ./scrounge.js -i ./getStarted \
  `isConcatenated` may be defined as true or false or it may be defined with comma separated names of trees or extension types, such as '.js'. Only matching files will be concatenated.
 
 
-```bash
-$ node ./scrounge.js -i ./getStarted --isConcatenated=true
-[...] read: files (2/2)  
+ ```bash
+ $ node ./scrounge.js -i ./getStarted --isConcatenated=true
+ [...] read: files (2/2)  
   
-fileB.js  
- └── fileA.js  
+ fileB.js  
+  └── fileA.js  
   
-[...] join: (fileA.js, .js, 1/2) getStarted/fileA.js
-[...] join: (fileB.js, .js, 2/2) getStarted/fileB.js
-[...] write: getStarted/cmpr/fileB.js
-[...] finish: 00:00:27 (mm:ss:ms)
-```
+ [...] join: (fileA.js, .js, 1/2) getStarted/fileA.js
+ [...] join: (fileB.js, .js, 2/2) getStarted/fileB.js
+ [...] write: getStarted/cmpr/fileB.js
+ [...] finish: 00:00:27 (mm:ss:ms)
+ ```
 
  8. **Specify an Output Directory**
  
@@ -199,9 +197,9 @@ fileB.js
  Multiple trees may be discovered and concatenated and .css files that associate with a tree will be discovered as well.
 
  ```bash
-$ node ./scrounge.js -i ./getStarted/app --isConcatenated=true \
-  --outputPath=./app/public/cmpr --isRecursive=true --trees=app.js
-[...] read: files (12/12)  
+ $ node ./scrounge.js -i ./getStarted/app --isConcatenated=true \
+   --outputPath=./app/public/cmpr --isRecursive=true --trees=app.js
+ [...] read: files (12/12)  
   
 beep
 ├── ity
@@ -214,28 +212,28 @@ beep
   └── party
       time!  
   
-app.js
-└─┬ ViewsAll.js
-  ├─┬ ViewB.js
-  │ └─┬ CtrlsAll.js
-  │   ├─┬ CtrlB.js
-  │   │ └── ModelB.js
-  │   └─┬ CtrlA.js
-  │     └── ModelA.js
-  └── ViewA.js  
+ app.js
+ └─┬ ViewsAll.js
+   ├─┬ ViewB.js
+   │ └─┬ CtrlsAll.js
+   │   ├─┬ CtrlB.js
+   │   │ └── ModelB.js
+   │   └─┬ CtrlA.js
+   │     └── ModelA.js
+   └── ViewA.js  
   
-[...] join: (app.js, .css, 1/1) getStarted/app/views/ViewA.css
-[...] write: app/public/cmpr/app.css
-[...] join: (app.js, .js, 1/9) getStarted/app/models/ModelB.js
-[...] join: (app.js, .js, 2/9) getStarted/app/controls/CtrlB.js
-[...] join: (app.js, .js, 3/9) getStarted/app/models/ModelA.js
-[...] join: (app.js, .js, 4/9) getStarted/app/controls/CtrlA.js
-[...] join: (app.js, .js, 5/9) getStarted/app/controls/CtrlsAll.js
-[...] join: (app.js, .js, 6/9) getStarted/app/views/ViewB.js
-[...] join: (app.js, .js, 7/9) getStarted/app/views/ViewA.js
-[...] join: (app.js, .js, 8/9) getStarted/app/views/ViewsAll.js
-[...] join: (app.js, .js, 9/9) getStarted/app/app.js
-[...] write: app/public/cmpr/app.js
+ [...] join: (app.js, .css, 1/1) getStarted/app/views/ViewA.css
+ [...] write: app/public/cmpr/app.css
+ [...] join: (app.js, .js, 1/9) getStarted/app/models/ModelB.js
+ [...] join: (app.js, .js, 2/9) getStarted/app/controls/CtrlB.js
+ [...] join: (app.js, .js, 3/9) getStarted/app/models/ModelA.js
+ [...] join: (app.js, .js, 4/9) getStarted/app/controls/CtrlA.js
+ [...] join: (app.js, .js, 5/9) getStarted/app/controls/CtrlsAll.js
+ [...] join: (app.js, .js, 6/9) getStarted/app/views/ViewB.js
+ [...] join: (app.js, .js, 7/9) getStarted/app/views/ViewA.js
+ [...] join: (app.js, .js, 8/9) getStarted/app/views/ViewsAll.js
+ [...] join: (app.js, .js, 9/9) getStarted/app/app.js
+ [...] write: app/public/cmpr/app.js
  ```
 
  10. **Define filters for the build process.**  
