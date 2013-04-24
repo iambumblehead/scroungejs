@@ -29,8 +29,7 @@ var scrounge = module.exports = {
       treeArr = filters.getFilteredTreeArr(treeArr);    
     }
 
-
-    /*
+/*
     treeArr = treeArr.filter(function (tree) { 
       return FilterTree.isTreePassingFilters(tree, filters, opts);
       //filters.getRemoveNodesTreeArr();
@@ -46,52 +45,30 @@ var scrounge = module.exports = {
     treeArr = treeArr.filter(function (tree) {
       return FilterTree.isTreeInfoNodeInTreeArr(tree, treeArr);
     });
+*/
 
     treeArr.map(function (tree) {
       if (opts.isConcatenated && tree.dependencyArr.length) {
-        console.log('\n' + Message.getAsArchyStr(graph.getAsArchyTree(tree.treename)));              
+        console.log('\n' + Message.getAsArchyStr(graph.getAsArchyTree(tree)));              
       }
     });
-     */
 
-    ////////////////////////
-    /////// pending removal
-    treeArr = treeArr.map(function (tree) { 
-      if ((filters['.js'] || 
-           filters['.css'] ||
-           opts.isConcatenated === true)) {
-        if (tree.dependencyArr.length) {
-          console.log('\n' + Message.getAsArchyStr(graph.getAsArchyTree(tree)));              
-        }
-
-        return InfoTree.getNew({
-          fileObjArr : graph.getSorted(tree),
-          fileInfoObj : tree
-        });
-      }
-      
+    return treeArr.map(function (tree) {
+      return InfoTree.getNew({
+        fileObjArr : graph.getSorted(tree),
+        fileInfoObj : tree
+      });
     });
-    return treeArr;
-  },
 
-  /*
-  getMissingDependencyArr : function (treeArr) {
-    var missingDependencyArr = [], missingTreeInfoArr, x, y;
-    for (x = treeArr.length; x--;) {
-      missingTreeInfoArr = treeArr[x].getMissingDependencyArr();
-        for (y = missingTreeInfoArr.length; y--;) {
-          missingDependencyArr.push(missingTreeInfoArr[y]);
-        }
-    }
-    return missingDependencyArr;
   },
-   */
 
   getMissingDependencyArr : function (treeArr) {
     var missingDepArr = [];
 
     treeArr.map(function (tree) {
-      missingDepArr = missingDepArr.concat(tree.getMissingDependencyArr());
+      tree.getMissingDependencyArr().map(function (dep) {
+        missingDepArr.push(dep);
+      });
     });
 
     return missingDepArr;
@@ -113,8 +90,8 @@ var scrounge = module.exports = {
   treesBuild : function (opts, infoBasepage, fn) {
     var basepageUtil, fileObjBuilder, x, treeObjArr;
 
-    //FileUtil.getFiles(opts, function (err, filenameArr) {
     FileUtil.getTreeFiles(opts, function (err, filenameArr) {
+
       if (err) return fn(err);
       infoBasepage.getFilters(function (err, filters) {
         if (err) return fn(err);
@@ -124,7 +101,7 @@ var scrounge = module.exports = {
           if (!filters) {
             filters = FilterTree.getNew();
           }
-
+          
           opts.trees.map(function (treename) {
             filters.addTreeByFilename(treename);              
           });
@@ -161,6 +138,13 @@ var scrounge = module.exports = {
 
     InfoTree.getTreeArrAsAssocTreeArr(treeObjArr, opts, function (err, treeArr) {
       if (err) return fn(err);  
+
+      if (opts.extnType) {
+        treeArr = treeArr.filter(function (tree) {
+          return tree.fileInfoObj.type === opts.extnType ? true : false;
+        });
+      }
+
       InfoTree.writeTreeArr(treeArr, opts, function () {
         if (err) return fn(err);
         infoBasepage.writeTrees(treeArr, opts, fn);        

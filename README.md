@@ -191,13 +191,13 @@ Scroungejs may be downloaded directly or installed through `npm`.
  
  9. **Build a larger tree found in _./getStarted/app/_.**  
  
- Multiple trees may be discovered and concatenated and .css files that associate with a tree are concatenated as well.
+ Multiple trees may be discovered and concatenated and .css files that associate with a tree will be discovered as well.
 
  <!-- should be 3 js bars -one css bar -->
 
  ```bash
  $ node ./scrounge.js -i ./getStarted/app --isConcatenated=true \
-   --outputPath=./app/public/cmpr --isRecursive=true
+   --outputPath=./app/public/cmpr --isRecursive=true --trees=app.js
  [...] read: files (12/12)  
   
  app.js
@@ -216,18 +216,6 @@ Scroungejs may be downloaded directly or installed through `npm`.
  [...] join: tree: app.js, type: .js
  [...] [=============================] 100% (9/9)
  [...] write: app/public/cmpr/app.js
- [...] join: tree: app2.js, type: .js
- [...] [=============================] 100% (1/1)
- [...] write: app/public/cmpr/app2.js
- [...] join: tree: library.js, type: .js
- [...] [=============================] 100% (1/1)
- [...] write: app/public/cmpr/library.js
- [...] join: tree: ViewA.css, type: .css
- [...] [=============================] 100% (1/1)
- [...] write: app/public/cmpr/ViewA.css
- [...] join: tree: ViewA.css, type: .css
- [...] [=============================] 100% (1/1)
- [...] write: app/public/cmpr/ViewA.css
  [...] finish: 00:00:55 (mm:ss:ms)
  ```
 
@@ -239,7 +227,20 @@ Scroungejs may be downloaded directly or installed through `npm`.
 
  ```bash
  $ node ./scrounge.js -i ./getStarted/app --isConcatenated=true \
-   --outputPath=./app/public/cmpr --isRecursive=true  --extensionType=js
+   --outputPath=./app/public/cmpr --isRecursive=true --tress=app.js \
+   --extensionType=.js
+ [...] read: files (12/12)  
+  
+ app.js
+ └─┬ ViewsAll.js
+   ├─┬ ViewB.js
+   │ └─┬ CtrlsAll.js
+   │   ├─┬ CtrlB.js
+   │   │ └── ModelB.js
+   │   └─┬ CtrlA.js
+   │     └── ModelA.js
+   └── ViewA.js  
+  
  [...] open: getStarted/app/app.js
  [...] open: getStarted/app/app2.js
  [...] open: getStarted/app/controls/CtrlA.js
