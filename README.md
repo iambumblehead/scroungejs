@@ -205,7 +205,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
   
  app.js
  └─┬ ViewsAll.js
-   ├─┬ ViewB.js
+ &nbsp; ├─┬ ViewB.js
    │ └─┬ CtrlsAll.js
    │   ├─┬ CtrlB.js
    │   │ └── ModelB.js
