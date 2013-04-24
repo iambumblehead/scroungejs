@@ -221,6 +221,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
  [...] join: (app.js, .js, 8/9) getStarted/app/views/ViewsAll.js
  [...] join: (app.js, .js, 9/9) getStarted/app/app.js
  [...] write: app/public/cmpr/app.js
+ [...] finish: 00:00:17 (mm:ss:ms)
  ```
 
  10. **Define filters for the build process.**  
@@ -257,7 +258,6 @@ Scroungejs may be downloaded directly or installed through `npm`.
  [...] join: (app.js, .js, 8/9) getStarted/app/views/ViewsAll.js
  [...] join: (app.js, .js, 9/9) getStarted/app/app.js
  [...] write: app/public/cmpr/app.js
- [...] finish: 00:00:17 (mm:ss:ms)
  [...] finish: 00:00:12 (mm:ss:ms)
  ```
  11. **Controlling the tree display.**  
