@@ -205,13 +205,13 @@ Scroungejs may be downloaded directly or installed through `npm`.
   
  app.js
  └─┬ ViewsAll.js
- &nbsp; ├─┬ ViewB.js
-   │ └─┬ CtrlsAll.js
-   │   ├─┬ CtrlB.js
-   │   │ └── ModelB.js
-   │   └─┬ CtrlA.js
-   │     └── ModelA.js
-   └── ViewA.js  
+ . ├─┬ ViewB.js
+ . │ └─┬ CtrlsAll.js
+ . │   ├─┬ CtrlB.js
+ . │   │ └── ModelB.js
+ . │   └─┬ CtrlA.js
+ . │     └── ModelA.js
+ . └── ViewA.js  
   
  [...] join: (app.js, .css, 1/1) getStarted/app/views/ViewA.css
  [...] write: app/public/cmpr/app.css
