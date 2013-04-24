@@ -196,8 +196,6 @@ Scroungejs may be downloaded directly or installed through `npm`.
  
  Multiple trees may be discovered and concatenated and .css files that associate with a tree will be discovered as well.
 
- _npmjs and github do not display the tree correctly_
-
  ```bash
  $ node ./scrounge.js -i ./getStarted/app --isConcatenated=true \
    --outputPath=./app/public/cmpr --isRecursive=true --trees=app.js
