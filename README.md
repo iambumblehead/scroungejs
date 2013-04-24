@@ -196,7 +196,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
  
  Multiple trees may be discovered and concatenated and .css files that associate with a tree will be discovered as well.
 
-```bash
+ ```bash
 $ node ./scrounge.js -i ./getStarted/app --isConcatenated=true \
   --outputPath=./app/public/cmpr --isRecursive=true --trees=app.js
 [...] read: files (12/12)  
@@ -234,7 +234,7 @@ app.js
 [...] join: (app.js, .js, 8/9) getStarted/app/views/ViewsAll.js
 [...] join: (app.js, .js, 9/9) getStarted/app/app.js
 [...] write: app/public/cmpr/app.js
-```
+ ```
 
  10. **Define filters for the build process.**  
 
