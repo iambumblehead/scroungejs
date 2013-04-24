@@ -149,8 +149,8 @@ Scroungejs may be downloaded directly or installed through `npm`.
  > ```javascript
    // Requires: fileA.js
    ```
-
- 7. **Concatenate files**
+   
+ 7. **Concatenate files**  
  
  Dependency-related files are recognized as a _tree_. A tree is composed of one file that depends on other files 'and so on. Here _fileB.js_ is a _source_ file that begins a dependency tree. 
 
