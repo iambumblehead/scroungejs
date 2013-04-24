@@ -201,6 +201,19 @@ Scroungejs may be downloaded directly or installed through `npm`.
    --outputPath=./app/public/cmpr --isRecursive=true --trees=app.js
  ```
  
+```
+beep
+├── ity
+└─┬ boop
+  ├─┬ o_O
+  │ ├─┬ oh
+  │ │ ├── hello
+  │ │ └── puny
+  │ └── human
+  └── party
+      time!  
+```      
+
  ```
  [...] read: files (12/12)  
   
