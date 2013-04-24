@@ -100,7 +100,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
 ```bash
 $ cd /path/to/scroungejs
 ```
-
+  
 3. **Call scroungejs with node.**  
 
 ```bash
@@ -110,7 +110,7 @@ $ node ./scrounge.js
 [...] write: cmpr/index.js
 [...] finish: 00:00:23 (mm:ss:ms)
 ```
-
+  
 4. **Specify an input path.**  
  
  _The directory named 'getStarted' and its contents are provided with the [Scrounge][3] package._ 
@@ -122,7 +122,7 @@ $ node ./scrounge.js -i ./getStarted
 [...] write: getStarted/cmpr/fileA.js
 [...] finish: 00:00:25 (mm:ss:ms)
 ```
- 
+  
 5. **Use compression and timestamping modifiers.**  
  
 ```bash
