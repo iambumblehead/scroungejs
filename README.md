@@ -548,7 +548,7 @@ example scrounge elements are given below
 
 #### <a id="modifiers">MODIFIERS:
 
- - **--inputPath=_path_**, **-i _path_**, _default: ./_  
+ - **--inputPath=*path***, **-i _path_**, _default: ./_  
    
    a systempath to a directory or file.
 
