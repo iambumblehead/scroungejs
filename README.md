@@ -144,11 +144,6 @@ Scroungejs may be downloaded directly or installed through `npm`.
 
  _File properties are explained in section [File Properties](#file-properties)._
 
- > *./getStarted/fileB.js:*
-
- > ```javascript
-   // Requires: fileA.js
-   ```
    
  7. **Concatenate files**  
  
