@@ -142,16 +142,13 @@ Scroungejs may be downloaded directly or installed through `npm`.
  
  Open `fileB.js` and add the following line to the top: `// Requires: fileA.js`.
 
+ _File properties are explained in section [File Properties](#file-properties)._
+
  > *./getStarted/fileB.js:*
 
  > ```javascript
    // Requires: fileA.js
    ```
- 
- Add '`// Requires: fileB.js`' to a file to create a dependency on `fileB.js`.  
-
- _File properties are explained in section [File Properties](#file-properties)._
-
 
  7. **Concatenate files**
  
