@@ -24,6 +24,12 @@
 (puthash "scroungejs" "~/Software/scroungejs" *Project-Root-Hash*)
 (puthash "simpleTime" "~/Software/simpleTime" *Project-Root-Hash*)
 
+(puthash "jrlf" "~/Software/foxsportscms/trunk/fscom/src/main/webapp/js/janrain/JRLFBundleSrc" *Project-Source-Hash*)
+(puthash "jrlf" "~/Software/foxsportscms/trunk/fscom/src/main/webapp/js/janrain/JRLFBundle" *Project-Scrounge-Hash*)
+(puthash "jrlf" "~/Software/foxsportscms/trunk/fscom/src/main/webapp/jsp/layout/meta/metaJanrainLivefyre.jsp" *Basepage-Path-Hash*)
+(puthash "jrlf" "~/Software/foxsportscms/trunk/fscom/src/main/webapp/js/janrain" *Project-Root-Hash*)
+(puthash "jrlf" "/fe/js" *Public-Root-Hash*)
+
 (puthash "cucumberWeb" "~/Software/cucumberWeb/sources/appSrc" *Project-Source-Hash*)
 (puthash "cucumberWeb" "~/Software/cucumberWeb/sources/app" *Project-Scrounge-Hash*)
 (puthash "cucumberWeb" "~/Software/cucumberWeb/sources/index.mustache" *Basepage-Path-Hash*)
@@ -122,6 +128,8 @@
                          "--isRemoveRequires=true "
                          (if is-fake " --isCompressed=false" " --isCompressed=true")
                          (if is-fake " --isConcatenated=false" " --isConcatenated=true")
+;;                         "--isCompressed=false "
+;;                         "--isConcatenated=true "
                          (if is-fake "" " --isRemoveConsole=true")
                          (if public-root-path (concat " --publicPath=" public-root-path) "")
                          (if basepage-path (concat " --basepage=" basepage-path) "")                         
@@ -307,7 +315,7 @@ is `Filename: $name` on first line?"
          (concat "node " *Scrounge-Path* 
                  " -isLines=true "
                  "--isRecursive=true "
-                 "--isTimestamped=true "
+;;                 "--isTimestamped=true "
                  "--isUpdateOnly=true "
                  "--isSilent=true "
                  "--isRemoveRequires=true "
