@@ -54,6 +54,15 @@ describe("ScroungeElem.getFromMarkup", function () {
 
 
 describe("scroungeElem.getElemIndentation", function () {
+  it("should return carriage-return indentation", function () {
+    var str = markupStr_scroungeElems_treesNone_typeJS_valid,
+        scroungeElemObj = ScroungeElem.getNew({
+          elem : '	   <!-- <scrounge.js> -->'
+        });
+
+    expect( scroungeElemObj.getElemIndentation() ).toBe( '	   ' );
+  });
+
   it("should return whitespace indentation", function () {
     var str = markupStr_scroungeElems_treesNone_typeJS_valid,
         scroungeElemObj = ScroungeElem.getNew({
