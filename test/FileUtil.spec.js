@@ -27,8 +27,8 @@ describe("FileUtil.getPublicPath", function () {
 
   it("should return a syspath on given public path, even when public path is on an fqdn", function () {
     var sysPath = "/Users/chrisdep/Software/foxsportscms/trunk/fscom/src/main/webapp/js/janrain/JRLFBundle/PkTime.js";
-    var pubPath = "https:www.google.com/fe/js";
+    var pubPath = "https://www.google.com/fe/js";
     
-    expect( FileUtil.getPublicPath(sysPath, pubPath) ).toBe( "https:www.google.com/fe/js/janrain/JRLFBundle/PkTime.js" );
+    expect( FileUtil.getPublicPath(sysPath, pubPath) ).toBe( "https://www.google.com/fe/js/janrain/JRLFBundle/PkTime.js" );
   });
 });
