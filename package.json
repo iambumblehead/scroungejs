@@ -22,6 +22,7 @@
     "console-progress" : ">=0.0.1"
   },
   "devDependencies" : {
+      "compareobj" : ">=0.0.3",
       "jasmine-node" : ">=1.3.0"
   },
   "scripts" : {

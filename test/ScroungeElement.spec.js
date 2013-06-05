@@ -2,6 +2,7 @@ var ScroungeElem = require('../lib/ScroungeElem'),
     FileInfoTree = require('../lib/fileInfo/fileInfoTree'),
     FileInfoNode = require('../lib/fileInfo/fileInfoNode'),
     UserOptions = require('../lib/UserOptions'),
+    CompareObj = require('compareobj'),
     BMBLib = require('../lib/BMBLib');
 
 var markupStr_scroungeElems_treesNone_typeJS_valid = '' +
@@ -12,9 +13,15 @@ var markupStr_scroungeElems_treesTwo_typeJS_valid = '' +
   '   <!-- <scrounge.js trees="one,two"> -->' + 
   '\n   <!-- </scrounge> -->';
 
+var markupStr_scroungeElems_treesTwo_typeJS_valid_space = '' +
+  '   <!-- <scrounge.js trees="one, two"> -->' + 
+  '\n   <!-- </scrounge> -->';
+
 var markupStr_scroungeElems_treesNone_typeCSS_valid = '' +
   '   <!-- <scrounge.css> -->' + 
   '\n   <!-- </scrounge> -->';
+
+
 
 describe("ScroungeElem.getFromMarkup", function () {
   
@@ -49,6 +56,34 @@ describe("ScroungeElem.getFromMarkup", function () {
     expect( BMBLib.isArray(scroungeElemObj.trees) ).toBe( true );
     expect( scroungeElemObj.trees.length ).toBe( 2 );
     expect( scroungeElemObj.type ).toBe( '.js' );
+  });
+});
+
+describe("ScroungeElem.getFromStrScroungeElemObj", function () {
+  it('should return element with trees="one,two" as object w/ trees = [one, two]', function () {
+    var str = markupStr_scroungeElems_treesTwo_typeJS_valid,
+        result = ScroungeElem.getFromStrScroungeElemObj(str),
+        resultExpected = ['one', 'two'];
+
+    expect( 
+      CompareObj.isSameMembersDefinedArrSame(
+        result.trees, resultExpected
+      ) 
+    ).toBe( true );
+  });
+
+  it('should return element with trees="one, two" as object w/ trees = [one, two]', function () {
+    var str = markupStr_scroungeElems_treesTwo_typeJS_valid_space,
+        result = ScroungeElem.getFromStrScroungeElemObj(str),
+        resultExpected = ['one', 'two'];
+
+    expect( 
+      CompareObj.isSameMembersDefinedArrSame(
+        result.trees, resultExpected
+      ) 
+    ).toBe( true );
+
+    
   });
 });
 
