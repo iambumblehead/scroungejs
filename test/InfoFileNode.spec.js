@@ -158,6 +158,15 @@ describe("infoFile.getPublicPathStr", function () {
     result = infoFile.getPublicPathStr(params);
     expect( result ).toBe( "/output/path/script.js" );
   });
+
+  it("should return path of file, with unique id added, when public path is defined", function () {  
+    infoFile = InfoFile.getNew({ filename : "/path/to/script.js" });
+    params = { outputPath : '/output/path',
+               isSourcePathUnique : true };
+    result = infoFile.getPublicPathStr(params);
+    expect( /\d\d\d\d\d\d\d\d\d\d\d\d\d$/.test(result) ).toBe( true );
+  });
+
 });
 
 
