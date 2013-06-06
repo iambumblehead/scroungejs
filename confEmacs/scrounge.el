@@ -126,6 +126,7 @@
                          "--isRecursive=true "
                          "--isTimestamped=true "
                          "--isRemoveRequires=true "
+;;                         "--isSourcePathUnique=true "
                          (if is-fake " --isCompressed=false" " --isCompressed=true")
                          (if is-fake " --isConcatenated=false" " --isConcatenated=true")
 ;;                         "--isCompressed=false "
@@ -151,6 +152,7 @@
                  "--isRecursive=true "
                  "--isBasepageSourcePaths=true "
                  "--isRemoveRequires=true "
+;;                 "--isSourcePathUnique=true "
                  (if basepage-path (concat " --basepage=" basepage-path) "")                         
                  (if project-path (concat " --inputPath=" project-path) "")
                  (if public-path (concat " --publicPath=" "/appSrc") ""))))))
@@ -171,6 +173,7 @@
                          "--isTimestamped=true "
                          "--isWarning=true "
                          "--isRemoveRequires=true "
+;;                         "--isSourcePathUnique=true "
                          (if is-fake " --isCompressed=false ")
                          (if is-fake " --isConcatenated=false ")
                          (if public-root-path (concat " --publicPath=" public-root-path) "")
@@ -319,6 +322,7 @@ is `Filename: $name` on first line?"
                  "--isUpdateOnly=true "
                  "--isSilent=true "
                  "--isRemoveRequires=true "
+;;                 "--isSourcePathUnique=true "
                  (if is-fake " --isCompressed=false ")
                  (if is-fake " --isConcatenated=false")
                  (if public-root-path (concat " --publicPath=" public-root-path) "")

@@ -297,7 +297,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
   >     <script src="/scr/libFile.js" type="text/javascript"></script>
   >   </head>
   >   <body>  
-  >     <!-- <scrounge.js> -->
+  >     <!-- <scrounge type=".js"> -->
   >     <!-- </scrounge> -->
   >   </body>
   > </html>
@@ -324,7 +324,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
      <script src="/app/lib/library.js" type="text/javascript"></script>
    </head>
    <body>
-     <!-- <scrounge.js> -->
+     <!-- <scrounge type=".js"> -->
      <script src="/app/public/cmpr/library.js" type="text/javascript"></script>
      <script src="/app/public/cmpr/app2.js" type="text/javascript"></script>
      <script src="/app/public/cmpr/ModelB.js" type="text/javascript"></script>
@@ -360,7 +360,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
      <script src="/app/lib/library.js" type="text/javascript"></script>  
    </head>  
    <body>  
-     <!-- <scrounge.js> -->  
+     <!-- <scrounge type=".js"> -->  
      <script src="/app/public/cmpr/library.js" type="text/javascript"></script>  
      <script src="/app/public/cmpr/app2.js" type="text/javascript"></script>  
      <script src="/app/public/cmpr/app.js" type="text/javascript"></script>  
@@ -390,7 +390,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
      <script src="/app/lib/library.js" type="text/javascript"></script>
    </head>  
    <body>  
-     <!-- <scrounge.js> -->  
+     <!-- <scrounge type=".js"> -->  
      <script src="/cmpr/library.js" type="text/javascript"></script>
      <script src="/cmpr/app.js" type="text/javascript"></script>  
      <script src="/cmpr/app2.js" type="text/javascript"></script>  
@@ -412,11 +412,11 @@ Scroungejs may be downloaded directly or installed through `npm`.
  <html>  
    <head>  
      <script src="/app/lib/library.js" type="text/javascript"></script>  
-     <!-- <scrounge.css trees="app.js"> -->     
+     <!-- <scrounge type=".css" trees="app.js"> -->     
      <!-- </scrounge> -->  
    </head>  
    <body>  
-     <!-- <scrounge.js trees="app.js"> -->  
+     <!-- <scrounge type=".js" trees="app.js"> -->  
      <!-- </scrounge> -->  
    </body>  
  </html>  
@@ -434,12 +434,12 @@ Scroungejs may be downloaded directly or installed through `npm`.
  <html>  
    <head>  
      <script src="/app/lib/library.js" type="text/javascript"></script>  
-     <!-- <scrounge.css trees="app.js"> -->
+     <!-- <scrounge type=".css" trees="app.js"> -->
      <script src="/cmpr/app.css" type="text/javascript"></script>  
      <!-- </scrounge> -->     
    </head>  
    <body>  
-     <!-- <scrounge.js trees="app.js"> -->  
+     <!-- <scrounge type=".js" trees="app.js"> -->  
      <script src="/cmpr/app.js" type="text/javascript"></script>  
      <!-- </scrounge> -->  
    </body>  
@@ -511,7 +511,7 @@ scroungejs may add include elements for the js and css files it processes. Only 
    <!doctype html>  
    <html>  
      <head>  
-       <!-- <scrounge.js> -->  
+       <!-- <scrounge type=".js"> -->  
        <!-- </scrounge> -->  
      </head>  
      <body></body>   
@@ -523,7 +523,7 @@ scroungejs adds js/css include elements in the body of scrounge elements. Someth
   > *example.html* 
 
   ```html
-  <!-- <scrounge.js> -->
+  <!-- <scrounge type=".js"> -->
   <script src="cmpr/app1.js" type="text/javascript"></script>
   <script src="cmpr/app2.js" type="text/javascript"></script>
   <script src="cmpr/app3.js" type="text/javascript"></script>
@@ -538,7 +538,7 @@ a 'tree' attribute will affect the body of the element produced by scroungejs.
   > *example.html*
 
   ```html
-  <!-- <scrounge.css tree="app1.js,app2"> -->
+  <!-- <scrounge type=".css" tree="app1.js,app2"> -->
   <script src="cmpr/app1.js" type="text/javascript"></script>
   <script src="cmpr/app2.js" type="text/javascript"></script>
   <!-- </scrounge> -->
@@ -550,11 +550,11 @@ example scrounge elements are given below
   > *example.html*
   
   ```html
-  <!-- <scrounge.css tree="Map.css,Main.js"> -->
+  <!-- <scrounge type=".css" tree="Map.css,Main.js"> -->
   <!-- </scrounge> -->
-  <!-- <scrounge.js tree="Main.js,Crypto.js"> -->
+  <!-- <scrounge type=".js" tree="Main.js,Crypto.js"> -->
   <!-- </scrounge> -->
-  <!-- <scrounge.css tree="Main.js"> -->
+  <!-- <scrounge type=".css" tree="Main.js"> -->
   <!-- </scrounge> -->
   ```
 
@@ -572,13 +572,23 @@ example scrounge elements are given below
    a systempath to a directory or file.
    
  - **--publicPath= _path_**, **-p _path_**, _default: null_  
-   a path to the files created by scrounge.
+   a path to the files created by scrounge. examples describe it best
+
+   for the file `./getStarted/app/cmpr/app.js`, with publicPath `/cmpr/app.js`:
+
+   a resulting basepage element:
+   ```html
+   <script src="/cmpr/app.js" type="text/javascript"></script>';
+   ```
    
-   a valid public path is discoverable on the full system path to the file. for example, `/cmpr` is found on the path `./getStarted/app/cmpr/app.js`.   
+   for the file `./getStarted/app/cmpr/app.js`, with publicPath `http://www.site.com/cmpr/app.js`:   
+     
+   a resulting basepage element:
+   ```html
+   <script src="http://www.site.com/cmpr/app.js" type="text/javascript"></script>';
+   ```   
    
-   this file's full public path would be `/cmpr/app.js`.  
-   
-   a public path is not useful without a `-basepage` argument as it affects only paths generated for the specified basepage.   
+   a public path is not useful without a `--basepage` argument as it affects only paths generated for the specified basepage.   
   
  - **--isBasepageSourcePaths= _bool_**, _default: false_  
    basepage include tags will reference scripts in source directory.
@@ -591,6 +601,21 @@ example scrounge elements are given below
      --basepage=~/Software/kuaweb/sources/index.html \  
      --inputPath=~/Software/kuaweb/sources/appSrc --publicPath=/appSrc
    ```
+
+ - **--isSourcePathUnique= _bool_**, _default: false_  
+   add a unique argument to reference paths in include elements
+   
+   if enabled, an include element may appear as follows:
+   
+   ```html
+   <script src="Main.js?u=1370491167925" type="text/javascript"></script>';
+   <link href="Main.css?u=1370491167926" rel="stylesheet" type="text/css">
+   ```
+     
+ - **--extnTemplate= _str_**, _default: ''_  
+   prompts scroungejs to recognize the given string as an extentions for template files. For example, `--extnTemplate=.mustache`. 
+
+   If `ViewSignin.js` is included in scroungejs' output, `ViewSignin.mustache` will be included as well and it will be copied to the specified output directory.    
 
  - **--isCompressed= _bool_, _extension_, _tree_**, _default: false_  
    compress all files and/or trees before writing them to disk. If an extension or a treename are given only files that associate with the treename or extension will be compressed.

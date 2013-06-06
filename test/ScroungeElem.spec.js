@@ -6,19 +6,19 @@ var ScroungeElem = require('../lib/ScroungeElem'),
     BMBLib = require('../lib/BMBLib');
 
 var markupStr_scroungeElems_treesNone_typeJS_valid = '' +
-  '   <!-- <scrounge.js> -->' + 
+  '   <!-- <scrounge type=".js"> -->' + 
   '\n   <!-- </scrounge> -->';
 
 var markupStr_scroungeElems_treesTwo_typeJS_valid = '' +
-  '   <!-- <scrounge.js trees="one,two"> -->' + 
+  '   <!-- <scrounge type=".js" trees="one,two"> -->' + 
   '\n   <!-- </scrounge> -->';
 
 var markupStr_scroungeElems_treesTwo_typeJS_valid_space = '' +
-  '   <!-- <scrounge.js trees="one, two"> -->' + 
+  '   <!-- <scrounge type=".js" trees="one, two"> -->' + 
   '\n   <!-- </scrounge> -->';
 
 var markupStr_scroungeElems_treesNone_typeCSS_valid = '' +
-  '   <!-- <scrounge.css> -->' + 
+  '   <!-- <scrounge type=".css"> -->' + 
   '\n   <!-- </scrounge> -->';
 
 
@@ -152,8 +152,12 @@ describe("scroungeElem.getScroungeElemTplStr", function () {
           type : '.js'
         }),
         scroungeElemTplStr = scroungeElemObj.getScroungeElemTplStr(),
-        scroungeElemTplStrFin = '<!-- <scrounge.js$tree> -->',
+        scroungeElemTplStrFin = '<!-- <scrounge type=".js"$tree> -->\n$tags\n<!-- </scrounge> -->',
+
         isElemFin = scroungeElemTplStr.indexOf(scroungeElemTplStrFin) !== -1;
+
+//    console.log(scroungeElemTplStr);
+//    console.log(scroungeElemTplStrFin);
 
     expect( isElemFin ).toBe( true );    
   });
@@ -164,7 +168,7 @@ describe("scroungeElem.getScroungeElemTplStr", function () {
           type : '.css'
         }),
         scroungeElemTplStr = scroungeElemObj.getScroungeElemTplStr(),
-        scroungeElemTplStrFin = '<!-- <scrounge.css$tree> -->',
+        scroungeElemTplStrFin = '<!-- <scrounge type=".css"$tree> -->',
         isElemFin = scroungeElemTplStr.indexOf(scroungeElemTplStrFin) !== -1;
 
     expect( isElemFin ).toBe( true );    
@@ -172,19 +176,19 @@ describe("scroungeElem.getScroungeElemTplStr", function () {
 
 
   it("should return correctly indented scrounge element", function () {
-    var scroungeElemObj = ScroungeElem.getFromStrScroungeElemObj('   <!-- <scrounge.js> --->'),
+    var scroungeElemObj = ScroungeElem.getFromStrScroungeElemObj('   <!-- <scrounge type=".js"> --->'),
         scroungeElemTplStr = scroungeElemObj.getScroungeElemTplStr(),
         scroungeElemTplStrFin = '' +
-          '   <!-- <scrounge.js$tree> -->' +
+          '   <!-- <scrounge type=".js"$tree> -->' +
           '\n$tags\n' +
           '   <!-- </scrounge> -->';
 
     expect( scroungeElemTplStr ).toBe( scroungeElemTplStrFin );    
 
-    scroungeElemObj = ScroungeElem.getFromStrScroungeElemObj(' <!-- <scrounge.js> --->');
+    scroungeElemObj = ScroungeElem.getFromStrScroungeElemObj(' <!-- <scrounge type=".js"> --->');
     scroungeElemTplStr = scroungeElemObj.getScroungeElemTplStr();
     scroungeElemTplStrFin = '' +
-      ' <!-- <scrounge.js$tree> -->' +
+      ' <!-- <scrounge type=".js"$tree> -->' +
       '\n$tags\n' +
       ' <!-- </scrounge> -->';
 
@@ -321,7 +325,7 @@ describe("scroungeElem.getScroungeElemStr", function () {
 
     scroungeElemStr = scroungeElemObj.getScroungeElemStr('__str__');
     finStr = '' +
-      '<!-- <scrounge.js> -->' +
+      '<!-- <scrounge type=".js"> -->' +
       '\n__str__\n' + 
       '<!-- </scrounge> -->';      
 
@@ -336,7 +340,7 @@ describe("scroungeElem.getScroungeElemStr", function () {
 
     scroungeElemStr = scroungeElemObj.getScroungeElemStr('');
     finStr = '' +
-      '<!-- <scrounge.js> -->' +
+      '<!-- <scrounge type=".js"> -->' +
       '\n\n' + 
       '<!-- </scrounge> -->';      
 
@@ -529,7 +533,7 @@ describe("scroungeElem.getTreeArrAsScroungeElemStr", function () {
     opts = UserOptions.getNew({ isConcatenated : true });
     result = scroungeElemObj.getTreeArrAsScroungeElemStr([fileInfoTree], opts);
     resultExpected =
-      '<!-- <scrounge.js> -->\n' + 
+      '<!-- <scrounge type=".js"> -->\n' + 
       '<script src="cmpr/dep1.js" type="text/javascript"></script>\n' + 
       '<!-- </scrounge> -->';
 
