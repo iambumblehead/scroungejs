@@ -1,4 +1,5 @@
 var BasepageUtil = require('../lib/fileInfo/fileInfoBasepage');
+var FileInfoNode = require('../lib/fileInfo/fileInfoNode');
 var CompareObj = require('compareobj');
 
 var basepageStr_valid = 'string';
@@ -21,6 +22,13 @@ var basepageStr_scroungeElem_empty_2trees_space = '' +
 
 var basepageStr_scroungeElem_full = '' +
       '    <!-- <scrounge.js> -->\n' +
+      '    <script src="/cmpr/library.js" type="text/javascript"></script>\n' +
+      '    <script src="/cmpr/app2.js" type="text/javascript"></script>\n' +
+      '    <script src="/cmpr/app.js" type="text/javascript"></script>\n' +
+      '    <!-- </scrounge> -->\n  ';
+
+var basepageStr_scroungeElem_full_2trees = '' +
+      '    <!-- <scrounge.js trees="app.js,app2.js"> -->\n' +
       '    <script src="/cmpr/library.js" type="text/javascript"></script>\n' +
       '    <script src="/cmpr/app2.js" type="text/javascript"></script>\n' +
       '    <script src="/cmpr/app.js" type="text/javascript"></script>\n' +
@@ -129,4 +137,32 @@ describe("fileInfoBasepage.getFilters", function () {
       done();
     });
   });
+});
+
+
+describe("fileInfoBasepage.getWithUpdatedIncludeStr", function () {
+  var basepageUtil = BasepageUtil.getNew({ basepage : 'testbasepage' });
+  var pageMarkup = basepageStr_scroungeElem_full_2trees;
+
+  var infoFileObj = FileInfoNode.getNew({
+    filename : 'app.js',
+    treename : 'app.js',
+    type : '.js',
+    dependencyArr : [],
+    timestamp : new Date(),
+    authorsArr : 'authors'
+  });
+
+  var userOptions = {
+//    forceTimestamp : 'forcedTimestamp',
+//    isTimestamped : true,
+    publicPath : '/cmpr/'
+  };
+
+  // use force timestamp
+  var result = basepageUtil.getWithUpdatedIncludeStr(pageMarkup, infoFileObj, userOptions);
+  //result = 
+  console.log('basepageUtil result: ', result);
+
+  expect( true ).toBe( true );
 });
