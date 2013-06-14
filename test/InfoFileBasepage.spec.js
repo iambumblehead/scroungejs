@@ -5,30 +5,30 @@ var CompareObj = require('compareobj');
 var basepageStr_valid = 'string';
 
 var basepageStr_scroungeElem_empty = '' +
-      '    <!-- <scrounge.js> -->\n' +
+      '    <!-- <scrounge type=".js"> -->\n' +
       '    <!-- </scrounge> -->\n  ';
 
 var basepageStr_scroungeElem_empty_0trees = '' +
-      '    <!-- <scrounge.js> -->\n' +
+      '    <!-- <scrounge type=".js"> -->\n' +
       '    <!-- </scrounge> -->\n  ';
 
 var basepageStr_scroungeElem_empty_2trees = '' +
-      '    <!-- <scrounge.js trees="treeA.js,treeB.js"> -->\n' +
+      '    <!-- <scrounge type=".js" trees="treeA.js,treeB.js"> -->\n' +
       '    <!-- </scrounge> -->\n  ';
 
 var basepageStr_scroungeElem_empty_2trees_space = '' +
-      '    <!-- <scrounge.js trees="treeA.js, treeB.js"> -->\n' +
+      '    <!-- <scrounge type=".js" trees="treeA.js, treeB.js"> -->\n' +
       '    <!-- </scrounge> -->\n  ';
 
 var basepageStr_scroungeElem_full = '' +
-      '    <!-- <scrounge.js> -->\n' +
+      '    <!-- <scrounge type=".js"> -->\n' +
       '    <script src="/cmpr/library.js" type="text/javascript"></script>\n' +
       '    <script src="/cmpr/app2.js" type="text/javascript"></script>\n' +
       '    <script src="/cmpr/app.js" type="text/javascript"></script>\n' +
       '    <!-- </scrounge> -->\n  ';
 
 var basepageStr_scroungeElem_full_2trees = '' +
-      '    <!-- <scrounge.js trees="app.js,app2.js"> -->\n' +
+      '    <!-- <scrounge type=".js" trees="app.js,app2.js"> -->\n' +
       '    <script src="/cmpr/library.js" type="text/javascript"></script>\n' +
       '    <script src="/cmpr/app2.js" type="text/javascript"></script>\n' +
       '    <script src="/cmpr/app.js" type="text/javascript"></script>\n' +
@@ -141,28 +141,68 @@ describe("fileInfoBasepage.getFilters", function () {
 
 
 describe("fileInfoBasepage.getWithUpdatedIncludeStr", function () {
-  var basepageUtil = BasepageUtil.getNew({ basepage : 'testbasepage' });
-  var pageMarkup = basepageStr_scroungeElem_full_2trees;
 
-  var infoFileObj = FileInfoNode.getNew({
-    filename : 'app.js',
-    treename : 'app.js',
-    type : '.js',
-    dependencyArr : [],
-    timestamp : new Date(),
-    authorsArr : 'authors'
+  /*
+  it('should return the same string when if no timestamp or unique id', function () {
+    var basepageUtil = BasepageUtil.getNew({ basepage : 'testbasepage' });
+    var pageMarkup = basepageStr_scroungeElem_full_2trees;
+
+    var infoFileObj = FileInfoNode.getNew({
+      filename : 'app.js',
+      treename : 'app.js',
+      type : '.js',
+      dependencyArr : [],
+      timestamp : new Date(),
+      authorsArr : 'authors'
+    });
+
+    var userOptions = {
+      publicPath : '/cmprBOOM/'
+    };
+
+    var result = basepageUtil.getWithUpdatedIncludeStr(pageMarkup, infoFileObj, userOptions);
+    expect( result ).toBe( pageMarkup );
+  });
+   */
+
+  it('should return the same string with new timestamp for file', function () {
+    var basepageUtil = BasepageUtil.getNew({ basepage : 'testbasepage' });
+    var pageMarkup = '' +
+      '    <!-- <scrounge type=".js" trees="app.js,app2.js"> -->\n' +
+      '    <script src="/cmpr/library.js" type="text/javascript"></script>\n' +
+      '    <script src="/cmpr/app2.js" type="text/javascript"></script>\n' +
+      '    <script src="/cmpr/app_2012.34.56-78:90:23.js" type="text/javascript"></script>\n' +
+      '    <!-- </scrounge> -->\n  ';
+
+    var expectedMarkup = '' +
+      '    <!-- <scrounge type=".js" trees="app.js,app2.js"> -->\n' +
+      '    <script src="/cmpr/library.js" type="text/javascript"></script>\n' +
+      '    <script src="/cmpr/app2.js" type="text/javascript"></script>\n' +
+      '    <script src="/cmpr/app_2013.04.05-21:23:41.js" type="text/javascript"></script>\n' +
+      '    <!-- </scrounge> -->\n  ';
+
+    //Fri Apr 05 2013 21:23:41 GMT-0700 (PDT)
+    var dateObj = new Date(1365222221485);
+
+    var infoFileObj = FileInfoNode.getNew({
+      filename : 'app.js',
+      treename : 'app.js',
+      type : '.js',
+      dependencyArr : [],
+      timestamp : dateObj,
+      authorsArr : 'authors'
+    });
+
+    var userOptions = {
+      //    forceTimestamp : 'forcedTimestamp',
+      isTimestamped : true,
+      publicPath : '/cmprBOOM/'
+    };
+
+    // use force timestamp
+    var result = basepageUtil.getWithUpdatedIncludeStr(pageMarkup, infoFileObj, userOptions);
+
+    expect( result ).toBe( expectedMarkup );
   });
 
-  var userOptions = {
-//    forceTimestamp : 'forcedTimestamp',
-//    isTimestamped : true,
-    publicPath : '/cmpr/'
-  };
-
-  // use force timestamp
-  var result = basepageUtil.getWithUpdatedIncludeStr(pageMarkup, infoFileObj, userOptions);
-  //result = 
-  console.log('basepageUtil result: ', result);
-
-  expect( true ).toBe( true );
 });

@@ -176,7 +176,8 @@ describe("infoFile.getFilenameRe", function () {
   it("should return a RE for matching filename", function () {  
     infoFile = InfoFile.getNew({ filename : "/path/to/script.js" });
     result = infoFile.getFilenameRe(params);
-    resultExpected = new RegExp(/[/"']script.js/);        
+    //resultExpected = new RegExp(/[/"']script.js/);        
+    resultExpected = new RegExp(/script.js/);        
     expect( result.toString() ).toBe( resultExpected.toString() );
   });
 
@@ -184,7 +185,8 @@ describe("infoFile.getFilenameRe", function () {
     infoFile = InfoFile.getNew({ filename : "/path/to/script.js" });
     params = { isTimestamped : true };
     result = infoFile.getFilenameRe(params);
-    resultExpected = new RegExp(/[/"']script_\d{4}\.\d{2}\.\d{2}-\d{2}:\d{2}:\d{2}.js/);    
+    //resultExpected = new RegExp(/[/"']script_\d{4}\.\d{2}\.\d{2}-\d{2}:\d{2}:\d{2}.js/);    
+    resultExpected = new RegExp(/script_\d{4}\.\d{2}\.\d{2}-\d{2}:\d{2}:\d{2}.js/);    
     expect( result.toString() ).toBe( resultExpected.toString() );
   });
 
