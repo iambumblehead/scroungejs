@@ -1,6 +1,6 @@
 {
   "name": "scroungejs",
-  "version": "0.4.0",
+  "version": "0.4.01",
   "repository": {
     "type": "git",
     "url": "https://github.com/iambumblehead/scroungejs.git"
@@ -19,7 +19,8 @@
     "node-fs" : ">=0.1.5",
     "archy" : ">=0.0.2",
     "simpletime" : ">=0.1.0",
-    "console-progress" : ">=0.0.1"
+    "console-progress" : ">=0.0.1",
+    "pathpublic" : ">=0.0.1"
   },
   "devDependencies" : {
       "compareobj" : ">=0.0.3",
