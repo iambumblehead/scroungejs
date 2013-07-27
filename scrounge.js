@@ -29,9 +29,6 @@ var scrounge = module.exports = {
       treeArr = filters.getFilteredTreeArr(treeArr);    
     }
 
-    //if (opts.trees.length) {
-    //  treeArr = FilterTree.getFilteredByNodeInTreeArr(opts.trees, treeArr);
-    //}
     treeArr.map(function (tree) {
       if (opts.isConcatenated && tree.dependencyArr.length) {
         console.log('\n' + Message.getAsArchyStr(graph.getAsArchyTree(tree, opts)));
