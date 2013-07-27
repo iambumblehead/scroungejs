@@ -24,7 +24,6 @@ Perform these tasks:
  * Yield output for multiple applications with one group of files.
 
  * Preprocess scripts before writing them to 'output'
- 
    * Remove calls to 'console.log' with precision using an ast-tree ([UglifyJS2][2]).
    * Remove node.js `requires` statements from scripts to share them with client
 
