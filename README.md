@@ -5,27 +5,42 @@ scroungejs
 
 ### OVERVIEW:
 
-Scroungejs processes scripts, stylesheets and template files.
+Scroungejs processes scripts, stylesheets and template files. 
+
+Scroungejs reads files from a 'source' directory and writes to an 'output' directory. The output may contain minified, concatenated results from source scripts, stylesheets and templates. It is made to be flexible and features are selectively enabled as needed. Scroungejs concatenates files in an ordered way -each file appears after the files it depends on. No config file, just commented meta-data at each file.
+
+Perform these tasks:
+
+ * Easily choose deployment options: Concatenate, or not. Minify, or not. Timestamp, or...
+
+ * Preprocess markup on each build, to auto add or update include elements:
+ 
+   `<!-- ex. include for concatenated application -->`
+   `<script src="app/appScriptsConcatenated.js" type="text/javascript"></script>`
+   `<!-- ex. include for unconcatenated application -->`
+   `<script src="app/appScriptA.js" type="text/javascript"></script>`
+   `<script src="app/appScriptB.js" type="text/javascript"></script>`
+
+ * Yield output for multiple applications with one group of files.
+
+ * Preprocess scripts before writing them to 'output'
+ 
+   * Remove calls to 'console.log' with precision using an ast-tree ([UglifyJS2][2]).
+   * Remove node.js `requires` statements from scripts to share them with client
 
 
-<!--
-With it you may compress, concatenate and/or timestamp your files as part of a build process for your web site. It is made to be as flexible as possible and its features are selectively enabled as needed. Scroungejs concatenates files in an ordered way -each file appears after the files that it depends on.
-
-
-Scroungejs is a javascript program that processes .js and .css files. With it you may compress, concatenate and/or timestamp your files as part of a build process for your web site. It is made to be as flexible as possible and its features are selectively enabled as needed. Scroungejs concatenates files in an ordered way -each file appears after the files that it depends on.
--->
-
-Scroungejs provides advantages over other deployment tools:  
+Advantages scroungejs has over other deployment tools:
 
  - usable as a command line tool -no config file or framework.  
- - callable from a javascript file using node.js.   
- - it does not interfere with the node.js requirejs module system.  
+ - usable with node.js.   
+ - output does not interfere with the node.js requirejs module system.  
  - compression and concatenation are enabled/disabled for each build.  
+   - unconcatenated, unminified are helpful during development.
  - html files do not need unusual tags or attributes added to them.  
  - it works with almost any collection of javascript files.
  - by default, it does not add javascript to files it generates.  
  - it is packaged with an emacs config file.
- 
+
 Scroungejs relies on other packages, notably: [css-clean][1] and [UglifyJS2][2].
 
 Read about [how it works](#how-it-works) to learn more, or [get started](#get-started) with scroungejs.
@@ -33,34 +48,6 @@ Read about [how it works](#how-it-works) to learn more, or [get started](#get-st
 [0]: http://www.bumblehead.com                            "bumblehead"
 [1]: http://github.com/GoalSmashers/clean-css              "css-clean"
 [2]: http://github.com/mishoo/UglifyJS2                    "js-uglify"
-
----------------------------------------------------------
-#### <a id="how-it-works"></a>HOW IT WORKS:
-
-Scroungejs reads files from a 'source' directory and writes files to an 'output' directory. The output may contain minified, concatenated results from source files (scripts, stylesheets, templates).
-
-It will optionally perform these tasks:
-
- * Easily choose deployment options: Concatenate, or not. Minify, or not. Timestamp, or...
-
- * Preprocess HTML on each build, adding or updating include elements:
- 
-     `<!-- ex. include for concatenated application -->`
-     `<script src="app/appNodesConcatenated.js" type="text/javascript"></script>`
-     `<!-- ex. include for unconcatenated application -->`
-     `<script src="app/appNodeA.js" type="text/javascript"></script>`
-     `<script src="app/appNodeB.js" type="text/javascript"></script>`
-
- * Use one group of files to yield output for multiple applications.
-
- * Preprocess your scripts before writing them to 'output'
- 
-     * Remove calls to 'console.log' using the ast tree from UglifyJS2.
-     * Remove node.js `requires` statements from scripts to share them with client
-
-<!--
- * Remove `requires` statements from files that it generates. This is useful for application files that are shared by a node.js environment and a browser environment. A node.js environment should access files found in the 'source' directory and a web browser should access files found in the 'output' directory.
- -->
 
 
 ---------------------------------------------------------
@@ -87,7 +74,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
 
  1. **Before Starting...**   
 
- 'Examples demonstrate usage from a shell but scroungejs is also usable from a javascript file. Each environment uses the same modifiers. Only the syntax is different. 'Both examples would produce the same output.
+ 'Examples demonstrate usage from a shell. Scroungejs is also usable from a javascript file. Each environment uses the same modifiers, but syntax is different. 'Both examples would produce the same output.
  
  > *shell*
 
@@ -173,16 +160,15 @@ Scroungejs may be downloaded directly or installed through `npm`.
 
  When tree information is collected a visual representation of each tree is printed.
 
- `isConcatenated` may be defined as true or false or it may be defined with comma separated names of trees or extension types, such as '.js'. Only matching files will be concatenated.
-
+ `isConcatenated` may be defined as true or false or it may be defined with comma separated names of trees or extension types, such as '.js'. Only matching files will be concatenated.  
 
  ```bash
  $ node ./scrounge.js -i ./getStarted --isConcatenated=true
  [...] read: files (2/2)  
-  
+ 
  fileB.js  
  └── fileA.js  
-  
+ 
  [...] join: (fileA.js, .js, 1/2) getStarted/fileA.js
  [...] join: (fileB.js, .js, 2/2) getStarted/fileB.js
  [...] write: getStarted/cmpr/fileB.js
@@ -209,7 +195,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
  
  9. **Build a larger tree found in _./getStarted/app/_.**  
  
- Multiple trees may be discovered and concatenated and .css files that associate with a tree will be discovered as well.
+ Multiple trees may be discovered and concatenated and .css files that associate with a tree will be discovered.
 
  ```bash
  $ node ./scrounge.js -i ./getStarted/app --isConcatenated=true \
@@ -243,9 +229,9 @@ Scroungejs may be downloaded directly or installed through `npm`.
 
  10. **Define filters for the build process.**  
 
- When `--extensionType=js` is given, files without a `js` extension are ignored by the build process.  
+ When `--extensionType=.js` is given, files with other extensions are ignored by the build process.  
 
- _Other modifiers are explained in section [Modifiers](#modifiers)._
+ _modifiers are explained in section [Modifiers](#modifiers)._
 
  ```bash
  $ node ./scrounge.js -i ./getStarted/app --isConcatenated=true \
@@ -373,16 +359,16 @@ Scroungejs may be downloaded directly or installed through `npm`.
  ```html   
  <!doctype html>  
  <html>  
-   <head>  
-     <script src="/app/lib/library.js" type="text/javascript"></script>  
-   </head>  
-   <body>  
-     <!-- <scrounge type=".js"> -->  
-     <script src="/app/public/cmpr/library.js" type="text/javascript"></script>  
-     <script src="/app/public/cmpr/app2.js" type="text/javascript"></script>  
-     <script src="/app/public/cmpr/app.js" type="text/javascript"></script>  
-     <!-- </scrounge> -->  
-   </body>  
+     <head>  
+         <script src="/app/lib/library.js" type="text/javascript"></script>  
+     </head>  
+     <body>  
+         <!-- <scrounge type=".js"> -->  
+         <script src="/app/public/cmpr/library.js" type="text/javascript"></script>  
+         <script src="/app/public/cmpr/app2.js" type="text/javascript"></script>  
+         <script src="/app/public/cmpr/app.js" type="text/javascript"></script>  
+         <!-- </scrounge> -->  
+     </body>  
  </html>  
  ```
 
@@ -403,16 +389,16 @@ Scroungejs may be downloaded directly or installed through `npm`.
  ```html
  <!doctype html>  
  <html>  
-   <head>  
-     <script src="/app/lib/library.js" type="text/javascript"></script>
-   </head>  
-   <body>  
-     <!-- <scrounge type=".js"> -->  
-     <script src="/cmpr/library.js" type="text/javascript"></script>
-     <script src="/cmpr/app.js" type="text/javascript"></script>  
-     <script src="/cmpr/app2.js" type="text/javascript"></script>  
-     <!-- </scrounge> -->  
-   </body>  
+     <head>  
+         <script src="/app/lib/library.js" type="text/javascript"></script>
+     </head>  
+     <body>  
+         <!-- <scrounge type=".js"> -->  
+         <script src="/cmpr/library.js" type="text/javascript"></script>
+         <script src="/cmpr/app.js" type="text/javascript"></script>  
+         <script src="/cmpr/app2.js" type="text/javascript"></script>  
+         <!-- </scrounge> -->  
+     </body>  
  </html>
  ```
 
@@ -427,15 +413,15 @@ Scroungejs may be downloaded directly or installed through `npm`.
  ```html
  <!doctype html>  
  <html>  
-   <head>  
-     <script src="/app/lib/library.js" type="text/javascript"></script>  
-     <!-- <scrounge type=".css" trees="app.js"> -->     
-     <!-- </scrounge> -->  
-   </head>  
-   <body>  
-     <!-- <scrounge type=".js" trees="app.js"> -->  
-     <!-- </scrounge> -->  
-   </body>  
+     <head>  
+         <script src="/app/lib/library.js" type="text/javascript"></script>  
+         <!-- <scrounge type=".css" trees="app.js"> -->     
+         <!-- </scrounge> -->  
+     </head>  
+     <body>  
+         <!-- <scrounge type=".js" trees="app.js"> -->  
+         <!-- </scrounge> -->  
+     </body>  
  </html>  
  ```
 
@@ -449,17 +435,17 @@ Scroungejs may be downloaded directly or installed through `npm`.
  ```html
  <!doctype html>  
  <html>  
-   <head>  
-     <script src="/app/lib/library.js" type="text/javascript"></script>  
-     <!-- <scrounge type=".css" trees="app.js"> -->
-     <script src="/cmpr/app.css" type="text/javascript"></script>  
-     <!-- </scrounge> -->     
-   </head>  
-   <body>  
-     <!-- <scrounge type=".js" trees="app.js"> -->  
-     <script src="/cmpr/app.js" type="text/javascript"></script>  
-     <!-- </scrounge> -->  
-   </body>  
+     <head>  
+         <script src="/app/lib/library.js" type="text/javascript"></script>  
+         <!-- <scrounge type=".css" trees="app.js"> -->
+         <script src="/cmpr/app.css" type="text/javascript"></script>  
+         <!-- </scrounge> -->     
+     </head>  
+     <body>  
+         <!-- <scrounge type=".js" trees="app.js"> -->  
+         <script src="/cmpr/app.js" type="text/javascript"></script>  
+         <!-- </scrounge> -->  
+     </body>  
  </html>  
  ```
 
@@ -473,8 +459,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
 
 #### <a id="file-properties">FILE PROPERTIES:
 
-Each file processed by scroungejs may affect the build process.
-This is done through information added to each file.
+Each file processed by scroungejs may affect the build process, with meta-data added to each file.
 
  > *./getStarted/app/views/ViewA.js*
 
@@ -504,23 +489,23 @@ This is done through information added to each file.
      the file depends on files with these filenames.  
      
   - `Timestamp:` _YYYY.MM.DD-H:MM:SS_  
-     _by default_, timestamp is a result of `Date.now()`.  
-     the file will associate with this timestamp. concatenated files will produce a file that uses the most recent timestamp found.
+     _by default_, timestamp is `Date.now()`.  
+     the file will associate with this timestamp. concatenated files will produce a file using the most recent timestamp found.
 
   - `Authors:` _authorname_, _more authornames_  
-     _by default_, file does not associate with an author.  
+     _by default_, file associates with no author.  
      the file associates with the given author(s). concatenated files will produce a file that associates with all defined authors.  
      
   - `DoNotCompress:` _bool_     
      _by default_, `false`
-     Scroungejs will skip compression of this file value is `true`
+     If `true`, scroungejs will skip compression of this file.
 
 
 ---------------------------------------------------------
 
 #### <a id="basepage">BASEPAGE:
 
-scroungejs may add include elements for the js and css files it processes. Only a basepage that contains one or more _scrounge elements_ will be modified.
+scroungejs may add include elements for the js and css files it processes. A basepage containing one or more _scrounge elements_ will be modified.
 
    > *example.html* 
 
@@ -535,7 +520,7 @@ scroungejs may add include elements for the js and css files it processes. Only 
    </html>  
    ```
 
-scroungejs adds js/css include elements in the body of scrounge elements. Something like the following could be added to the body of the scrounge element above.  
+scroungejs adds js/css include elements in the body of scrounge elements. Something like the following could be added to the scrounge element above.  
 
   > *example.html* 
 
@@ -548,9 +533,7 @@ scroungejs adds js/css include elements in the body of scrounge elements. Someth
   ````
    
    
-Each time that you modify a basepage with scroungejs, the body of the tags is remade by scroungejs.
-
-a 'tree' attribute will affect the body of the element produced by scroungejs.
+Each time you modify a basepage, the body of the tags is remade by scroungejs. A 'tree' attribute will affect focus this process.
 
   > *example.html*
 
@@ -630,7 +613,7 @@ example scrounge elements are given below
    ```
      
  - **--extnTemplate= _str_**, _default: ''_  
-   prompts scroungejs to recognize the given string as an extentions for template files. For example, `--extnTemplate=.mustache`. 
+   prompts scroungejs to recognize the given string as an extention for template files. For example, `--extnTemplate=.mustache`. 
 
    If `ViewSignin.js` is included in scroungejs' output, `ViewSignin.mustache` will be included as well and it will be copied to the specified output directory.    
 
