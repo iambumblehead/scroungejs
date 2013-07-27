@@ -5,7 +5,15 @@ scroungejs
 
 ### OVERVIEW:
 
-Scroungejs is a javascript program that processes .js and .css files. With it you may compress, concatenate and/or timestamp your files as part of a build process for your web site. It is made to be as flexible as possible and its features are selectively enabled as needed. Scroungejs concatenates files in an ordered way -each file appears after the files that it depends on.  
+Scroungejs processes scripts, stylesheets and template files.
+
+
+<!--
+With it you may compress, concatenate and/or timestamp your files as part of a build process for your web site. It is made to be as flexible as possible and its features are selectively enabled as needed. Scroungejs concatenates files in an ordered way -each file appears after the files that it depends on.
+
+
+Scroungejs is a javascript program that processes .js and .css files. With it you may compress, concatenate and/or timestamp your files as part of a build process for your web site. It is made to be as flexible as possible and its features are selectively enabled as needed. Scroungejs concatenates files in an ordered way -each file appears after the files that it depends on.
+-->
 
 Scroungejs provides advantages over other deployment tools:  
 
@@ -29,21 +37,30 @@ Read about [how it works](#how-it-works) to learn more, or [get started](#get-st
 ---------------------------------------------------------
 #### <a id="how-it-works"></a>HOW IT WORKS:
 
-Scroungejs reads files from a 'source' directory and it writes files to an 'output' directory. The output directory will have the minified and concatenated result of your web application files (.js and .css files).
+Scroungejs reads files from a 'source' directory and writes files to an 'output' directory. The output may contain minified, concatenated results from source files (scripts, stylesheets, templates).
 
-Scroungejs handles burdensome tasks related to web application development and deployment. It will optionally perform these tasks:
+It will optionally perform these tasks:
 
- * Update an html-formatted file to include references to web application files. 
+ * Easily choose deployment options: Concatenate, or not. Minify, or not. Timestamp, or...
 
- * Concatenate files. When an html file is updated, it will be updated with references to the resulting concatenated or unconcatenated files.
+ * Preprocess HTML on each build, adding or updating include elements:
+ 
+     `<!-- ex. include for concatenated application -->`
+     `<script src="app/appNodesConcatenated.js" type="text/javascript"></script>`
+     `<!-- ex. include for unconcatenated application -->`
+     `<script src="app/appNodeA.js" type="text/javascript"></script>`
+     `<script src="app/appNodeB.js" type="text/javascript"></script>`
 
- * Timestamp files. Scroungejs will write files that have a timestamp in the filename. When an html file is updated, it will be updated with references to the resulting timestamped filenames. _Timestamped filenames ease development and deployment -no need to clear the browser cache to use the most recent file. An updated timestamp yields a unique filename and so a cached version of the file will not be used by a web browser._
+ * Use one group of files to yield output for multiple applications.
 
- * Produce output for one or more specific web applications when a directory contains files that are used by multiple web applications.
+ * Preprocess your scripts before writing them to 'output'
+ 
+     * Remove calls to 'console.log' using the ast tree from UglifyJS2.
+     * Remove node.js `requires` statements from scripts to share them with client
 
- * Find console.log statements among the source files of your web application. It may also be used to remove console.log from the files that it generates.
-
+<!--
  * Remove `requires` statements from files that it generates. This is useful for application files that are shared by a node.js environment and a browser environment. A node.js environment should access files found in the 'source' directory and a web browser should access files found in the 'output' directory.
+ -->
 
 
 ---------------------------------------------------------
@@ -269,7 +286,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
  ```bash
  $ node ./scrounge.js -i ./getStarted/app --isConcatenated=true \
    --isRecursive=true --stop=tree --treeView=full
- [...] read: files (12/12)  
+ [...] read: files (12/12)
   
  app.js
  └─┬ ViewsAll.js
@@ -280,8 +297,8 @@ Scroungejs may be downloaded directly or installed through `npm`.
  . │   └─┬ CtrlA.js
  . │     └── ModelA.js
  . └─┬ ViewA.js
- .   └── CtrlsAll.js  
-  
+ .   └── CtrlsAll.js
+ 
  ```
  
  12. **Update _index.mustache_ using scroungejs.**  
