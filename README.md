@@ -14,12 +14,14 @@ Perform these tasks:
  * Easily choose deployment options: Concatenate, or not. Minify, or not. Timestamp, or...
 
  * Preprocess markup on each build, to auto add or update include elements:
- 
-   `<!-- ex. include for concatenated application -->`
-   `<script src="app/appScriptsConcatenated.js" type="text/javascript"></script>`
-   `<!-- ex. include for unconcatenated application -->`
-   `<script src="app/appScriptA.js" type="text/javascript"></script>`
-   `<script src="app/appScriptB.js" type="text/javascript"></script>`
+
+   ```html
+   <!-- ex. include for concatenated application -->
+   <script src="app/appScriptsConcatenated.js" type="text/javascript"></script>
+   <!-- ex. include for unconcatenated application -->
+   <script src="app/appScriptA.js" type="text/javascript"></script>
+   <script src="app/appScriptB.js" type="text/javascript"></script>
+   ```
 
  * Yield output for multiple applications with one group of files.
 
