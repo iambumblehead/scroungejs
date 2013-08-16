@@ -30,7 +30,7 @@ var scrounge = module.exports = {
     }
 
     treeArr.map(function (tree) {
-      if (opts.isConcatenated && tree.dependencyArr.length) {
+      if (tree.dependencyArr.length) {
         console.log('\n' + Message.getAsArchyStr(graph.getAsArchyTree(tree, opts)));
       }
     });
