@@ -73,7 +73,6 @@ var scrounge = module.exports = {
     var basepageUtil, fileObjBuilder, x, treeObjArr;
 
     FileUtil.getTreeFiles(opts, function (err, filenameArr) {
-
       if (err) return fn(err);
       infoBasepage.getFilters(function (err, filters) {
         if (err) return fn(err);

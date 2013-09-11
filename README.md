@@ -566,7 +566,7 @@ example scrounge elements are given below
 
  - **--inputPath= _path_**, **-i _path_**, _default: ./_  
    
-   a systempath to a directory or file.
+   a systempath to a directory or file. multiple paths may be given, separated with a comma, for example: `--inputPath=./path/1,./path/2`.
 
  - **--outputPath= _path_**, **-o _path_**, _default: ./cmpr_  
  
