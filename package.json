@@ -1,6 +1,7 @@
 {
   "name": "scroungejs",
   "version": "0.4.7",
+  "license" : "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/iambumblehead/scroungejs.git"
