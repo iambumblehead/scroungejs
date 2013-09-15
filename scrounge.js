@@ -1,6 +1,5 @@
 var argv = require('optimist').argv,
     fs = require('fs'),
-    path = require('path'),
     SimpleTime = require('simpletime'),
 
     Graph = require('./lib/DAG.js'),

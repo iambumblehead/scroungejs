@@ -93,7 +93,7 @@ Scroungejs may be downloaded directly or installed through `npm`.
    scroungejs.build({  
      inputPath : './getStarted',
      isTimestamped : true,  
-     isComressed : true
+     isCompressed : true
    }, function (err, res) {
      if (err) return console.log(err);
      console.log('finished!')
