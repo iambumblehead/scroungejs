@@ -30,6 +30,15 @@
 (puthash "jrlf" "~/Software/foxsportscms/trunk/fscom/src/main/webapp/js/janrain" *Project-Root-Hash*)
 (puthash "jrlf" "/fe/js" *Public-Root-Hash*)
 
+
+(puthash "ssocial" "~/Desktop/jsonpDemoForm/ssocial" *Project-Source-Hash*)
+(puthash "ssocial" "~/Desktop/jsonpDemoForm/ssocialFin" *Project-Scrounge-Hash*)
+(puthash "ssocial" "~/Desktop/jsonpDemoForm/index.html" *Basepage-Path-Hash*)
+(puthash "ssocial" "~/Deskotp/jsonpDemoForm" *Project-Root-Hash*)
+(puthash "ssocial" "/" *Public-Root-Hash*)
+
+
+
 (puthash "cucumberWeb" "~/Software/cucumberWeb/sources/appSrc" *Project-Source-Hash*)
 (puthash "cucumberWeb" "~/Software/cucumberWeb/sources/app" *Project-Scrounge-Hash*)
 (puthash "cucumberWeb" "~/Software/cucumberWeb/sources/index.mustache" *Basepage-Path-Hash*)
@@ -121,8 +130,8 @@
              (public-path (gethash focus-site *Project-Scrounge-Hash*))
              (public-root-path (gethash focus-site *Public-Root-Hash*))
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
-        (compile (concat "node " *Scrounge-Path* 
-                         " -isLines=true "
+        (compile (concat "node " *Scrounge-Path* " "
+                         "--isLines=true "
                          "--isRecursive=true "
                          "--isTimestamped=true "
                          "--isRemoveRequires=true "
@@ -147,8 +156,8 @@
              (public-root-path (gethash focus-site *Public-Root-Hash*))
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
         (compile 
-         (concat "node " *Scrounge-Path*
-                 " -isLines=true "
+         (concat "node " *Scrounge-Path* " "
+                 "--isLines=true "
                  "--isRecursive=true "
                  "--isBasepageSourcePaths=true "
                  "--isRemoveRequires=true "
@@ -167,8 +176,8 @@
              (public-path (gethash focus-site *Project-Scrounge-Hash*))
              (public-root-path (gethash focus-site *Public-Root-Hash*))
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
-        (compile (concat "node " *Scrounge-Path*
-                         " -isLines=true "
+        (compile (concat "node " *Scrounge-Path* " "
+                         "--isLines=true "
                          "--isRecursive=true "
                          "--isTimestamped=true "
                          "--isWarning=true "
@@ -315,8 +324,8 @@ is `Filename: $name` on first line?"
              (public-root-path (gethash focus-site *Public-Root-Hash*))
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
         (shell-command-to-string 
-         (concat "node " *Scrounge-Path* 
-                 " -isLines=true "
+         (concat "node " *Scrounge-Path* " "
+                 "--isLines=true "
                  "--isRecursive=true "
 ;;                 "--isTimestamped=true "
                  "--isUpdateOnly=true "

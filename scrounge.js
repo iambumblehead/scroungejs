@@ -139,7 +139,6 @@ var scrounge = module.exports = {
           if (typeof fn === 'function') fn(err, res);
         };
 
-
     Message.start();
     scrounge.treesBuild(opts, infoBasepage, function (err, treeArr) {
       if (err) return console.log(err);
