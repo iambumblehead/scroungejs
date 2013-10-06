@@ -35,7 +35,7 @@
 (puthash "ssocial" "~/Desktop/jsonpDemoForm/ssocialFin" *Project-Scrounge-Hash*)
 (puthash "ssocial" "~/Desktop/jsonpDemoForm/index.html" *Basepage-Path-Hash*)
 (puthash "ssocial" "~/Deskotp/jsonpDemoForm" *Project-Root-Hash*)
-(puthash "ssocial" "/" *Public-Root-Hash*)
+(puthash "ssocial" "./ssocialFin" *Public-Root-Hash*)
 
 
 

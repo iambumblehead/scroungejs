@@ -125,7 +125,7 @@ var scrounge = module.exports = {
         });
       }
 
-      InfoTree.writeTreeArr(treeArr, opts, function () {
+      InfoTree.writeTreeArr(treeArr, opts, function (err, res) {
         if (err) return fn(err);
         infoBasepage.writeTrees(treeArr, opts, fn);        
       });
@@ -141,16 +141,16 @@ var scrounge = module.exports = {
 
     Message.start();
     scrounge.treesBuild(opts, infoBasepage, function (err, treeArr) {
-      if (err) return console.log(err);
+      if (err) throw new Error(err);
 
       if (opts.stop === 'tree') {
         return cb(null, '');
       }
 
       scrounge.copyAll(opts, function (err, res) {
-        if (err) return console.log(err);     
+        if (err) throw new Error(err);     
         scrounge.treesApply(treeArr, opts, infoBasepage, function (err) {
-          if (err) return console.log(err);
+          if (err) throw new Error(err);
           Message.releaseMessages();
           totalTime = SimpleTime.getElapsedTimeFormatted(bgnDateObj, new Date());
           console.log(Message.finish(totalTime));
