@@ -8,6 +8,7 @@
 (defvar *Project-Root-Hash* (make-hash-table :test 'equal))
 (defvar *Public-Root-Hash* (make-hash-table :test 'equal))
 (defvar *Err-Log-Hash* (make-hash-table :test 'equal))
+(defvar *Tree-Hash* (make-hash-table :test 'equal))
 
 (puthash "iammegumi" "~/Software/iammegumi.com/sources/appSrc" *Project-Source-Hash*)
 (puthash "iammegumi" "~/Software/iammegumi.com/sources/app" *Project-Scrounge-Hash*)
@@ -31,12 +32,13 @@
 (puthash "jrlf" "/fe/js" *Public-Root-Hash*)
 
 
-(puthash "ssocial" "~/Desktop/jsonpDemoForm/ssocial" *Project-Source-Hash*)
-(puthash "ssocial" "~/Desktop/jsonpDemoForm/ssocialFin" *Project-Scrounge-Hash*)
-(puthash "ssocial" "~/Desktop/jsonpDemoForm/index.html" *Basepage-Path-Hash*)
-(puthash "ssocial" "~/Deskotp/jsonpDemoForm" *Project-Root-Hash*)
-(puthash "ssocial" "./ssocialFin" *Public-Root-Hash*)
-
+(puthash "ssocial" "~/Software/bumblehead.com/sources/appSrc,~/Software/cucumberWeb/node_modules/pocket" *Project-Source-Hash*)
+(puthash "ssocial" "~/Software/bumblehead.com/sources/app" *Project-Scrounge-Hash*)
+;;(puthash "ssocial" "~/Software/cucumberWeb/sources/index.mustache" *Basepage-Path-Hash*)
+(puthash "ssocial" "~/Software/bumblehead.com" *Project-Root-Hash*)
+(puthash "ssocial" "ssocial.js,ssocial-bundle.js" *Tree-Hash*)
+(puthash "ssocial" "~/Software/bumblehead.com/log/out.log" *Err-Log-Hash*)
+(puthash "ssocial" "/app" *Public-Root-Hash*)
 
 
 (puthash "cucumberWeb" "~/Software/cucumberWeb/sources/appSrc" *Project-Source-Hash*)
@@ -129,18 +131,17 @@
       (let* ((project-path (gethash focus-site *Project-Source-Hash*))
              (public-path (gethash focus-site *Project-Scrounge-Hash*))
              (public-root-path (gethash focus-site *Public-Root-Hash*))
+             (trees (gethash focus-site *Tree-Hash*))
              (basepage-path (gethash focus-site *Basepage-Path-Hash*)))
         (compile (concat "node " *Scrounge-Path* " "
                          "--isLines=true "
                          "--isRecursive=true "
-                         "--isTimestamped=true "
                          "--isRemoveRequires=true "
-;;                         "--isSourcePathUnique=true "
+                         "--isSourcePathUnique=true "
                          (if is-fake " --isCompressed=false" " --isCompressed=true")
                          (if is-fake " --isConcatenated=false" " --isConcatenated=true")
-;;                         "--isCompressed=false "
-;;                         "--isConcatenated=true "
-                         (if is-fake "" " --isRemoveConsole=true")
+                         (if is-fake "" " --isRemoveConsole=true ")
+                         (if trees (concat " --trees=" trees) "")
                          (if public-root-path (concat " --publicPath=" public-root-path) "")
                          (if basepage-path (concat " --basepage=" basepage-path) "")                         
                          (if project-path (concat " --inputPath=" project-path) "")
