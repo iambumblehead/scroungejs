@@ -73,10 +73,14 @@ var scrounge = module.exports = {
 
     FileUtil.getTreeFiles(opts, function (err, filenameArr) {
       if (err) return fn(err);
+
       infoBasepage.getFilters(function (err, filters) {
         if (err) return fn(err);
+
         InfoNode.getFromFileArr(filenameArr, function (err, fileInfoObjArr) {
           if (err) return fn(err);          
+
+//          console.log('filters', filters);
 
           if (!filters) {
             filters = FilterTree.getNew();
@@ -85,6 +89,8 @@ var scrounge = module.exports = {
           opts.trees.map(function (treename) {
             filters.addTreeByFilename(treename);              
           });
+
+
 
           if (opts.isUpdateOnly) {
             treeObjArr = [InfoTree.getNew({
@@ -119,14 +125,17 @@ var scrounge = module.exports = {
     InfoTree.getTreeArrAsAssocTreeArr(treeObjArr, opts, function (err, treeArr) {
       if (err) return fn(err);  
 
+      // probably not important
       if (opts.extnType) {
         treeArr = treeArr.filter(function (tree) {
           return tree.fileInfoObj.type === opts.extnType ? true : false;
         });
       }
 
+//      console.log('treeArr assoc --- ', treeArr);
       InfoTree.writeTreeArr(treeArr, opts, function (err, res) {
         if (err) return fn(err);
+//        console.log('writeTrees', treeArr);
         infoBasepage.writeTrees(treeArr, opts, fn);        
       });
     });

@@ -618,6 +618,15 @@ example scrounge elements are given below
 
    If `ViewSignin.js` is included in scroungejs' output, `ViewSignin.mustache` will be included as well and it will be copied to the specified output directory.    
 
+ - **--extnStylesheet= _str_**, _default: '.css'_  
+   prompts scroungejs to recognize the given string as an extention for stylesheet files. For example, `--extnTemplate=.less`.  
+
+   If `ViewSignin.js` is included in scroungejs' output, `ViewSignin.less` or maybe `viewSignin.css` will be included as well and it will be copied to the specified output directory.
+
+   .less support is recently added and does not support cross-file references.
+
+   *Only `.css` and `.less` are supported at this time*.
+
  - **--isCompressed= _bool_, _extension_, _tree_**, _default: false_  
    compress all files and/or trees before writing them to disk. If an extension or a treename are given only files that associate with the treename or extension will be compressed.
 

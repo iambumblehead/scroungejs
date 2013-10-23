@@ -1,6 +1,6 @@
 {
   "name": "scroungejs",
-  "version": "0.5.03",
+  "version": "0.5.04",
   "license" : "MIT",
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
     "clean-css": ">=0.5.0",
     "node-fs" : ">=0.1.5",
     "archy" : ">=0.0.2",
+    "less" : ">=1.4.2", 
     "simpletime" : ">=0.1.0",
     "console-progress" : ">=0.0.1",
     "pathpublic" : ">=0.0.1"
