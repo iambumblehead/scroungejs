@@ -10,7 +10,7 @@ scroungejs.build({
   basepage : "./testbuild/index.mustache",
   //extnStylesheet : ".css",
   extnStylesheet : ".less",
-  trees : "app.js"
+  trees : "app.js,ViewB.js"
 }, function (err, res) {
   if (err) return console.log(err);
   console.log('finished!');

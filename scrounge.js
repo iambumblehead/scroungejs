@@ -21,10 +21,8 @@ var argv = require('optimist').argv,
 var scrounge = module.exports = {
 
   getAsTrees : function (fileInfoObjArr, filters, opts) {
-    var graph = Graph.get(), 
+    var graph = Graph.get().addFileInfoArr(fileInfoObjArr), 
         treeArr, filterTreenameStrArr;
-
-    graph.addFileInfoArr(fileInfoObjArr);
 
     if (filters) {
       filterTreenameStrArr = filters.getAllFilterTreeNameStrArr();
