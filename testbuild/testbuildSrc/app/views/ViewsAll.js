@@ -1,4 +1,6 @@
 // Filename: ViewsAll.js  
-// Timestamp: 2012.07.11-19:17:13 (last modified)  
+// Timestamp: 2013.10.24-16:38:08 (last modified)  
 // Author(s): Bumblehead (www.bumblehead.com)  
 // Requires: ViewA.js, ViewB.js
+
+var ViewsAll = {};

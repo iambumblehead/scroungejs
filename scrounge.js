@@ -21,11 +21,16 @@ var argv = require('optimist').argv,
 var scrounge = module.exports = {
 
   getAsTrees : function (fileInfoObjArr, filters, opts) {
-    var treeFilters, graph = Graph.get(),
-        treeArr = graph.addFileInfoArr(fileInfoObjArr).getSourceArr();
+    var graph = Graph.get(), 
+        treeArr, filterTreenameStrArr;
+
+    graph.addFileInfoArr(fileInfoObjArr);
 
     if (filters) {
-      treeArr = filters.getFilteredTreeArr(treeArr);    
+      filterTreenameStrArr = filters.getAllFilterTreeNameStrArr();
+      treeArr = graph.extractAsTreeArr(filterTreenameStrArr);
+    } else {
+      treeArr = graph.getSourceArr();
     }
 
     treeArr.map(function (tree) {
@@ -80,17 +85,13 @@ var scrounge = module.exports = {
         InfoNode.getFromFileArr(filenameArr, function (err, fileInfoObjArr) {
           if (err) return fn(err);          
 
-//          console.log('filters', filters);
-
           if (!filters) {
             filters = FilterTree.getNew();
           }
-          
+
           opts.trees.map(function (treename) {
             filters.addTreeByFilename(treename);              
           });
-
-
 
           if (opts.isUpdateOnly) {
             treeObjArr = [InfoTree.getNew({
