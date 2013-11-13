@@ -619,7 +619,7 @@ example scrounge elements are given below
    If `ViewSignin.js` is included in scroungejs' output, `ViewSignin.mustache` will be included as well and it will be copied to the specified output directory.    
 
  - **--extnStylesheet= _str_**, _default: '.css'_  
-   prompts scroungejs to recognize the given string as an extention for stylesheet files. For example, `--extnTemplate=.less`.  
+   prompts scroungejs to recognize the given string as an extention for stylesheet files. For example, `--extnStylesheet=.less`.  
 
    If `ViewSignin.js` is included in scroungejs' output, `ViewSignin.less` or maybe `viewSignin.css` will be included as well and it will be copied to the specified output directory.
 

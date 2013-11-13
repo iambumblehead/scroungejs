@@ -124,6 +124,13 @@ var scrounge = module.exports = {
     InfoTree.getTreeArrAsAssocTreeArr(treeObjArr, opts, function (err, treeArr) {
       if (err) return fn(err);  
 
+      /*
+      console.log('treeArr', opts);
+      if (treeArr) {
+        treeArr.map(function (t) { console.log('t: ', t); });
+      }
+       */
+
       // probably not important
       if (opts.extnType) {
         treeArr = treeArr.filter(function (tree) {
@@ -131,10 +138,8 @@ var scrounge = module.exports = {
         });
       }
 
-//      console.log('treeArr assoc --- ', treeArr);
       InfoTree.writeTreeArr(treeArr, opts, function (err, res) {
         if (err) return fn(err);
-//        console.log('writeTrees', treeArr);
         infoBasepage.writeTrees(treeArr, opts, fn);        
       });
     });
