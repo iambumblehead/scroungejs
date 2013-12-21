@@ -1,6 +1,7 @@
 var FileInfoParser = require('../lib/FileInfoParser'),
     BMBLib = require('../lib/BMBLib');
 
+
 describe("FileInfoParser.isMint", function () {
   var filenameMint = 'filename_mint.js';
 
@@ -11,14 +12,25 @@ describe("FileInfoParser.isMint", function () {
 
 describe("FileInfoParser.getFilename", function () {
   var fileStr = '// Filename: test1.js';
+  var filedotsStr = '// Filename: test1.min.script.js';
+  var filedashStr = '// Filename: test1-min-script.js';
 
   it("should discover a `Filename` definition", function () {
     expect( FileInfoParser.getFilename(fileStr) ).toBe( 'test1.js' );
   });
 
+  it("should discover a `Filename` definition, with dots", function () {
+    expect( FileInfoParser.getFilename(filedotsStr) ).toBe( 'test1.min.script.js' );
+  });
+
+  it("should discover a `Filename` definition, with dashes", function () {
+    expect( FileInfoParser.getFilename(filedashStr) ).toBe( 'test1-min-script.js' );
+  });
+
   it("should return null, if no `Filename` definition", function () {
     expect( FileInfoParser.getFilename('') ).toBe( null );
   });
+
 });
 
 describe("FileInfoParser.getAuthors", function () {
@@ -40,7 +52,7 @@ describe("FileInfoParser.getAuthors", function () {
     expect( authors[1] ).toBe( 'author2' );
   });
 
-  it("should retur null, if no `Author(s)` definition", function () {
+  it("should return null, if no `Author(s)` definition", function () {
     authors = FileInfoParser.getAuthors('');
     expect( authors ).toBe( null );
   });
@@ -117,6 +129,38 @@ describe("FileInfoParser.getDependencies", function () {
     expect( result[1] ).toBe( 'file2.js' );    
   });
 
+  it("should discover dependencies for filenames with dots in them", function () {
+    result = FileInfoParser.getDependencies(
+      '// Requires: file1.min.script.js, file2.min.script.js  '
+    );
+
+    expect( BMBLib.isArray(result) ).toBe( true );    
+    expect( result[0] ).toBe( 'file1.min.script.js' );    
+  });
+
+
+  it("should discover dependencies for filenames with dash in them", function () {
+    result = FileInfoParser.getDependencies(
+      '// Requires: file1-min-script.js, file2-min-script.js  '
+    );
+
+    expect( BMBLib.isArray(result) ).toBe( true );    
+    expect( result[0] ).toBe( 'file1-min-script.js' );    
+  });
+
+
+  it("should discover dependencies for filenames that begin on line _after_ `Requires:`", function () {
+    result = FileInfoParser.getDependencies(
+      '// Requires: \n' +
+      '// file1.js,\n' +
+      '// file2.js'
+    );
+
+    expect( BMBLib.isArray(result) ).toBe( true );    
+    expect( result[0] ).toBe( 'file1.js' );    
+  });
+
+
   it("should discover dependencies for `" + displayStrArr[1] + "`", function () {
     result = FileInfoParser.getDependencies(testStrArr[1]);
 
@@ -151,6 +195,7 @@ describe("FileInfoParser.getDependencies", function () {
     expect( BMBLib.isArray(result) ).toBe( true );    
     expect( result.length ).toBe( 2 );    
   });
+
 });
 
 
