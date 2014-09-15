@@ -1,7 +1,7 @@
 scroungejs
 ==========
 **(c)[Bumblehead][0], 2012,2013** [MIT-license](#license)  
-![scrounge](http://github.com/iambumblehead/scroungejs/raw/master/img/hand3.png)
+![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand3.png)
 
 ### OVERVIEW:
 
@@ -452,9 +452,9 @@ Scroungejs may be downloaded directly or installed through `npm`.
 
  16. ## You are now ready to use scroungejs.
 
- ![scrounge](http://github.com/iambumblehead/scroungejs/raw/master/img/hand10.png) 
+ ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand10.png) 
 
-[3]: http://github.com/bumblehead/scrounge.js            "scrounge.js"
+[3]: https://github.com/bumblehead/scrounge.js            "scrounge.js"
 
 ---------------------------------------------------------
 
@@ -680,7 +680,7 @@ example scrounge elements are given below
 
 #### <a id="license">License:
 
- ![scrounge](http://github.com/iambumblehead/scroungejs/raw/master/img/hand.png) 
+ ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand.png) 
 
 (The MIT License)
 
