@@ -1,690 +1,177 @@
-scroungejs
-==========
-**(c)[Bumblehead][0], 2012,2013** [MIT-license](#license)  
+scrounge.js
+===========
+**(c)[Bumblehead][0], 2012-2016** [MIT-license](#license)
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand3.png)
 
-### OVERVIEW:
+__NOT FOR PRODUCTION USE -ALPHA QUALITY__
 
-Scroungejs processes scripts, stylesheets and template files. 
+scrounge.js is a narrow use-case build-tool of minimal setup. It is a decision-making wrapper around tools like [depgraph][1], [replace-requires][2], [uglifyjs2][3], [umd][4] and [detective][5]. features include:
 
-Scroungejs reads files from a 'source' directory and writes to an 'output' directory. The output may contain minified, concatenated results from source scripts, stylesheets and templates. It is made to be flexible and features are selectively enabled as needed. Scroungejs concatenates files in an ordered way -each file appears after the files it depends on. No config file, just commented meta-data at each file.
+ * **supports CommonJS** and NPM module resolution and _**does not support**_ **AMD, ES6 or other module formats**
+ * compression and concatenation are enabled or disabled for each build (useful during development)
+ * does not require unusual tags or attributes added to markup files
+ * handles ".css" and ".less" stylesheets
 
-Perform these tasks:
+Clone and try out the test with `npm start`.
 
- * Easily choose deployment options: Concatenate, or not. Minify, or not. Timestamp, or...
-
- * Preprocess markup on each build, to auto add or update include elements:
-
-   ```html
-   <!-- ex. include for concatenated application -->
-   <script src="app/appScriptsConcatenated.js" type="text/javascript"></script>
-   <!-- ex. include for unconcatenated application -->
-   <script src="app/appScriptA.js" type="text/javascript"></script>
-   <script src="app/appScriptB.js" type="text/javascript"></script>
-   ```
-
- * Yield output for multiple applications with one group of files.
-
- * Preprocess scripts before writing them to 'output'
-   * Remove calls to 'console.log' with precision using an ast-tree ([UglifyJS2][2]).
-   * Remove node.js `requires` statements from scripts to share them with client
-
-
-Advantages scroungejs has over other deployment tools:
-
- - usable as a command line tool -no config file or framework.  
- - usable with node.js.   
- - output does not interfere with the node.js requirejs module system.  
- - compression and concatenation are enabled/disabled for each build.  
-   - unconcatenated, unminified are helpful during development.
- - html files do not need unusual tags or attributes added to them.  
- - it works with almost any collection of javascript files.
- - by default, it does not add javascript to files it generates.  
- - it is packaged with an emacs config file.
-
-Scroungejs relies on other packages, notably: [css-clean][1] and [UglifyJS2][2].
-
-Read about [how it works](#how-it-works) to learn more, or [get started](#get-started) with scroungejs.
-
-[0]: http://www.bumblehead.com                            "bumblehead"
-[1]: http://github.com/GoalSmashers/clean-css              "css-clean"
-[2]: http://github.com/mishoo/UglifyJS2                    "js-uglify"
-
+[0]: http://www.bumblehead.com                                     "bumblehead"
+[1]: https://github.com/iambumblehead/depgraph                       "depgraph"
+[2]: https://github.com/bendrucker/replace-requires          "replace-requires"
+[3]: http://github.com/mishoo/UglifyJS2                             "uglifyjs2"
+[4]: https://github.com/ForbesLindesay/umd                                "umd"
+[5]: https://github.com/substack/node-detective                "node-detective"
 
 ---------------------------------------------------------
-#### <a id="install"></a>INSTALL:
+#### <a id="get-started"></a>get started
 
-Scroungejs may be downloaded directly or installed through `npm`.
+A sample scrounge.js configuration found in test/,
 
- * **npm**   
+```javascript
+scroungejs.build({
+  inputpath      : './test/testbuild1/testbuildSrc',
+  outputpath     : './test/testbuild1/testbuildFin',
+  publicpath     : './testbuildFin',
+  basepage       : './test/testbuild1/index.html',
+  iscompressed   : true,
+  isconcatenated : false,
+  roots          : 'app.js'
+}, function (err, res) {
+  if (err) return console.log(err);
+  console.log('finished!');
+});
+```
 
- ```bash
- $ npm install scroungejs
- ```
+It console prints this when it runs,
 
- * **Direct Download**
- 
- ```bash  
- $ git clone https://github.com/iambumblehead/scroungejs.git
- $ cd scroungejs && npm install
- ```
+```bash
+[...] start: Mon Dec 07 2015 22:09:36 GMT-0800 (PST)
+[...] root: app.js
 
----------------------------------------------------------
+scroungejs-0.8.0:~/test/testbuild1/testbuildSrc/app.js
+└─┬ scroungejs-0.8.0:~/test/testbuild1/testbuildSrc/views/viewsall.js
+. ├─┬ scroungejs-0.8.0:~/test/testbuild1/testbuildSrc/views/viewa.js
+. │ └─┬ scroungejs-0.8.0:~/test/testbuild1/testbuildSrc/controls/ctrlsall.js
+. │   ├─┬ scroungejs-0.8.0:~/test/testbuild1/testbuildSrc/controls/ctrla.js
+. │   │ └── scroungejs-0.8.0:~/test/testbuild1/testbuildSrc/models/modela.js
+. │   └─┬ scroungejs-0.8.0:~/test/testbuild1/testbuildSrc/controls/ctrlb.js
+. │     └── scroungejs-0.8.0:~/test/testbuild1/testbuildSrc/models/modelb.js
+. └── scroungejs-0.8.0:~/test/testbuild1/testbuildSrc/views/viewb.js
 
-#### <a id="get-started">GET STARTED:
+[...] ugly: (app.js, .css, 1/1) ./test/testbuild1/testbuildSrc/views/viewa.css
+[...] write: ./test/testbuild1/testbuildFin/app.css
+[...] ugly: (app.js, .js, 1/9) ./test/testbuild1/testbuildSrc/views/viewb.js
+[...] ugly: (app.js, .js, 2/9) ./test/testbuild1/testbuildSrc/models/modelb.js
+[...] ugly: (app.js, .js, 3/9) ./test/testbuild1/testbuildSrc/controls/ctrlb.js
+[...] ugly: (app.js, .js, 4/9) ./test/testbuild1/testbuildSrc/models/modela.js
+[...] ugly: (app.js, .js, 5/9) ./test/testbuild1/testbuildSrc/controls/ctrla.js
+[...] ugly: (app.js, .js, 6/9) ./test/testbuild1/testbuildSrc/controls/ctrlsall.js
+[...] ugly: (app.js, .js, 7/9) ./test/testbuild1/testbuildSrc/views/viewa.js
+[...] ugly: (app.js, .js, 8/9) ./test/testbuild1/testbuildSrc/views/viewsall.js
+[...] ugly: (app.js, .js, 9/9) ./test/testbuild1/testbuildSrc/app.js
+[...] write: ./test/testbuild1/testbuildFin/app.js
+[...] write: ./test/testbuild1/index.html
+[...] finish: 00:00:288 (mm:ss:ms)
+```
 
- 1. **Before Starting...**   
+It reads index.tpl.html,
 
- 'Examples demonstrate usage from a shell. Scroungejs is also usable from a javascript file. Each environment uses the same modifiers, but syntax is different. 'Both examples would produce the same output.
- 
- > *shell*
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- <scrounge trees="app.css"> -->
+    <!-- </scrounge> -->
+    <!-- <scrounge trees="app.js"> -->
+    <!-- </scrounge> -->
+  </head>
+  <body>
+    <script type="text/javascript">
+      app.start();
+    </script>
+  </body>
+</html>
+```
 
- > ```bash
-   $ node ./scrounge.js \  
-     --inputPath=./getStarted \
-     --isTimestamped=true \
-     --isCompressed=true
-   ```
+It then creates or updates index.html to look like this,
 
- > *javascript file*
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- <scrounge trees="app.css"> -->
+    <link href="./testbuildFin/app.css" rel="stylesheet" type="text/css">
+    <!-- </scrounge> -->
+    <!-- <scrounge trees="app.js"> -->
+    <script src="./testbuildFin/app.js" type="text/javascript"></script>
+    <!-- </scrounge> -->
+  </head>
+  <body>
+    <script type="text/javascript">
+      app.start();
+    </script>
+  </body>
+</html>
+```
 
- > ```javascript
-   var scroungejs = require('scroungejs');
-   scroungejs.build({  
-     inputPath : './getStarted',
-     isTimestamped : true,  
-     isCompressed : true
-   }, function (err, res) {
-     if (err) return console.log(err);
-     console.log('finished!')
-   });
-   ```
-   
- 2. **Visit the scroungejs directory.**  
- 
- ```bash
- $ cd /path/to/scroungejs
- ```
-
- 3. **Call scroungejs with node.**  
-
- ```bash
- $ node ./scrounge.js
- [...] read: files (2/2)
- [...] write: cmpr/scrounge.js
- [...] write: cmpr/index.js
- [...] finish: 00:00:23 (mm:ss:ms)
- ```
-
- 4. **Specify an input path.**  
- 
- _The directory named 'getStarted' and its contents are provided with the [Scrounge][3] package._ 
-
- ```bash
- $ node ./scrounge.js -i ./getStarted
- [...] read: files (2/2) 
- [...] write: getStarted/cmpr/fileB.js
- [...] write: getStarted/cmpr/fileA.js
- [...] finish: 00:00:25 (mm:ss:ms)
- ```
- 
- 5. **Use compression and timestamping modifiers.**  
- 
- ```bash
- $ node ./scrounge.js -i ./getStarted \
-    --isTimestamped=true --isCompressed=true
- [...] read: files (2/2) 
- [...] ugly: (fileA.js, .js, 1/2) getStarted/fileB.js
- [...] write: getStarted/cmpr/fileB_2012.07.07-15:25:57.js
- [...] ugly: (fileB.js, .js, 2/2) getStarted/fileA.js
- [...] write: getStarted/cmpr/fileA_2012.07.07-15:25:46.js
- [...] finish: 00:00:25 (mm:ss:ms)
- ```
-
- 6. **Define a dependency in _fileB.js_.**  
- 
- scroungejs will concatenate dependency-related files. Dependencies are defined in .js and .css files using the 'Requires' property.  
- 
- Open `fileB.js` and add the following line to the top: `// Requires: fileA.js`.
-
- _File properties are explained in section [File Properties](#file-properties)._
-
- > *./getStarted/fileB.js:*
-
- > ```javascript
- > // Requires: fileA.js
- > ```
-   
- 7. **Concatenate files**  
- 
- Dependency-related files are recognized as a _tree_. A tree is composed of one file that depends on other files 'and so on. Here _fileB.js_ is a _source_ file that begins a dependency tree. 
-
- When tree information is collected a visual representation of each tree is printed.
-
- `isConcatenated` may be defined as true or false or it may be defined with comma separated names of trees or extension types, such as '.js'. Only matching files will be concatenated.  
-
- ```bash
- $ node ./scrounge.js -i ./getStarted --isConcatenated=true
- [...] read: files (2/2)  
- 
- fileB.js  
- └── fileA.js  
- 
- [...] join: (fileA.js, .js, 1/2) getStarted/fileA.js
- [...] join: (fileB.js, .js, 2/2) getStarted/fileB.js
- [...] write: getStarted/cmpr/fileB.js
- [...] finish: 00:00:27 (mm:ss:ms)
- ```
-
- 8. **Specify an Output Directory**
- 
- If a specified output directory does not exist it is created.
-
- ```bash
- $ node ./scrounge.js -i ./getStarted --isConcatenated=true \
-  --outputPath=./app/public/cmpr
- [...] read: files (2/2)  
-  
- fileB.js  
- └── fileA.js  
-  
- [...] join: (fileA.js, .js, 1/2) getStarted/fileA.js
- [...] join: (fileB.js, .js, 2/2) getStarted/fileB.js
- [...] write: app/public/cmpr/fileB.js
- [...] finish: 00:00:27 (mm:ss:ms)
- ```
- 
- 9. **Build a larger tree found in _./getStarted/app/_.**  
- 
- Multiple trees may be discovered and concatenated and .css files that associate with a tree will be discovered.
-
- ```bash
- $ node ./scrounge.js -i ./getStarted/app --isConcatenated=true \
-   --outputPath=./app/public/cmpr --isRecursive=true --trees=app.js
- [...] read: files (12/12)  
-  
- app.js
- └─┬ ViewsAll.js
- . ├─┬ ViewB.js
- . │ └─┬ CtrlsAll.js
- . │   ├─┬ CtrlB.js
- . │   │ └── ModelB.js
- . │   └─┬ CtrlA.js
- . │     └── ModelA.js
- . └── ViewA.js  
-  
- [...] join: (app.js, .css, 1/1) getStarted/app/views/ViewA.css
- [...] write: app/public/cmpr/app.css
- [...] join: (app.js, .js, 1/9) getStarted/app/models/ModelB.js
- [...] join: (app.js, .js, 2/9) getStarted/app/controls/CtrlB.js
- [...] join: (app.js, .js, 3/9) getStarted/app/models/ModelA.js
- [...] join: (app.js, .js, 4/9) getStarted/app/controls/CtrlA.js
- [...] join: (app.js, .js, 5/9) getStarted/app/controls/CtrlsAll.js
- [...] join: (app.js, .js, 6/9) getStarted/app/views/ViewB.js
- [...] join: (app.js, .js, 7/9) getStarted/app/views/ViewA.js
- [...] join: (app.js, .js, 8/9) getStarted/app/views/ViewsAll.js
- [...] join: (app.js, .js, 9/9) getStarted/app/app.js
- [...] write: app/public/cmpr/app.js
- [...] finish: 00:00:17 (mm:ss:ms)
- ```
-
- 10. **Define filters for the build process.**  
-
- When `--extensionType=.js` is given, files with other extensions are ignored by the build process.  
-
- _modifiers are explained in section [Modifiers](#modifiers)._
-
- ```bash
- $ node ./scrounge.js -i ./getStarted/app --isConcatenated=true \
-   --outputPath=./app/public/cmpr --isRecursive=true --tress=app.js \
-   --extensionType=.js
- [...] read: files (12/12)  
-  
- app.js
- └─┬ ViewsAll.js
- . ├─┬ ViewB.js
- . │ └─┬ CtrlsAll.js
- . │   ├─┬ CtrlB.js
- . │   │ └── ModelB.js
- . │   └─┬ CtrlA.js
- . │     └── ModelA.js
- . └── ViewA.js  
-  
- [...] join: (app.js, .css, 1/1) getStarted/app/views/ViewA.css
- [...] write: app/public/cmpr/app.css
- [...] join: (app.js, .js, 1/9) getStarted/app/models/ModelB.js
- [...] join: (app.js, .js, 2/9) getStarted/app/controls/CtrlB.js
- [...] join: (app.js, .js, 3/9) getStarted/app/models/ModelA.js
- [...] join: (app.js, .js, 4/9) getStarted/app/controls/CtrlA.js
- [...] join: (app.js, .js, 5/9) getStarted/app/controls/CtrlsAll.js
- [...] join: (app.js, .js, 6/9) getStarted/app/views/ViewB.js
- [...] join: (app.js, .js, 7/9) getStarted/app/views/ViewA.js
- [...] join: (app.js, .js, 8/9) getStarted/app/views/ViewsAll.js
- [...] join: (app.js, .js, 9/9) getStarted/app/app.js
- [...] write: app/public/cmpr/app.js
- [...] finish: 00:00:12 (mm:ss:ms)
- ```
- 11. **Controlling the tree display.**  
- 
- To make scroungejs display the tree and stop, use the modifier `stop=tree`
- 
- By default, each dependency is only displayed once. This makes the tree smaller when, for example, a library is required by many files. To view the entire tree, use the modifier `treeView=full`
-
- ```bash
- $ node ./scrounge.js -i ./getStarted/app --isConcatenated=true \
-   --isRecursive=true --stop=tree --treeView=full
- [...] read: files (12/12)
-  
- app.js
- └─┬ ViewsAll.js
- . ├─┬ ViewB.js
- . │ └─┬ CtrlsAll.js
- . │   ├─┬ CtrlB.js
- . │   │ └── ModelB.js
- . │   └─┬ CtrlA.js
- . │     └── ModelA.js
- . └─┬ ViewA.js
- .   └── CtrlsAll.js
- 
- ```
- 
- 12. **Update _index.mustache_ using scroungejs.**  
-
- The index file contains a _scrounge_ element.
- 
-  > *./getStarted/index.mustache* 
-
-  > ```html
-  > <!doctype html>
-  > <html>
-  >   <head>
-  >     <script src="/scr/libFile.js" type="text/javascript"></script>
-  >   </head>
-  >   <body>  
-  >     <!-- <scrounge type=".js"> -->
-  >     <!-- </scrounge> -->
-  >   </body>
-  > </html>
-  > ```
-     
- 13. **modify the _basepage_ `index.mustache` with scroungejs**  
- 
- Call scroungejs without concatenation on the _basepage_.
- 
- _using -s makes the output 'silent'_
-
- ```bash
- $ node ./scrounge.js -s -i ./getStarted/app \
- --basepage=./getStarted/index.mustache --isRecursive=true \
- --outputPath=./app/public/cmpr
- ```
- 
- *./getStarted/index.mustache* 
-
- ```html
- <!doctype html>
- <html>
-   <head>
-     <script src="/app/lib/library.js" type="text/javascript"></script>
-   </head>
-   <body>
-     <!-- <scrounge type=".js"> -->
-     <script src="/app/public/cmpr/library.js" type="text/javascript"></script>
-     <script src="/app/public/cmpr/app2.js" type="text/javascript"></script>
-     <script src="/app/public/cmpr/ModelB.js" type="text/javascript"></script>
-     <script src="/app/public/cmpr/CtrlB.js" type="text/javascript"></script>
-     <script src="/app/public/cmpr/ModelA.js" type="text/javascript"></script>
-     <script src="/app/public/cmpr/CtrlA.js" type="text/javascript"></script>
-     <script src="/app/public/cmpr/CtrlsAll.js" type="text/javascript"></script>
-     <script src="/app/public/cmpr/ViewB.js" type="text/javascript"></script>
-     <script src="/app/public/cmpr/ViewA.js" type="text/javascript"></script>
-     <script src="/app/public/cmpr/ViewsAll.js" type="text/javascript"></script>
-     <script src="/app/public/cmpr/app.js" type="text/javascript"></script>     
-     <!-- </scrounge> -->
-   </body>
- </html>
- ```
-     
- 13. **modify the basepage _index.mustache_ and use concatenation.**  
- 
- Call scroungejs with concatenation on this _basepage_. scroungejs correctly modifies the basepage for concatenated files.
-
- ```bash
- $ node ./scrounge.js -s -i ./getStarted/app --isConcatenated=true \
- --basepage=./getStarted/index.mustache --isRecursive=true \
- --outputPath=./app/public/cmpr
- ```
- 
- *./getStarted/index.mustache* 
-     
- ```html   
- <!doctype html>  
- <html>  
-     <head>  
-         <script src="/app/lib/library.js" type="text/javascript"></script>  
-     </head>  
-     <body>  
-         <!-- <scrounge type=".js"> -->  
-         <script src="/app/public/cmpr/library.js" type="text/javascript"></script>  
-         <script src="/app/public/cmpr/app2.js" type="text/javascript"></script>  
-         <script src="/app/public/cmpr/app.js" type="text/javascript"></script>  
-         <!-- </scrounge> -->  
-     </body>  
- </html>  
- ```
-
- 14. **define a public path and update _index.mustache_.**  
-
- This index page may reference a root web directory served from `app/public`. In this case, files copied to `/app/public/cmpr/` should be accessed through the path `/cmpr`. 
- 
- Scroungejs will modify a basepage to reference scripts from a _publicPath_.
-
- ```bash
- $ node ./scrounge.js -s -i ./getStarted/app --isConcatenated=true \
-   --basepage=./getStarted/index.mustache --isRecursive=true \
-   --outputPath=./app/public/cmpr --publicPath=/cmpr
- ```
-
- > *./getStarted/index.mustache*  
-
- ```html
- <!doctype html>  
- <html>  
-     <head>  
-         <script src="/app/lib/library.js" type="text/javascript"></script>
-     </head>  
-     <body>  
-         <!-- <scrounge type=".js"> -->  
-         <script src="/cmpr/library.js" type="text/javascript"></script>
-         <script src="/cmpr/app.js" type="text/javascript"></script>  
-         <script src="/cmpr/app2.js" type="text/javascript"></script>  
-         <!-- </scrounge> -->  
-     </body>  
- </html>
- ```
-
- 15. **define tree attributes.**  
- 
- If a tree attribute is defined in a scrounge element, only the file or files that result from the named tree are added to the scrounge element.  
- 
- Trees may be defined in a scrounge element attribute or by using the `--trees` modifier. When trees are defined, scrounge will output the defined trees only.
-
- > *./getStarted/index.mustache* 
-
- ```html
- <!doctype html>  
- <html>  
-     <head>  
-         <script src="/app/lib/library.js" type="text/javascript"></script>  
-         <!-- <scrounge type=".css" trees="app.js"> -->     
-         <!-- </scrounge> -->  
-     </head>  
-     <body>  
-         <!-- <scrounge type=".js" trees="app.js"> -->  
-         <!-- </scrounge> -->  
-     </body>  
- </html>  
- ```
-
- ```bash
- $ node ./scrounge.js -s -i ./getStarted/app
-   --basepage=./getStarted/index.mustache --isRecursive=true --publicPath=/cmpr
- ```
-
- > *./getStarted/index.mustache* 
- 
- ```html
- <!doctype html>  
- <html>  
-     <head>  
-         <script src="/app/lib/library.js" type="text/javascript"></script>  
-         <!-- <scrounge type=".css" trees="app.js"> -->
-         <script src="/cmpr/app.css" type="text/javascript"></script>  
-         <!-- </scrounge> -->     
-     </head>  
-     <body>  
-         <!-- <scrounge type=".js" trees="app.js"> -->  
-         <script src="/cmpr/app.js" type="text/javascript"></script>  
-         <!-- </scrounge> -->  
-     </body>  
- </html>  
- ```
-
- 16. ## You are now ready to use scroungejs.
-
- ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand10.png) 
-
-[3]: https://github.com/bumblehead/scrounge.js            "scrounge.js"
+That's the basic functionality with details explained below. Pull Requests are liberally accepted.
 
 ---------------------------------------------------------
+#### <a id="modifiers"></a>modifiers
 
-#### <a id="file-properties">FILE PROPERTIES:
+![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand10.png)
 
-Each file processed by scroungejs may affect the build process, with meta-data added to each file.
-
- > *./getStarted/app/views/ViewA.js*
-
- > ```javascript
-   // Filename: ViewA.js
-   // Timestamp: 2011.06.03-22:10:20
-   // Author(s): Bumblehead (www.bumblehead.com)
-   // Requires: CtrlsAll.js, ModelA.js
-   ```
-
- > *./getStarted/app/views/ViewA.css*
-
- > ```css
-   /* Filename: Main.css
-    * Timestamp: 2011.06.03-22:10:20
-    * Author(s): Bumblehead (www.bumblehead.com)
-    */
-   ```
-
-
-  - `Filename:` _filename_  
-     _by default_, filename is the file's system filename.  
-     the file will be recognized by this name when processed by scroungejs.  
-
-  - `Requires:` _filename_, _more filenames_  
-     _by default_, file has no dependencies.  
-     the file depends on files with these filenames.  
-     
-  - `Timestamp:` _YYYY.MM.DD-H:MM:SS_  
-     _by default_, timestamp is `Date.now()`.  
-     the file will associate with this timestamp. concatenated files will produce a file using the most recent timestamp found.
-
-  - `Authors:` _authorname_, _more authornames_  
-     _by default_, file associates with no author.  
-     the file associates with the given author(s). concatenated files will produce a file that associates with all defined authors.  
-     
-  - `DoNotCompress:` _bool_     
-     _by default_, `false`
-     If `true`, scroungejs will skip compression of this file.
-
-
----------------------------------------------------------
-
-#### <a id="basepage">BASEPAGE:
-
-scroungejs may add include elements for the js and css files it processes. A basepage containing one or more _scrounge elements_ will be modified.
-
-   > *example.html* 
-
-   ```html
-   <!doctype html>  
-   <html>  
-     <head>  
-       <!-- <scrounge type=".js"> -->  
-       <!-- </scrounge> -->  
-     </head>  
-     <body></body>   
-   </html>  
-   ```
-
-scroungejs adds js/css include elements in the body of scrounge elements. Something like the following could be added to the scrounge element above.  
-
-  > *example.html* 
-
-  ```html
-  <!-- <scrounge type=".js"> -->
-  <script src="cmpr/app1.js" type="text/javascript"></script>
-  <script src="cmpr/app2.js" type="text/javascript"></script>
-  <script src="cmpr/app3.js" type="text/javascript"></script>
-  <!-- </scrounge> -->
-  ````
+ - **inputpath= _path_**, _default: ./_
    
-   
-Each time you modify a basepage, the body of the tags is remade by scroungejs. A 'tree' attribute will affect focus this process.
+   a systempath to a directory
 
-  > *example.html*
-
-  ```html
-  <!-- <scrounge type=".css" tree="app1.js,app2"> -->
-  <script src="cmpr/app1.js" type="text/javascript"></script>
-  <script src="cmpr/app2.js" type="text/javascript"></script>
-  <!-- </scrounge> -->
-  ```
-
-
-example scrounge elements are given below
-
-  > *example.html*
-  
-  ```html
-  <!-- <scrounge type=".css" tree="Map.css,Main.js"> -->
-  <!-- </scrounge> -->
-  <!-- <scrounge type=".js" tree="Main.js,Crypto.js"> -->
-  <!-- </scrounge> -->
-  <!-- <scrounge type=".css" tree="Main.js"> -->
-  <!-- </scrounge> -->
-  ```
-
-
----------------------------------------------------------
-
-#### <a id="modifiers">MODIFIERS:
-
- - **--inputPath= _path_**, **-i _path_**, _default: ./_  
-   
-   a systempath to a directory or file. multiple paths may be given, separated with a comma, for example: `--inputPath=./path/1,./path/2`.
-
- - **--outputPath= _path_**, **-o _path_**, _default: ./cmpr_  
+ - **outputpath= _path_**, _default: ./www\__
  
-   a systempath to a directory or file.
+   a systempath to a directory or file
    
- - **--publicPath= _path_**, **-p _path_**, _default: null_  
-   a path to the files created by scrounge. examples describe it best
+ - **publicpath= _path_**, _default: null_
+   
+   a path to files created by scrounge.js used with basepage 
 
-   for the file `./getStarted/app/cmpr/app.js`, with publicPath `/cmpr/app.js`:
+   `./getStarted/app/cmpr/app.js`, with publicpath `/cmpr/`
 
-   a resulting basepage element:
    ```html
    <script src="/cmpr/app.js" type="text/javascript"></script>';
    ```
-   
-   for the file `./getStarted/app/cmpr/app.js`, with publicPath `http://www.site.com/cmpr/app.js`:   
-     
-   a resulting basepage element:
-   ```html
-   <script src="http://www.site.com/cmpr/app.js" type="text/javascript"></script>';
-   ```   
-   
-   a public path is not useful without a `--basepage` argument as it affects only paths generated for the specified basepage.   
-  
- - **--isBasepageSourcePaths= _bool_**, _default: false_  
-   basepage include tags will reference scripts in source directory.
-   disables compression, concatenation and copying of files. uses `publicPath`
-       
-   ex.  
-   ```bash
-   $ node scrounge.js -l --isRecursive=true \        
-     --isBasepageSourcePaths=true \  
-     --basepage=~/Software/kuaweb/sources/index.html \  
-     --inputPath=~/Software/kuaweb/sources/appSrc --publicPath=/appSrc
-   ```
 
- - **--isSourcePathUnique= _bool_**, _default: false_  
+ - **isunique= _bool_**, _default: false_
+
    add a unique argument to reference paths in include elements
-   
-   if enabled, an include element may appear as follows:
    
    ```html
    <script src="Main.js?u=1370491167925" type="text/javascript"></script>';
    <link href="Main.css?u=1370491167926" rel="stylesheet" type="text/css">
    ```
-     
- - **--extnTemplate= _str_**, _default: ''_  
-   prompts scroungejs to recognize the given string as an extention for template files. For example, `--extnTemplate=.mustache`. 
 
-   If `ViewSignin.js` is included in scroungejs' output, `ViewSignin.mustache` will be included as well and it will be copied to the specified output directory.    
+ - **iscompressed= _bool_**, _default: false_
 
- - **--extnStylesheet= _str_**, _default: '.css'_  
-   prompts scroungejs to recognize the given string as an extention for stylesheet files. For example, `--extnStylesheet=.less`.  
+   compress scripts and styles before writing them.
 
-   If `ViewSignin.js` is included in scroungejs' output, `ViewSignin.less` or maybe `viewSignin.css` will be included as well and it will be copied to the specified output directory.
+ - **isconcatenated= _bool_**, _default: false_
 
-   .less support is recently added and does not support cross-file references.
+   concatenate scripts and stylesheets files before writing them.
 
-   *Only `.css` and `.less` are supported at this time*.
+ - **issilent= _bool_**, _default: false_
 
- - **--isCompressed= _bool_, _extension_, _tree_**, _default: false_  
-   compress all files and/or trees before writing them to disk. If an extension or a treename are given only files that associate with the treename or extension will be compressed.
-
- - **--isConcatenated= _bool_, _extension_, _tree_**, _default: false_  
-   concatenate all js/css files that form a tree before writing them to disk. If an extension or a treename are given only files that associate with the treename or extension will be concatenated.
-
- - **--isRecursive= _bool_**, _default: false_  
-   discover files in nested directories on the given path.
-   
- - **--isWarning= _bool_**, _default: false_  
-   raise warnings around trace statements.
-
- - **--isLines= _bool_**, _default: false_  
-   each compressed script on its own line.
-
- - **--isClosure= _bool_**, _default: false_  
-   compressed js code will added in the body of anonymous self-calling function.
-
- - **--isSilent= _bool_**, **-s**, _default: false_  
    supress console messages.
    
- - **--isMintFilter= _bool_**, _default: false_  
-   only process files that include `_mint` in their filename. this should only be used for the special case when a build directory has many files that should not be included in the build process. `_mint` distinguishes a file that _should_ be included in the build process from a file that _should not_ be included in the build process.
-
- - **--isTimestamped= _bool_, _extension_, _tree_**, _default: false_  
-   add a timestamp to name of the output files. If an extension or treename are given only files that associate with the treename or extension will be timestamped
-
- - **--isRemoveRequires= _bool_**, _default: true_  
-   remove 'requires' statements from javascript files. `true` by default.
+ - **basepage= _basepage_**, _default: null_
    
- - **--isRemoveConsole= _bool_**, _default: false_  
-   remove 'console.log' statements from javascript files.
-   uses UglifyJS2 ast to comprehensively remove console.log
-   
- - **--isUpdateOnly= _bool_**, _default: false_  
-   modify include tags in a basepage only. do not build scrounge elements.
-
- - **--extensionType= _type_**, **-t _type_**, _default: null_   
-   process files of one type only, `js` or `css`.
-   
- - **--forceTimestamp= _timestamp_**, _default: null_  
-   all timestamped files will use the given timestamp.
-   
- - **--basepage= _basepage_**, **-b _basepage_**, _default: null_  
-   update scrounge tags in the defined basepage.
-   
-   scroungejs will not modify or process a file that does not contain scrounge tags.
+   update scrounge tags in the defined basepage. basepage is not modified if it does not contain scrounge tags.
 
 
 ---------------------------------------------------------
-
-#### <a id="license">License:
+#### <a id="license"></a>license
 
  ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand.png) 
 
 (The MIT License)
 
-Copyright (c) 2012 [Bumblehead][0] <chris@bumblehead.com>
+Copyright (c) 2012-2016 [Bumblehead][0] <chris@bumblehead.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
