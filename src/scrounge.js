@@ -1,5 +1,5 @@
 // Filename: scrounge.js  
-// Timestamp: 2015.12.08-00:13:17 (last modified)
+// Timestamp: 2015.12.08-11:01:41 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
 var fs = require('fs'),
@@ -33,13 +33,15 @@ var scrounge = module.exports = (function (o) {
   o.writebasepage = function (opts, rootarr, rootobj, fn) {
     var basepage = opts.basepage,
         basepagein = opts.basepagein;
-    
+
     if (basepage && !scrounge_file.isexist(basepage)) {
       scrounge_file.copy(opts, basepagein, basepage, function (err, res) {
         if (err) return fn(err);
         
         scrounge_basepage.writeelemarr(opts, basepage, rootarr, rootobj, fn);
       });
+    } else if (basepage && scrounge_file.isexist(basepage)) {
+      scrounge_basepage.writeelemarr(opts, basepage, rootarr, rootobj, fn);
     } else {
       fn(null);
     }

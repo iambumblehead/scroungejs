@@ -1,5 +1,5 @@
 // Filename: scrounge_root.js  
-// Timestamp: 2015.12.07-23:55:57 (last modified)
+// Timestamp: 2015.12.08-11:15:42 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var path = require('path'),
@@ -41,8 +41,8 @@ var scrounge_root = module.exports = (function (o) {
         opts, rootname, opts.treetype === 'small' ?
           depgraph.tree.getfromgraphsmall(graph):
           depgraph.tree.getfromgraph(graph));
-
-      fn(null, depgraph.graph.getdeparr(graph));
+      
+      fn(null, depgraph.graph.getdeparr(graph).reverse());
     });
   };
   
