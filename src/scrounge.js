@@ -1,5 +1,5 @@
 // Filename: scrounge.js  
-// Timestamp: 2015.12.08-11:01:41 (last modified)
+// Timestamp: 2015.12.08-12:10:07 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
 var fs = require('fs'),
@@ -79,6 +79,8 @@ var scrounge = module.exports = (function (o) {
             if (err) throw new Error(err);
           
             scrounge_log.finish(opts, simpletime.getElapsedTimeFormatted(datebgn, new Date()));
+            
+            fn(err, res);
           });
         });
       });
