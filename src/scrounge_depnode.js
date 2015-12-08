@@ -1,5 +1,5 @@
 // Filename: scrounge_depnode.js  
-// Timestamp: 2015.12.08-12:50:23 (last modified)
+// Timestamp: 2015.12.08-13:28:52 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
 var fs = require('fs'),
@@ -50,7 +50,6 @@ var scrounge_depnode = module.exports = (function (o) {
     } else {
       return depnodearr.map(function (node) {
         return scrounge_elem.getincludetag(
-          // needs a uniquenessname...
           scrounge_file.setpublicoutputpath(opts, node.get('filepath'), node.get('uid'))
         );
       }).reverse();
