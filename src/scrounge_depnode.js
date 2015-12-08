@@ -1,5 +1,5 @@
 // Filename: scrounge_depnode.js  
-// Timestamp: 2015.12.08-00:04:46 (last modified)
+// Timestamp: 2015.12.08-12:50:23 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
 var fs = require('fs'),
@@ -44,13 +44,14 @@ var scrounge_depnode = module.exports = (function (o) {
     if (opts.isconcat) {
       return [
         scrounge_elem.getincludetag(
-          scrounge_file.setpublicoutputpath(opts, rootname)
+          scrounge_file.setpublicoutputpath(opts, depnodearr[0].get('filepath'), depnodearr[0].get('uid'))
         )
       ];
     } else {
       return depnodearr.map(function (node) {
         return scrounge_elem.getincludetag(
-          scrounge_file.setpublicoutputpath(opts, node.get('filepath'))
+          // needs a uniquenessname...
+          scrounge_file.setpublicoutputpath(opts, node.get('filepath'), node.get('uid'))
         );
       }).reverse();
     }

@@ -1,11 +1,13 @@
 // Filename: scrounge_file.js  
-// Timestamp: 2015.12.07-23:53:16 (last modified)
+// Timestamp: 2015.12.08-12:58:11 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
 var fs = require('fs'),
     path = require('path'),
     mkdirp = require('mkdirp'),
     pathpublic = require('pathpublic'),
+
+    scrounge_adapt = require('./scrounge_adapt'),
     scrounge_log = require('./scrounge_log');
 
 var scrounge_file = module.exports = (function (o) {
@@ -16,14 +18,25 @@ var scrounge_file = module.exports = (function (o) {
       path.basename(filename, path.extname(filename)) + extn);
   };
 
-  o.setpublicpath = function (opts, filepath) {
-    return pathpublic.get(filepath, opts.publicpath);    
+  o.setbasename = function (filepath, uid) {
+    var fileextn = path.extname(filepath),
+        uidname = o.setextn(scrounge_adapt.uidsanitised(uid), fileextn);
+    
+    return path.join(path.dirname(filepath), uidname);
   };
 
-  o.setpublicoutputpath = function (opts, filepath) {
+  o.setpublicpath = function (opts, filepath, uid) {
+    if (opts.isconcat) {
+      return pathpublic.get(filepath, opts.publicpath);
+    } else {
+      return pathpublic.get(o.setbasename(filepath, uid), opts.publicpath);    
+    }
+  };
+
+  o.setpublicoutputpath = function (opts, filepath, uid) {
     return o.setpublicpath(opts, path.join(
       opts.outputpath, path.basename(filepath)
-    ));
+    ), uid);
   };
 
   o.setoutputpath = function (opts, filepath) {

@@ -1,5 +1,5 @@
 // Filename: scrounge_root.js  
-// Timestamp: 2015.12.08-11:15:42 (last modified)
+// Timestamp: 2015.12.08-12:57:11 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var path = require('path'),
@@ -127,7 +127,7 @@ var scrounge_root = module.exports = (function (o) {
         scrounge_depnode.getcontentadapted(opts, dep[x], function (err, res) {
           if (err) return fn(err);
           
-          filewrite(opts, dep[x].get('filepath'), res, function (err, res) {
+          filewrite(opts, scrounge_file.setbasename(dep[x].get('filepath'), dep[x].get('uid')), res, function (err, res) {
             if (err) return fn(err);
 
             nextdep(dep, x);
