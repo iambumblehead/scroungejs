@@ -1,5 +1,5 @@
 // Filename: scrounge_log.js  
-// Timestamp: 2015.12.08-00:28:17 (last modified)
+// Timestamp: 2015.12.08-14:19:00 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
 
@@ -18,6 +18,7 @@ var scrounge_log = module.exports = (function (o) {
   };
 
   o.start = function (opts, time) {
+    o(opts, '');
     o(opts, '[...] start: ' + time);    
   };
 

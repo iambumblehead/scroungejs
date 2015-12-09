@@ -1,5 +1,5 @@
 // Filename: scrounge_file.js  
-// Timestamp: 2015.12.08-13:33:22 (last modified)
+// Timestamp: 2015.12.08-18:50:14 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
 var fs = require('fs'),
@@ -25,7 +25,6 @@ var scrounge_file = module.exports = (function (o) {
   };  
 
   o.setpublicpath = function (opts, filepath, uid) {
-    if (!uid) throw new Error('no');
     if (!opts.isconcat) {
       filepath = o.setbasename(filepath, uid);
     }

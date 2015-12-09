@@ -1,5 +1,5 @@
 // Filename: scrounge_adapt.js  
-// Timestamp: 2015.12.08-13:25:58 (last modified)
+// Timestamp: 2015.12.08-18:51:13 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var umd = require('umd'),
@@ -33,11 +33,17 @@ var scrounge_adapt = module.exports = (function (o) {
   };
 
   o.js = function (opts, depmod, str, fn) {
-    var modname = o.uidsanitised(depmod.get('uid')),
+    var filepath = depmod.get('filepath'),
+        modname = o.uidsanitised(depmod.get('uid')),
         outarr = depmod.get('outarr'),
+        skip = opts.skippatharr.some(function (path) {
+          return filepath.indexOf(path) !== -1;
+        }),
         umdstr;
 
-    if (moduletype.cjs(str)) {
+    if (skip) {
+      umdstr = str;
+    } else if (moduletype.cjs(str)) {
       umdstr = umd(modname, str, { commonJS : true });
       umdstr = replacerequires(umdstr, depmod.get('outarr').reduce(function (prev, cur) {
         return prev[cur.get('refname')] = o.uidsanitised(cur.get('uid')), prev;
@@ -46,10 +52,10 @@ var scrounge_adapt = module.exports = (function (o) {
       scrounge_log.unsupportedtype(opts, moduletype.is(str), modname);
       return fn('[!!!] unsupported module');      
     } else {
-      umdstr = umd(modname, str, { commonJS : false });
+      umdstr = str;
     }
     
-    if (opts.iscompress) {    
+    if (!skip && opts.iscompress) {    
       try {
         fn(null, uglifyjs.minify(umdstr, { fromString: true }).code);
       } catch (e) {
