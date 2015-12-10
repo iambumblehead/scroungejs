@@ -36,7 +36,10 @@ var scrounge_basepage = module.exports = (function (o) {
         var indent = scrounge_elem.getindentation(elem);
         
         return content.replace(elem, scrounge_elem.getpopulated(
-          elem, scrounge_elem.getrootarr(elem).map(function (root) {
+          elem, scrounge_elem.getrootarr(elem).filter(function (root) {
+            // only operate on rootnames with an associated nodearr
+            return nodearrobj[root] && nodearrobj[root].length;
+          }).map(function (root) {
             
             // each node in the array returns ordered listing of elements
             return scrounge_depnode.arrgetincludetagarr(opts, nodearrobj[root], root)
