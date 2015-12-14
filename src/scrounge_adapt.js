@@ -1,5 +1,5 @@
 // Filename: scrounge_adapt.js  
-// Timestamp: 2015.12.08-18:51:13 (last modified)
+// Timestamp: 2015.12.14-10:57:32 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var umd = require('umd'),
@@ -28,7 +28,8 @@ var scrounge_adapt = module.exports = (function (o) {
   
   o.uidsanitised = function (uid) {
     return uid
-      .replace(/-|\//gi, '_')
+      .replace(/\.[^\.]*$/, '')     // remove extension from uid
+      .replace(/-|\//gi, '_')        // remove slash and dash
       .replace(/[^a-z0-9_]+/gi, '');
   };
 

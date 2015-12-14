@@ -1,5 +1,5 @@
 // Filename: scrounge_root.js  
-// Timestamp: 2015.12.08-18:51:55 (last modified)
+// Timestamp: 2015.12.14-13:02:47 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var path = require('path'),
@@ -98,16 +98,15 @@ var scrounge_root = module.exports = (function (o) {
         graphname = scrounge_file.setextn(rootname, '.js'),
         deparr = graphobj[rootname];
 
-    var filewrite = function (opts, filepath, content, fn) {
-      filepath = scrounge_file.setoutputpath(opts, filepath);
+    var nodewrite = function (opts, node, rootname, content, fn) {
+      var filepath = scrounge_depnode.setpublicoutputpath(opts, node, rootname);
+      
       scrounge_file.write(opts, filepath, content, fn);
-    };
+    };    
     
-    // always concatenate at this.
-    // no good method exists for converting single file 
     if (opts.isconcat) {
       (function nextdep (dep, x, contentarr) {
-        if (!x--) return filewrite(opts, rootname, contentarr.join('\n'), fn);
+        if (!x--) return nodewrite(opts, dep[0], rootname, contentarr.join('\n'), fn);       
 
         scrounge_depnode.getcontentadapted(opts, dep[x], function (err, res) {
           if (err) return fn(err);          
@@ -126,8 +125,8 @@ var scrounge_root = module.exports = (function (o) {
 
         scrounge_depnode.getcontentadapted(opts, dep[x], function (err, res) {
           if (err) return fn(err);
-          
-          filewrite(opts, scrounge_file.setbasename(dep[x].get('filepath'), dep[x].get('uid')), res, function (err, res) {
+
+          nodewrite(opts, dep[x], rootname, res, function (err, res) {          
             if (err) return fn(err);
 
             nextdep(dep, x);
@@ -141,7 +140,7 @@ var scrounge_root = module.exports = (function (o) {
     if (rootnamearr.length) {
       o.write(opts, rootnamearr[0], graphobj, function (err, res) {
         if (err) return fn(err);
-
+        
         o.writearr(opts, rootnamearr.slice(1), graphobj, fn);
       });
     } else {
