@@ -1,5 +1,5 @@
 // Filename: scrounge_depnode.js  
-// Timestamp: 2015.12.14-12:55:47 (last modified)
+// Timestamp: 2015.12.15-10:49:18 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
 var fs = require('fs'),
@@ -46,6 +46,15 @@ var scrounge_depnode = module.exports = (function (o) {
           scrounge_file.setbasename(filepath, rootname) : filepath;
 
     return scrounge_file.setpublicoutputpath(opts, publicpath, uid);
+  };
+
+  o.setpublicoutputpathreal = function (opts, node, rootname) {
+    var uid = node.get('uid'),
+        filepath = node.get('filepath'),
+        publicpath = opts.isconcat ?
+          scrounge_file.setbasename(filepath, rootname) : filepath;
+
+    return scrounge_file.setoutputpathreal(opts, publicpath, uid);
   };
 
   // for each node in the array build ordered listing of elements

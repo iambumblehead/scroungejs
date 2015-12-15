@@ -1,5 +1,5 @@
 // Filename: scrounge_root.js  
-// Timestamp: 2015.12.14-13:02:47 (last modified)
+// Timestamp: 2015.12.15-10:47:57 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var path = require('path'),
@@ -99,7 +99,7 @@ var scrounge_root = module.exports = (function (o) {
         deparr = graphobj[rootname];
 
     var nodewrite = function (opts, node, rootname, content, fn) {
-      var filepath = scrounge_depnode.setpublicoutputpath(opts, node, rootname);
+      var filepath = scrounge_depnode.setpublicoutputpathreal(opts, node, rootname);
       
       scrounge_file.write(opts, filepath, content, fn);
     };    
