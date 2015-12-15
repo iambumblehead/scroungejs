@@ -29,7 +29,7 @@ var scrounge_root = module.exports = (function (o) {
     }
 
     depgraph.graph.getfromseedfile(
-      path.join(opts.inputpath, rootname), fn);
+      path.join(opts.inputpath, rootname), opts, fn);
   };
 
   // return rootname as a graph deparr

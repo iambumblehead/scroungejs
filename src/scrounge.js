@@ -5,7 +5,6 @@
 var fs = require('fs'),
     path = require('path'),
     optfn = require('optfn'),
-    depgraph = require('depgraph'),
     simpletime = require('simpletime'),
 
     scrounge_basepage = require('./scrounge_basepage'),

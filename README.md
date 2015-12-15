@@ -7,7 +7,7 @@ __NOT FOR PRODUCTION USE -ALPHA QUALITY__
 
 scrounge.js is a narrow use-case build-tool of minimal setup. It is a decision-making wrapper around tools like [depgraph][1], [replace-requires][2], [uglifyjs2][3], [umd][4] and [detective][5]. features include:
 
- * **supports CommonJS** and NPM module resolution and _**does not support**_ **AMD, ES6 or other module formats**
+ * **supports CommonJS** and NPM/Bower module resolution and _**does not support**_ **AMD, ES6 or other module formats**
  * compression and concatenation are enabled or disabled for each build (useful during development)
  * does not require unusual tags or attributes added to markup files
  * handles ".css" and ".less" stylesheets
@@ -158,6 +158,10 @@ That's the basic functionality with details explained below. Pull Requests are l
  - **issilent= _bool_**, _default: false_
 
    supress console messages.
+
+ - **isbrowser= _bool_**, _default: true_
+
+   locate files defined to the "browser" property defined in package.json and bower.json files.
    
  - **basepage= _basepage_**, _default: null_
    

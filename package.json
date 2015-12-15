@@ -1,6 +1,6 @@
 {
   "name": "scroungejs",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "license" : "MIT",
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
     "moduletype" : "~0.0.x",
     "simpletime" : ">=0.1.0",
     "pathpublic" : "~0.0.x",    
-    "depgraph" : "~0.0.x",
+    "depgraph" : "~0.1.x",
     "mkdirp" : "~0.5.x",
     "umd" : "~3.0.x"
   },
