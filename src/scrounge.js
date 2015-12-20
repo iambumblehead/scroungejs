@@ -1,5 +1,5 @@
 // Filename: scrounge.js  
-// Timestamp: 2015.12.19-23:35:01 (last modified)
+// Timestamp: 2015.12.19-23:52:35 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
 var fs = require('fs'),
@@ -16,8 +16,8 @@ var fs = require('fs'),
 
 var scrounge = module.exports = (function (o) {
 
-  o = function (opts) {
-    o.build(opts);
+  o = function (opts, fn) {
+    o.build(opts, fn);
   };
   
   o.writeroots = function (opts, rootarr, rootobj, fn) {
@@ -109,7 +109,7 @@ var scrounge = module.exports = (function (o) {
 
             o.writebasepage(opts, rootsarr, rootobj, function (err, res) {
               if (err) throw new Error(err);
-              
+
               scrounge_log.finish(opts, simpletime.getElapsedTimeFormatted(datebgn, new Date()));
               
               fn(err, res);
