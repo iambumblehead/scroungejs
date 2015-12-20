@@ -1,5 +1,5 @@
 // Filename: scrounge_root.js  
-// Timestamp: 2015.12.19-20:26:13 (last modified)
+// Timestamp: 2015.12.19-23:10:50 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var path = require('path'),
@@ -103,7 +103,8 @@ var scrounge_root = module.exports = (function (o) {
             return extn === rootextn;
           }) || opts.cssextnarr.find(function (extn) {
             return extn === rootextn;
-          });
+          }) || rootextn;
+
 
       filepath = scrounge_file.setextn(filepath, fileextn);
 

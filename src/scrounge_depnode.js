@@ -1,5 +1,5 @@
 // Filename: scrounge_depnode.js  
-// Timestamp: 2015.12.19-20:01:01 (last modified)
+// Timestamp: 2015.12.19-23:10:45 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
 var fs = require('fs'),
@@ -76,7 +76,7 @@ var scrounge_depnode = module.exports = (function (o) {
           return extn === rootextn;
         }) || opts.cssextnarr.find(function (extn) {
           return extn === rootextn;
-        });
+        }) || rootextn;
 
     return scrounge_file.setextn(filepath, fileextn);
   };

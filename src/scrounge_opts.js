@@ -1,5 +1,5 @@
 // Filename: scrounge_opts.js  
-// Timestamp: 2015.12.19-19:27:43 (last modified)
+// Timestamp: 2015.12.19-23:35:28 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var fs = require('fs'),
@@ -69,6 +69,7 @@ var scrounge_opts = module.exports = (function (o) {
     finopt.iscompress = o.getasbool(opt.iscompressed, false);
     finopt.issilent   = o.getasbool(opt.issilent, false);
     finopt.isupdate   = o.getasbool(opt.isupdateonly, false);
+    finopt.istpl      = o.getasbool(opt.istpl, false);    
     finopt.browser    = o.getasbool(opt.isbrowser, true);    
       
     finopt.basepage   = o.getasstring(opt.basepage, '');

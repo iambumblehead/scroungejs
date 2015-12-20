@@ -1,5 +1,5 @@
 // Filename: scrounge.js  
-// Timestamp: 2015.12.19-19:19:37 (last modified)
+// Timestamp: 2015.12.19-23:35:01 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
 var fs = require('fs'),
@@ -8,6 +8,7 @@ var fs = require('fs'),
     simpletime = require('simpletime'),
 
     scrounge_basepage = require('./scrounge_basepage'),
+    scrounge_depnode = require('./scrounge_depnode'),
     scrounge_root = require('./scrounge_root'),    
     scrounge_file = require('./scrounge_file'),    
     scrounge_opts = require('./scrounge_opts'),
@@ -21,6 +22,33 @@ var scrounge = module.exports = (function (o) {
   
   o.writeroots = function (opts, rootarr, rootobj, fn) {
     scrounge_root.writearr(opts, rootarr, rootobj, fn);
+  };
+
+  // tpl files aren't processed in the way scripts and stylesheets are
+  // tpl deparr, adjacent to js deparr, is created any nodes are simply copied
+  // to outputpath
+  o.copyroottpl = function (opts, rootobj, fn) {
+    //
+    // by default, this feature switch off
+    //
+    if (opts.istpl) {
+      var jsrootarr = scrounge_root.getnamearrastype(opts, Object.keys(rootobj), '.js');
+      var custopts = Object.create(opts);
+
+      custopts.isconcat = false;
+      custopts.iscompress = false;    
+      
+      scrounge_depnode.getarrastypearr(rootobj[jsrootarr[0]], opts.tplextnarr, function (err, deparr) {
+        if (err) return fn(err);
+
+        var rootname = scrounge_file.setextn(jsrootarr[0], opts.tplextnarr[0]);
+        rootobj[rootname] = deparr;
+        
+        scrounge_root.write(custopts, rootname, rootobj, fn);
+      });
+    } else {
+      fn(null);
+    }
   };
   
   // returned object uses rootnames as named-properties defined w/ rootarr
@@ -76,14 +104,18 @@ var scrounge = module.exports = (function (o) {
         o.writeroots(opts, rootsarr, rootobj, function (err, nodearr) {
           if (err) throw new Error(err);
 
-          o.writebasepage(opts, rootsarr, rootobj, function (err, res) {
-            if (err) throw new Error(err);
-          
-            scrounge_log.finish(opts, simpletime.getElapsedTimeFormatted(datebgn, new Date()));
-            
-            fn(err, res);
+          o.copyroottpl(opts, rootobj, function (err) {
+            if (err) throw new Error(err);            
+
+            o.writebasepage(opts, rootsarr, rootobj, function (err, res) {
+              if (err) throw new Error(err);
+              
+              scrounge_log.finish(opts, simpletime.getElapsedTimeFormatted(datebgn, new Date()));
+              
+              fn(err, res);
+            });
           });
-        });
+        });          
       });
     });
   };
