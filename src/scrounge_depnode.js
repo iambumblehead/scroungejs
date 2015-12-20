@@ -1,5 +1,5 @@
 // Filename: scrounge_depnode.js  
-// Timestamp: 2015.12.15-10:49:18 (last modified)
+// Timestamp: 2015.12.19-20:01:01 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
 var fs = require('fs'),
@@ -16,6 +16,9 @@ var scrounge_depnode = module.exports = (function (o) {
     scrounge_adapt(opts, node, node.get('content'), fn);
   };
 
+  // for a node with filepath ~/software/node.js
+  // return a 'css' type node if type is 'css' and
+  // corresponding css file exists (~/software/node.css)
   o.getastype = function (node, type, fn) {
     var filepath = scrounge_file.setextn(node.get('filepath'), type);
 
@@ -24,6 +27,19 @@ var scrounge_depnode = module.exports = (function (o) {
          .set('filepath', filepath)
          .set('content', content));
     });
+  };
+
+  o.getastypearr = function (node, typearr, fn) {
+    (function next (typearr, x) {
+      if (!x--) return fn('type not found ' + typearr);
+
+      o.getastype(node, typearr[x], function (err, node) {
+        if (err) return next(typearr, x);
+        
+        fn(null, node);
+      });
+
+    }(typearr, typearr.length));            
   };
 
   o.getarrastype = function (deparr, type, fn) {
@@ -39,11 +55,39 @@ var scrounge_depnode = module.exports = (function (o) {
     }(deparr, deparr.length, []));      
   };
 
+  o.getarrastypearr = function (deparr, typearr, fn) {
+    (function next (deparr, x, finarr) {
+      if (!x--) return fn(null, finarr);      
+
+      o.getastypearr(deparr[x], typearr, function (err, node) {
+        if (err) return next(deparr, x, finarr);
+
+        finarr.push(node);
+        next(deparr, x, finarr);
+      });
+    }(deparr, deparr.length, []));      
+  };
+
+  // if basename has extension '.less',
+  // extension returned may be '.css'  
+  o.setpublicextn = function (opts, filepath, rootname) {
+    var rootextn = path.extname(rootname),
+        fileextn = opts.jsextnarr.find(function (extn) {
+          return extn === rootextn;
+        }) || opts.cssextnarr.find(function (extn) {
+          return extn === rootextn;
+        });
+
+    return scrounge_file.setextn(filepath, fileextn);
+  };
+
   o.setpublicoutputpath = function (opts, node, rootname) {
     var uid = node.get('uid'),
         filepath = node.get('filepath'),
         publicpath = opts.isconcat ?
           scrounge_file.setbasename(filepath, rootname) : filepath;
+
+    publicpath = o.setpublicextn(opts, publicpath, rootname);
 
     return scrounge_file.setpublicoutputpath(opts, publicpath, uid);
   };
@@ -54,6 +98,8 @@ var scrounge_depnode = module.exports = (function (o) {
         publicpath = opts.isconcat ?
           scrounge_file.setbasename(filepath, rootname) : filepath;
 
+    publicpath = o.setpublicextn(opts, publicpath, rootname);    
+
     return scrounge_file.setoutputpathreal(opts, publicpath, uid);
   };
 
@@ -62,13 +108,13 @@ var scrounge_depnode = module.exports = (function (o) {
     if (opts.isconcat) {
       return [
         scrounge_elem.getincludetag(
-          o.setpublicoutputpath(opts, depnodearr[0], rootname)
+          opts, o.setpublicoutputpath(opts, depnodearr[0], rootname)
         )
       ];
     } else {
       return depnodearr.map(function (node) {
         return scrounge_elem.getincludetag(
-          o.setpublicoutputpath(opts, node, rootname)
+          opts, o.setpublicoutputpath(opts, node, rootname)
         );
       }).reverse();
     }

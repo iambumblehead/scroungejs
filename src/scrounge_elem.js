@@ -1,5 +1,5 @@
 // Filename: scrounge_elem.js  
-// Timestamp: 2015.12.08-00:00:41 (last modified)
+// Timestamp: 2015.12.19-19:50:38 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
 var path = require('path'),
@@ -16,16 +16,20 @@ var scrounge_elem = module.exports = (function (o) {
   o.elemrootre = /root="([\s\S]*?)"/;
   o.elemtypere = /type="(\.[cj]ss?)?"/;
   
-  o.getincludetag = function (filepath) {
+  o.getincludetag = function (opts, filepath) {
     var extn = path.extname(filepath),
         include;
 
-    if (!/.css|.js/.test(extn)) {
-      throw new Error('Invalid type, ' + extn);
-    } else if (extn === '.css') {
+    if (opts.cssextnarr.find(function (cssextn) {
+      return cssextn === extn;
+    })) {
       include = o.includecsstpl;
-    } else if (extn === '.js') {
-      include = o.includejstpl;
+    } else if (opts.jsextnarr.find(function (jsextn) {
+      return jsextn === extn;
+    })) {
+      include = o.includejstpl;      
+    } else {
+      throw new Error('Invalid type, ' + extn);
     }
 
     return include.replace(/\$/, filepath);

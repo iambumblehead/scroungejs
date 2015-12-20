@@ -1,5 +1,5 @@
 // Filename: scrounge.js  
-// Timestamp: 2015.12.08-12:10:07 (last modified)
+// Timestamp: 2015.12.19-19:19:37 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
 var fs = require('fs'),
@@ -24,6 +24,8 @@ var scrounge = module.exports = (function (o) {
   };
   
   // returned object uses rootnames as named-properties defined w/ rootarr
+  //
+  // existance of template and stylesheet files is checked here
   o.buildrootobj = function (opts, rootarr, fn) {
     scrounge_root.getrootarrasobj(opts, rootarr, fn);
   };

@@ -1,5 +1,5 @@
 // Filename: scrounge_root.js  
-// Timestamp: 2015.12.17-01:36:07 (last modified)
+// Timestamp: 2015.12.19-20:26:13 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var path = require('path'),
@@ -77,10 +77,10 @@ var scrounge_root = module.exports = (function (o) {
         if (rootextn === '.js') {
           deparrobj[rootname] = jsdeparrobj[rootname];
           next(rootarr, ++x, len, jsdeparrobj, deparrobj);
-        } else {
-          scrounge_depnode.getarrastype(jsdeparr, rootextn, function (err, deparr) {
+        } else if (rootextn === '.css') {
+          scrounge_depnode.getarrastypearr(jsdeparr, opts.cssextnarr, function (err, deparr) {
             if (err) return fn(err);
-            
+
             deparrobj[rootname] = deparr;
             next(rootarr, ++x, len, jsdeparrobj, deparrobj);
           });
@@ -88,8 +88,6 @@ var scrounge_root = module.exports = (function (o) {
       }(rootarr, 0, rootarr.length, jsdeparrobj, {}));
     });
   };
-
-  
 
   // matches should be build and constructed ahead of this point,
   // to be reused for write at basepage
@@ -99,11 +97,20 @@ var scrounge_root = module.exports = (function (o) {
         deparr = graphobj[rootname];
 
     var nodewrite = function (opts, node, rootname, content, fn) {
-      var filepath = scrounge_depnode.setpublicoutputpathreal(opts, node, rootname);
-      
+      var filepath = scrounge_depnode.setpublicoutputpathreal(opts, node, rootname),
+          rootextn = path.extname(rootname),
+          fileextn = opts.jsextnarr.find(function (extn) {
+            return extn === rootextn;
+          }) || opts.cssextnarr.find(function (extn) {
+            return extn === rootextn;
+          });
+
+      filepath = scrounge_file.setextn(filepath, fileextn);
+
       scrounge_file.write(opts, filepath, content, fn);
     };    
-    
+
+
     if (opts.isconcat) {
       (function nextdep (dep, x, contentarr) {
         if (!x--) return nodewrite(opts, dep[0], rootname, contentarr.join('\n'), fn);       
