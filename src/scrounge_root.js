@@ -1,5 +1,5 @@
 // Filename: scrounge_root.js  
-// Timestamp: 2015.12.15-10:47:57 (last modified)
+// Timestamp: 2015.12.17-01:36:07 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var path = require('path'),
@@ -138,11 +138,15 @@ var scrounge_root = module.exports = (function (o) {
 
   o.writearr = function (opts, rootnamearr, graphobj, fn) {
     if (rootnamearr.length) {
-      o.write(opts, rootnamearr[0], graphobj, function (err, res) {
-        if (err) return fn(err);
-        
+      if (graphobj[rootnamearr[0]].length) {
+        o.write(opts, rootnamearr[0], graphobj, function (err, res) {
+          if (err) return fn(err);
+          
+          o.writearr(opts, rootnamearr.slice(1), graphobj, fn);
+        });
+      } else {
         o.writearr(opts, rootnamearr.slice(1), graphobj, fn);
-      });
+      }
     } else {
       fn(null);
     }

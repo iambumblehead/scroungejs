@@ -1,10 +1,11 @@
 // Filename: scrounge_adapt.js  
-// Timestamp: 2015.12.14-10:57:32 (last modified)
+// Timestamp: 2015.12.19-17:08:36 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var umd = require('umd'),
     path = require('path'),
     less = require('less'),
+    umdname = require('umdname'),
     cleancss = require('clean-css'),
     uglifyjs = require('uglify-js'),
     moduletype = require('moduletype'),
@@ -44,6 +45,8 @@ var scrounge_adapt = module.exports = (function (o) {
 
     if (skip) {
       umdstr = str;
+    } else if (moduletype.umd(str)) {
+      str = umdname(str, modname);
     } else if (moduletype.cjs(str)) {
       umdstr = umd(modname, str, { commonJS : true });
       umdstr = replacerequires(umdstr, depmod.get('outarr').reduce(function (prev, cur) {
