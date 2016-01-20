@@ -1,5 +1,5 @@
 // Filename: scrounge.js  
-// Timestamp: 2015.12.19-23:52:35 (last modified)
+// Timestamp: 2016.01.20-13:33:15 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
 var fs = require('fs'),
@@ -81,9 +81,17 @@ var scrounge = module.exports = (function (o) {
         basepagein = opts.basepagein;
     
     if (basepage && scrounge_file.isexist(basepagein)) {
-      scrounge_basepage.getrootnamearr(opts, basepagein, fn);
+      scrounge_basepage.getrootnamearr(opts, basepagein, function (err, res) {
+        if (err) return fn(err);
+
+        fn(null, res.reduce(function (roots, curval) {
+          if (roots.indexOf(curval) === -1) roots.push(curval);
+
+          return roots;
+        }, opts.treearr));
+      });
     } else {
-      fn(null, []);
+      fn(null, opts.treearr);
     }
   };
 
@@ -97,7 +105,7 @@ var scrounge = module.exports = (function (o) {
 
     o.readbasepage(opts, function (err, rootsarr) {
       if (err) throw new Error(err);
-      
+
       o.buildrootobj(opts, rootsarr, function (err, rootobj) {
         if (err) throw new Error(err);
 
