@@ -71,7 +71,8 @@ var scrounge_opts = module.exports = (function (o) {
     finopt.isupdate   = o.getasbool(opt.isupdateonly, false);
     finopt.istpl      = o.getasbool(opt.istpl, false);    
     finopt.browser    = o.getasbool(opt.isbrowser, true);    
-      
+    finopt.iscircular = o.getasbool(opt.iscircular, false);
+    
     finopt.basepage   = o.getasstring(opt.basepage, '');
     finopt.basepagein = o.getasstring(opt.basepagein, finopt.basepage);    
 
