@@ -1,5 +1,5 @@
 // Filename: scrounge_opts.js  
-// Timestamp: 2015.12.19-23:35:28 (last modified)
+// Timestamp: 2016.02.11-11:51:52 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var fs = require('fs'),
@@ -64,6 +64,7 @@ var scrounge_opts = module.exports = (function (o) {
     finopt.treearr    = o.getasarr(opt.treearr, []);
     finopt.skippatharr = o.getasarr(opt.skippatharr, []);    
     finopt.treetype   = /full/.test(opt.treetype) ? 'full' : 'small';
+    finopt.embedarr   = o.getasarr(opt.embedarr, []);
     
     finopt.isconcat   = o.getasbool(opt.isconcatenated, true);
     finopt.iscompress = o.getasbool(opt.iscompressed, false);
