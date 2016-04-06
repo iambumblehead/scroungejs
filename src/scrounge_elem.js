@@ -1,10 +1,8 @@
 // Filename: scrounge_elem.js  
-// Timestamp: 2015.12.19-19:50:38 (last modified)
+// Timestamp: 2016.04.06-15:18:24 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
-var path = require('path'),
-
-    scrounge_file = require('./scrounge_file');
+var path = require('path');
 
 var scrounge_elem = module.exports = (function (o) {
 
@@ -31,6 +29,10 @@ var scrounge_elem = module.exports = (function (o) {
     } else {
       throw new Error('Invalid type, ' + extn);
     }
+
+    if (opts.version) {
+      filepath += '?version=' + opts.version;
+    }    
 
     return include.replace(/\$/, filepath);
   };
