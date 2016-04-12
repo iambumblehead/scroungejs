@@ -1,5 +1,5 @@
 // Filename: scrounge_basepage.js  
-// Timestamp: 2015.12.08-13:28:33 (last modified)
+// Timestamp: 2016.04.12-14:14:10 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
 var fs = require('fs'),
@@ -50,6 +50,9 @@ var scrounge_basepage = module.exports = (function (o) {
         ));
       }, content);
 
+
+      newcontent = newcontent.replace(/:scrounge.version/gi, opts.version);
+      
       scrounge_file.write(opts, filepath, newcontent, fn);
     });
   };
