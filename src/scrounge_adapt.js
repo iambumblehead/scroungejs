@@ -1,5 +1,5 @@
 // Filename: scrounge_adapt.js  
-// Timestamp: 2016.04.12-16:10:52 (last modified)
+// Timestamp: 2016.04.14-14:12:30 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var umd = require('umd'),
@@ -61,9 +61,9 @@ var scrounge_adapt = module.exports = (function (o) {
         }),
         umdstr;
 
-    
     if (opts.ises2015 && !skip) {
       str = babel.transform(str, {
+        compact: false,
         presets: [
           babelpresetes2015
         ]

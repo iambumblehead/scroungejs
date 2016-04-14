@@ -1,5 +1,5 @@
 // Filename: scrounge_root.js  
-// Timestamp: 2015.12.19-23:10:50 (last modified)
+// Timestamp: 2016.04.14-14:14:22 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var path = require('path'),
@@ -7,6 +7,7 @@ var path = require('path'),
 
     scrounge_log = require('./scrounge_log'),
     scrounge_file = require('./scrounge_file'),
+    scrounge_prepend = require('./scrounge_prepend'),
     scrounge_depnode = require('./scrounge_depnode');
 
 var scrounge_root = module.exports = (function (o) {
@@ -56,8 +57,16 @@ var scrounge_root = module.exports = (function (o) {
         if (err) return fn(err);
 
         graphsobj[graphnamearr[x]] = deparr;
-        
-        return nextgraph(graphnamearr, x, graphsobj);        
+
+        scrounge_prepend.getprenodearr(opts, graphnamearr[x], function (err, prenodearr) {
+          if (err) return fn(err);
+
+          if (prenodearr) {
+            graphsobj[graphnamearr[x]] = deparr.concat(prenodearr);
+          }
+          
+          nextgraph(graphnamearr, x, graphsobj);
+        });
       });
     }(graphnamearr, graphnamearr.length, {}));
   };
@@ -76,6 +85,7 @@ var scrounge_root = module.exports = (function (o) {
         
         if (rootextn === '.js') {
           deparrobj[rootname] = jsdeparrobj[rootname];
+
           next(rootarr, ++x, len, jsdeparrobj, deparrobj);
         } else if (rootextn === '.css') {
           scrounge_depnode.getarrastypearr(jsdeparr, opts.cssextnarr, function (err, deparr) {
@@ -95,7 +105,7 @@ var scrounge_root = module.exports = (function (o) {
     var rootextn = path.extname(rootname),
         graphname = scrounge_file.setextn(rootname, '.js'),
         deparr = graphobj[rootname];
-
+    
     var nodewrite = function (opts, node, rootname, content, fn) {
       var filepath = scrounge_depnode.setpublicoutputpathreal(opts, node, rootname),
           rootextn = path.extname(rootname),
@@ -105,13 +115,11 @@ var scrounge_root = module.exports = (function (o) {
             return extn === rootextn;
           }) || rootextn;
 
-
+      
       filepath = scrounge_file.setextn(filepath, fileextn);
-
       scrounge_file.write(opts, filepath, content, fn);
     };    
-
-
+        
     if (opts.isconcat) {
       (function nextdep (dep, x, contentarr) {
         if (!x--) return nodewrite(opts, dep[0], rootname, contentarr.join('\n'), fn);       
@@ -145,6 +153,7 @@ var scrounge_root = module.exports = (function (o) {
   };
 
   o.writearr = function (opts, rootnamearr, graphobj, fn) {
+
     if (rootnamearr.length) {
       if (graphobj[rootnamearr[0]].length) {
         o.write(opts, rootnamearr[0], graphobj, function (err, res) {
