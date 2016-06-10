@@ -1,12 +1,12 @@
 // Filename: scrounge_adapt.js  
-// Timestamp: 2016.04.14-14:12:30 (last modified)
+// Timestamp: 2016.06.10-03:27:17 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var umd = require('umd'),
     path = require('path'),
     less = require('less'),
     babel = require('babel-core'),
-    babelpresetes2015 = require('babel-preset-es2015'),
+    babelpresetes2015 = require('babel-preset-es2015-script'),
     umdname = require('umdname'),
     cleancss = require('clean-css'),
     uglifyjs = require('uglify-js'),
