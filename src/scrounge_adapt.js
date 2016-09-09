@@ -1,5 +1,5 @@
 // Filename: scrounge_adapt.js  
-// Timestamp: 2016.07.31-16:00:33 (last modified)
+// Timestamp: 2016.09.09-12:21:06 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var umd = require('umd'),
@@ -98,11 +98,8 @@ var scrounge_adapt = module.exports = (function (o) {
   };
   
   o.css = function (opts, depmod, str, fn) {
-    if (opts.iscompress) {
-      fn(null, new cleancss().minify(str).styles);
-    } else {
-      fn(null, str);
-    }
+    fn(null, opts.iscompress ?
+       new cleancss().minify(str).styles : str);
   };
 
   o.less = function (opts, depmod, str, fn) {

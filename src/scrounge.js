@@ -1,5 +1,5 @@
 // Filename: scrounge.js  
-// Timestamp: 2016.01.20-13:33:15 (last modified)
+// Timestamp: 2016.09.08-11:12:55 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
 var fs = require('fs'),
@@ -95,6 +95,13 @@ var scrounge = module.exports = (function (o) {
     }
   };
 
+  o.throwerror = function (err, fn) {
+    err = new Error(err);
+    setTimeout(function () { throw err; });
+
+    return fn(err);
+  };
+
   o.build = function (opts, fn) {
     var datebgn = new Date();
 
@@ -104,19 +111,19 @@ var scrounge = module.exports = (function (o) {
     scrounge_log.start(opts, datebgn);
 
     o.readbasepage(opts, function (err, rootsarr) {
-      if (err) throw new Error(err);
+      if (err) return o.throwerror(err, fn);
 
       o.buildrootobj(opts, rootsarr, function (err, rootobj) {
-        if (err) throw new Error(err);
+        if (err) return o.throwerror(err, fn);
 
         o.writeroots(opts, rootsarr, rootobj, function (err, nodearr) {
-          if (err) throw new Error(err);
+          if (err) return o.throwerror(err, fn);
 
           o.copyroottpl(opts, rootobj, function (err) {
-            if (err) throw new Error(err);            
+            if (err) return o.throwerror(err, fn);
 
             o.writebasepage(opts, rootsarr, rootobj, function (err, res) {
-              if (err) throw new Error(err);
+              if (err) return o.throwerror(err, fn);
 
               scrounge_log.finish(opts, simpletime.getElapsedTimeFormatted(datebgn, new Date()));
               
