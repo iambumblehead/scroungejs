@@ -93,7 +93,6 @@ var scrounge_adapt = module.exports = (function (o) {
         fn(e);
       }
     } else {
-      console.log('skip filepath', filepath, skip);
       fn(null, umdstr);
     }
   };
