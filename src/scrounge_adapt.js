@@ -1,5 +1,5 @@
 // Filename: scrounge_adapt.js  
-// Timestamp: 2016.10.17-10:59:44 (last modified)
+// Timestamp: 2016.11.21-15:50:07 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var umd = require('umd'),
@@ -9,7 +9,7 @@ var umd = require('umd'),
     babelpresetes2015 = require('babel-preset-es2015-script'),
     umdname = require('umdname'),
     cleancss = require('clean-css'),
-    uglifyjs = require('uglify-js'),
+    //uglifyjs = require('uglify-js'),
     bcjstocjs = require('bcjstocjs'),    
     moduletype = require('moduletype'),
     replacerequires = require('replace-requires'),
@@ -61,12 +61,14 @@ var scrounge_adapt = module.exports = (function (o) {
         }),
         umdstr;
 
-    if (opts.ises2015 && !skip) {
+    //if (opts.ises2015 && !skip) {
+    if (!skip) {
       str = babel.transform(str, {
-        compact: false,
-        presets: [
+        //compact: false,
+        compact: opts.iscompress && !skip,//true,
+        presets: opts.ises2015 ? [
           babelpresetes2015
-        ]
+        ] : []
       }).code;
     }
 
@@ -88,8 +90,11 @@ var scrounge_adapt = module.exports = (function (o) {
 
     if (opts.iscompress && !skip) {
       try {
-        fn(null, uglifyjs.minify(umdstr, { fromString: true }).code);
+        fn(null, umdstr);
+        //fn(null, uglifyjs.minify(umdstr, { fromString: true }).code);
       } catch (e) {
+        console.error('[!!!] parse error ' + filepath);
+        
         fn(e);
       }
     } else {
