@@ -44,11 +44,11 @@ var scrounge_adapt = module.exports = (function (o) {
       fn(null, str);
     }
   };
-  
+
   o.uidsanitised = function (uid) {
     return uid
       .replace(/\.[^\.]*$/, '')     // remove extension from uid
-      .replace(/-|\//gi, '_')        // remove slash and dash
+      .replace(/-|\/|\\/gi, '_')        // remove slash and dash
       .replace(/[^a-z0-9_]+/gi, '');
   };
 

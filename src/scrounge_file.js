@@ -17,6 +17,10 @@ var scrounge_file = module.exports = (function (o) {
       path.basename(filename, path.extname(filename)) + extn);
   };
 
+  o.setposixbasename = function (filepath, uid) {
+    return o.setbasename(filepath, uid).replace(/\\/g, '/');
+  };  
+
   o.setbasename = function (filepath, uid) {
     var dirname = path.dirname(filepath),
         extname = path.extname(filepath);
@@ -26,7 +30,7 @@ var scrounge_file = module.exports = (function (o) {
 
   o.setpublicpath = function (opts, filepath, uid) {
     if (!opts.isconcat) {
-      filepath = o.setbasename(filepath, uid);
+      filepath = o.setposixbasename(filepath, uid);
     }
     
     return pathpublic.get(filepath, opts.publicpath);    
