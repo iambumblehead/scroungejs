@@ -9,26 +9,24 @@ var fs = require('fs'),
     scrounge_adapt = require('./scrounge_adapt'),
     scrounge_log = require('./scrounge_log');
 
-var scrounge_file = module.exports = (function (o) {
+var scrounge_file = module.exports = (o => {
 
-  o.setextn = function (filename, extn) {
-    return path.join(
+  o.setextn = (filename, extn) => 
+    path.join(
       path.dirname(filename),
       path.basename(filename, path.extname(filename)) + extn);
-  };
 
-  o.setposixbasename = function (filepath, uid) {
-    return o.setbasename(filepath, uid).replace(/\\/g, '/');
-  };  
+  o.setposixbasename = (filepath, uid) =>
+    o.setbasename(filepath, uid).replace(/\\/g, '/');
 
-  o.setbasename = function (filepath, uid) {
+  o.setbasename = (filepath, uid) => {
     var dirname = path.dirname(filepath),
         extname = path.extname(filepath);
 
     return path.join(dirname, scrounge_adapt.uidsanitised(uid) + extname);
   };  
 
-  o.setpublicpath = function (opts, filepath, uid) {
+  o.setpublicpath = (opts, filepath, uid) => {
     if (!opts.isconcat) {
       filepath = o.setposixbasename(filepath, uid);
     }
@@ -36,13 +34,12 @@ var scrounge_file = module.exports = (function (o) {
     return pathpublic.get(filepath, opts.publicpath);    
   };
 
-  o.setpublicoutputpath = function (opts, filepath, uid) {
-    return o.setpublicpath(opts, path.join(
+  o.setpublicoutputpath = (opts, filepath, uid) =>
+    o.setpublicpath(opts, path.join(
       opts.outputpath, path.basename(filepath)
     ), uid);
-  };
 
-  o.setoutputpathreal = function (opts, filepath, uid) {
+  o.setoutputpathreal = (opts, filepath, uid) => {
     if (!opts.isconcat && !/.mustache$/.test(filepath)) {
       filepath = o.setbasename(filepath, uid);
     }
@@ -50,13 +47,10 @@ var scrounge_file = module.exports = (function (o) {
     return path.join(opts.outputpath, path.basename(filepath));
   };  
 
-  o.setoutputpath = function (opts, filepath) {
-    return path.join(
-      opts.outputpath, path.basename(filepath)
-    );
-  };  
+  o.setoutputpath = (opts, filepath) =>
+    path.join(opts.outputpath, path.basename(filepath));
 
-  o.isexist = function (filepath) {
+  o.isexist = filepath => {
     var isexists = false;
     
     try {
@@ -66,28 +60,30 @@ var scrounge_file = module.exports = (function (o) {
     return isexists;
   };
 
-  o.read = function (opts, filepath, fn) {
+  o.read = (opts, filepath, fn) =>
     fs.readFile(path.resolve(filepath), 'utf-8', fn);
-  };
 
-  o.write = function (opts, filepath, content, fn) {
-    scrounge_log.write(opts, filepath);
-
-    mkdirp(path.dirname(filepath), function (err) {
+  o.writesilent = (opts, filepath, content, fn) =>
+    mkdirp(path.dirname(filepath), err => {
       if (err) return fn(err);
       
       fs.writeFile(path.resolve(filepath), content, fn);
     });
+
+  o.write = (opts, filepath, content, fn) => {
+    scrounge_log.write(opts, filepath);
+
+    o.writesilent(opts, filepath, content, fn);
   };
 
-  o.copy = function (opts, filepathin, filepathout, fn) {
-    o.read(opts, filepathin, function (err, res) {
+  o.copy = (opts, filepathin, filepathout, fn) =>
+    o.read(opts, filepathin, (err, res) => {
       if (err) return fn(err);
 
       o.write(opts, filepathout, res, fn);
     });
-  };
+
 
   return o;
   
-}({}));
+})({});

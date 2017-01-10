@@ -45,20 +45,19 @@ var scrounge_adapt = module.exports = (function (o) {
     }
   };
 
-  o.uidsanitised = function (uid) {
-    return uid
+  o.uidsanitised = uid =>
+    uid
       .replace(/\.[^\.]*$/, '')     // remove extension from uid
       .replace(/-|\/|\\/gi, '_')        // remove slash and dash
       .replace(/[^a-z0-9_]+/gi, '');
-  };
 
-  o.js = function (opts, depmod, str, fn) {
+  o.js = (opts, depmod, str, fn) => {
     var filepath = depmod.get('filepath'),
         modname = o.uidsanitised(depmod.get('uid')),
         outarr = depmod.get('outarr'),
-        skip = opts.skippatharr.some(function (path) {
-          return filepath.indexOf(path) !== -1;
-        }),
+        skip = opts.skippatharr.some(path =>
+          filepath.indexOf(path) !== -1
+        ),
         umdstr;
 
     //if (opts.ises2015 && !skip) {
@@ -102,15 +101,15 @@ var scrounge_adapt = module.exports = (function (o) {
     }
   };
   
-  o.css = function (opts, depmod, str, fn) {
+  o.css = (opts, depmod, str, fn) => {
     fn(null, opts.iscompress ?
        new cleancss().minify(str).styles : str);
   };
 
-  o.less = function (opts, depmod, str, fn) {
+  o.less = (opts, depmod, str, fn) => {
     less.render(str, {
       filename : path.resolve(depmod.get('filepath'))
-    }, function (err, output) {
+    }, (err, output) => {
       err ? fn(err) : o.css(opts, depmod, output.css, fn);
     });
   };

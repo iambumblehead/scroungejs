@@ -1,33 +1,32 @@
 // Filename: scrounge.js  
-// Timestamp: 2016.09.08-11:12:55 (last modified)
+// Timestamp: 2017.01.09-13:54:46 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
-var fs = require('fs'),
-    path = require('path'),
-    optfn = require('optfn'),
-    simpletime = require('simpletime'),
+const fs = require('fs'),
+      path = require('path'),
+      optfn = require('optfn'),
+      simpletime = require('simpletime'),
 
-    scrounge_basepage = require('./scrounge_basepage'),
-    scrounge_depnode = require('./scrounge_depnode'),
-    scrounge_root = require('./scrounge_root'),    
-    scrounge_file = require('./scrounge_file'),    
-    scrounge_opts = require('./scrounge_opts'),
-    scrounge_log = require('./scrounge_log');
+      scrounge_basepage = require('./scrounge_basepage'),
+      scrounge_depnode = require('./scrounge_depnode'),
+      scrounge_cache = require('./scrounge_cache'),
+      scrounge_root = require('./scrounge_root'),    
+      scrounge_file = require('./scrounge_file'),    
+      scrounge_opts = require('./scrounge_opts'),
+      scrounge_log = require('./scrounge_log');
 
-var scrounge = module.exports = (function (o) {
+const scrounge = module.exports = (o => {
 
-  o = function (opts, fn) {
+  o = (opts, fn) => 
     o.build(opts, fn);
-  };
   
-  o.writeroots = function (opts, rootarr, rootobj, fn) {
+  o.writeroots = (opts, rootarr, rootobj, fn) =>
     scrounge_root.writearr(opts, rootarr, rootobj, fn);
-  };
 
   // tpl files aren't processed in the way scripts and stylesheets are
   // tpl deparr, adjacent to js deparr, is created any nodes are simply copied
   // to outputpath
-  o.copyroottpl = function (opts, rootobj, fn) {
+  o.copyroottpl = (opts, rootobj, fn) => {
     //
     // by default, this feature switch off
     //
@@ -54,17 +53,16 @@ var scrounge = module.exports = (function (o) {
   // returned object uses rootnames as named-properties defined w/ rootarr
   //
   // existance of template and stylesheet files is checked here
-  o.buildrootobj = function (opts, rootarr, fn) {
+  o.buildrootobj = (opts, rootarr, fn) =>
     scrounge_root.getrootarrasobj(opts, rootarr, fn);
-  };
 
   // if baseage does not exist, skip read/write with no failure
-  o.writebasepage = function (opts, rootarr, rootobj, fn) {
-    var basepage = opts.basepage,
-        basepagein = opts.basepagein;
+  o.writebasepage = (opts, rootarr, rootobj, fn) => {
+    const basepage = opts.basepage,
+          basepagein = opts.basepagein;
 
     if (basepage && !scrounge_file.isexist(basepage)) {
-      scrounge_file.copy(opts, basepagein, basepage, function (err, res) {
+      scrounge_file.copy(opts, basepagein, basepage, (err, res) => {
         if (err) return fn(err);
         
         scrounge_basepage.writeelemarr(opts, basepage, rootarr, rootobj, fn);
@@ -76,15 +74,15 @@ var scrounge = module.exports = (function (o) {
     }
   };
   
-  o.readbasepage = function (opts, fn) {
-    var basepage = opts.basepage,
-        basepagein = opts.basepagein;
+  o.readbasepage = (opts, fn) => {
+    const basepage = opts.basepage,
+          basepagein = opts.basepagein;
     
     if (basepage && scrounge_file.isexist(basepagein)) {
-      scrounge_basepage.getrootnamearr(opts, basepagein, function (err, res) {
+      scrounge_basepage.getrootnamearr(opts, basepagein, (err, res) => {
         if (err) return fn(err);
 
-        fn(null, res.reduce(function (roots, curval) {
+        fn(null, res.reduce((roots, curval) => {
           if (roots.indexOf(curval) === -1) roots.push(curval);
 
           return roots;
@@ -95,14 +93,37 @@ var scrounge = module.exports = (function (o) {
     }
   };
 
-  o.throwerror = function (err, fn) {
+  o.throwerror = (err, fn) => {
     err = new Error(err);
-    setTimeout(function () { throw err; });
+    setTimeout(() => { throw err; });
 
     return fn(err);
   };
 
-  o.build = function (opts, fn) {
+  o.updatedestfile = (opts, srcfilename, fn) => {
+    fn = optfn(fn);
+    opts = scrounge_opts(opts);
+
+    if (opts.isconcat === false &&
+        scrounge_opts.isfilenamesupportedtype(opts, srcfilename)) {
+      
+      o.readbasepage(opts, (err, rootsarr) => {
+        if (err) return o.throwerror(err, fn);
+
+        scrounge_root.getfilenameasnode(srcfilename, (err, node) => {
+          if (err) return o.throwerror(err, fn);
+          
+          scrounge_cache.recoverrootarrcachemapnode(opts, rootsarr, node, (err, rootnodescached) => {
+            if (err) return o.throwerror(err, fn);
+            
+            o.writeroots(opts, rootsarr, rootnodescached, fn);
+          });
+        });
+      });
+    }
+  };
+
+  o.buildcachemap = (opts, fn) => {
     var datebgn = new Date();
 
     fn = optfn(fn);
@@ -110,23 +131,50 @@ var scrounge = module.exports = (function (o) {
     
     scrounge_log.start(opts, datebgn);
 
-    o.readbasepage(opts, function (err, rootsarr) {
+    o.readbasepage(opts, (err, rootsarr) => {
       if (err) return o.throwerror(err, fn);
 
-      o.buildrootobj(opts, rootsarr, function (err, rootobj) {
+      o.buildrootobj(opts, rootsarr, (err, rootobj) => {
         if (err) return o.throwerror(err, fn);
 
-        o.writeroots(opts, rootsarr, rootobj, function (err, nodearr) {
+        scrounge_cache.buildmaps(opts, rootsarr, rootobj, (err, res) => {
+          if (err) return o.throwerror(err, fn);
+          
+          scrounge_log.finish(opts, simpletime.getElapsedTimeFormatted(datebgn, new Date()));
+        });
+      });
+    });
+  };
+
+  o.build = (opts, fn) => {
+    var datebgn = new Date();
+
+    fn = optfn(fn);
+    opts = scrounge_opts(opts);
+    
+    scrounge_log.start(opts, datebgn);
+
+    o.readbasepage(opts, (err, rootsarr) => {
+      if (err) return o.throwerror(err, fn);
+
+      o.buildrootobj(opts, rootsarr, (err, rootobj) => {
+        if (err) return o.throwerror(err, fn);
+
+        if (opts.iscachemap) {
+          scrounge_cache.buildmaps(opts, rootsarr, rootobj);
+        }
+        
+        o.writeroots(opts, rootsarr, rootobj, (err, nodearr) => {
           if (err) return o.throwerror(err, fn);
 
-          o.copyroottpl(opts, rootobj, function (err) {
+          o.copyroottpl(opts, rootobj, (err) => {
             if (err) return o.throwerror(err, fn);
 
-            o.writebasepage(opts, rootsarr, rootobj, function (err, res) {
+            o.writebasepage(opts, rootsarr, rootobj, (err, res) => {
               if (err) return o.throwerror(err, fn);
 
               scrounge_log.finish(opts, simpletime.getElapsedTimeFormatted(datebgn, new Date()));
-              
+
               fn(err, res);
             });
           });
@@ -137,4 +185,4 @@ var scrounge = module.exports = (function (o) {
 
   return o;
   
-}());
+})({});

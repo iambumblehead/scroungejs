@@ -72,11 +72,11 @@ var scrounge_depnode = module.exports = (function (o) {
   // extension returned may be '.css'  
   o.setpublicextn = function (opts, filepath, rootname) {
     var rootextn = path.extname(rootname),
-        fileextn = opts.jsextnarr.find(function (extn) {
-          return extn === rootextn;
-        }) || opts.cssextnarr.find(function (extn) {
-          return extn === rootextn;
-        }) || rootextn;
+        fileextn = opts.jsextnarr.find(extn => 
+          extn === rootextn
+        ) || opts.cssextnarr.find(extn => 
+          extn === rootextn
+        ) || rootextn;
 
     return scrounge_file.setextn(filepath, fileextn);
   };

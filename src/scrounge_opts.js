@@ -46,6 +46,13 @@ var scrounge_opts = module.exports = (function (o) {
     return path.join(dir, base + '.tpl' + extn);
   };
 
+  o.isfilenamesupportedtype = (opts, filename) => {
+    const fileextn = path.extname(filename);
+    
+    return opts.jsextnarr.find(extn => extn === fileextn)
+      || opts.cssextnarr.find(extn => extn = fileextn);
+  };
+
   o.get = function (opt) {
     var finopt = {};
 
@@ -76,6 +83,7 @@ var scrounge_opts = module.exports = (function (o) {
     finopt.isupdate   = o.getasbool(opt.isupdateonly, false);
     finopt.istpl      = o.getasbool(opt.istpl, false);
     finopt.ises2015   = o.getasbool(opt.ises2015, true);
+    finopt.iscachemap = o.getasbool(opt.iscachemap, true);
     finopt.browser    = o.getasbool(opt.isbrowser, true);    
     finopt.iscircular = o.getasbool(opt.iscircular, false);
     
