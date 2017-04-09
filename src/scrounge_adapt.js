@@ -1,5 +1,5 @@
 // Filename: scrounge_adapt.js  
-// Timestamp: 2016.11.21-15:50:07 (last modified)
+// Timestamp: 2017.04.09-02:10:03 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var umd = require('umd'),
@@ -9,7 +9,7 @@ var umd = require('umd'),
     babelpresetes2015 = require('babel-preset-es2015-script'),
     umdname = require('umdname'),
     cleancss = require('clean-css'),
-    //uglifyjs = require('uglify-js'),
+    uglifyjs = require('uglify-js'),
     bcjstocjs = require('bcjstocjs'),    
     moduletype = require('moduletype'),
     replacerequires = require('replace-requires'),
@@ -17,19 +17,24 @@ var umd = require('umd'),
     scrounge_log = require('./scrounge_log');
 
 
-var scrounge_adapt = module.exports = (function (o) {
+// [01:58:47] Finished 'scrounge' after 7.11 s
+// [02:03:16] Finished 'scrounge' after 7.1 s
 
-  o = function (opts, depmod, str, fn) {
+
+
+var scrounge_adapt = module.exports = (o => {
+
+  o = (opts, depmod, str, fn) => {
     var filepath = depmod.get('filepath'),
         extname = path.extname(filepath).slice(1);
 
-    opts.embedarr.map(function (embed) {
+    opts.embedarr.map((embed) => {
       if (~filepath.indexOf(embed.filepath)) {
         str = embed.content + str;
       }
     });
 
-    opts.globalarr.map(function (global) {
+    opts.globalarr.map((global) => {
       // module namespace defined on user-given name 
       if (~filepath.indexOf(global.filepath)) {
         str += '\nif (typeof window === "object") window.:NAME = :UID;'
@@ -62,6 +67,8 @@ var scrounge_adapt = module.exports = (function (o) {
 
     //if (opts.ises2015 && !skip) {
     if (!skip) {
+      //str = uglifyjs.minify(str, { fromString: true }).code;
+
       str = babel.transform(str, {
         //compact: false,
         compact: opts.iscompress && !skip,//true,
@@ -77,7 +84,7 @@ var scrounge_adapt = module.exports = (function (o) {
       umdstr = umdname(str, modname);
     } else if (moduletype.cjs(str)) {
       umdstr = umd(modname, str, { commonJS : true });
-      umdstr = replacerequires(umdstr, depmod.get('outarr').reduce(function (prev, cur) {
+      umdstr = replacerequires(umdstr, depmod.get('outarr').reduce((prev, cur) => {
         return prev[cur.get('refname')] = o.uidsanitised(cur.get('uid')), prev;
       }, {}));
     } else if (moduletype.amd(str) || moduletype.esm(str)) {
@@ -116,4 +123,4 @@ var scrounge_adapt = module.exports = (function (o) {
   
   return o;
   
-}());
+})({});
