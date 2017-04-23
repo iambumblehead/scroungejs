@@ -1,8 +1,9 @@
 {
   "name": "scroungejs",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "license" : "MIT",
   "readmeFilename": "README.md",
+  "main" : "src/scrounge.js",
   "description": "compress, concatenate and/or timestamp your files as part of a build process for your web site.",
   "scripts" : {
     "test": "node node_modules/jasmine/bin/jasmine.js --verbose",
@@ -23,8 +24,10 @@
     "babel-core" : "^6.24.1",
     "babel-preset-es2015": "^6.3.13",    
     "babel-preset-es2015-script" : "^1.0.0",
-
+    "typescript": "2.1.4",
+    
     "clean-css": "^3.4.19",
+    "castas" : "^0.0.2",
     "archy" : "^1.0.0",
     "less" : "^2.7.2",
     "optfn" : "~0.0.x",    
@@ -32,7 +35,7 @@
     "moduletype" : "^0.0.5",
     "simpletime" : ">=0.1.0",
     "pathpublic" : "^0.0.7",    
-    "depgraph" : "^0.2.0",
+    "depgraph" : "^0.2.1",
     "umdname" : "^0.0.7",
     "bcjstocjs" : "^0.0.2",
     "mkdirp" : "~0.5.x",

@@ -1,5 +1,5 @@
 // Filename: scrounge_adapt.js  
-// Timestamp: 2017.04.15-14:25:13 (last modified)
+// Timestamp: 2017.04.23-12:16:35 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var umd = require('umd'),
@@ -11,6 +11,7 @@ var umd = require('umd'),
     cleancss = require('clean-css'),
     bcjstocjs = require('bcjstocjs'),    
     moduletype = require('moduletype'),
+    typescript = require('typescript'),
     replacerequires = require('replace-requires'),
     
     scrounge_log = require('./scrounge_log');
@@ -106,6 +107,12 @@ var scrounge_adapt = module.exports = (o => {
       fn(null, umdstr);
     }
   };
+
+  o.ts = (opts, depmod, str, fn) => {
+    let jsstr = typescript.transpileModule(str, opts.tsconfig || {}).outputText;
+
+    o.js(opts, depmod, jsstr, fn);
+  };  
   
   o.css = (opts, depmod, str, fn) => {
     fn(null, opts.iscompress ?

@@ -1,16 +1,16 @@
 // Filename: scrounge_root.js  
-// Timestamp: 2016.04.14-14:14:22 (last modified)
+// Timestamp: 2017.04.23-10:47:55 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-var path = require('path'),
-    depgraph = require('depgraph'),
+const path = require('path'),
+      depgraph = require('depgraph'),
 
-    scrounge_log = require('./scrounge_log'),
-    scrounge_file = require('./scrounge_file'),
-    scrounge_prepend = require('./scrounge_prepend'),
-    scrounge_depnode = require('./scrounge_depnode');
+      scrounge_log = require('./scrounge_log'),
+      scrounge_file = require('./scrounge_file'),
+      scrounge_prepend = require('./scrounge_prepend'),
+      scrounge_depnode = require('./scrounge_depnode');
 
-var scrounge_root = module.exports = (o => {
+const scrounge_root = module.exports = (o => {
 
   // converts rootname array to one of the specified type
   // filters the result so that all values are unique
@@ -23,14 +23,10 @@ var scrounge_root = module.exports = (o => {
     );
 
   // return rootname as a graph
-  o.getasgraph = (opts, rootname, fn) => {
-    if (!/.js/.test(path.extname(rootname))) {
-      throw new Error('.js file required for deparr');
-    }
-
-    depgraph.graph.getfromseedfile(
-      path.join(opts.inputpath, rootname), opts, fn);
-  };
+  o.getasgraph = (opts, rootpath, fn) => 
+    depgraph.graph.getfromseedfile(rootpath, opts, fn);
+    //depgraph.graph.getfromseedfile(
+    //  path.join(opts.inputpath, rootname), opts, fn);
 
   o.getfilenameasnode = (rootname, fn) => {
     if (!/.js/.test(path.extname(rootname))) {
@@ -38,11 +34,23 @@ var scrounge_root = module.exports = (o => {
     }
 
     depgraph.node.get_fromfilepath(rootname, fn);
-  };  
+  };
+
+  o.getrootnameaspath = (opts, rootname) => 
+    opts.jsextnarr.map(extn => (
+      scrounge_file.setextn(path.join(opts.inputpath, rootname), extn)
+    )).find(scrounge_file.isexist);
 
   // return rootname as a graph deparr
   o.getasdeparr = (opts, rootname, fn) => {
-    o.getasgraph(opts, rootname, (err, graph) => {
+    if (!/.js/.test(path.extname(rootname))) {
+      throw new Error('.js file required for deparr');
+    }
+
+    let rootpath = o.getrootnameaspath(opts, rootname);
+    console.log('rootpath', rootpath);
+
+    o.getasgraph(opts, rootpath, (err, graph) => {
       if (err) return fn(err);
       
       scrounge_log.printroot(
@@ -55,8 +63,8 @@ var scrounge_root = module.exports = (o => {
   };
   
   o.getrootarrasdeparr = (opts, rootarr, fn) => {
-    var graphnamearr = o.getnamearrastype(opts, rootarr, '.js');
-    
+    let graphnamearr = o.getnamearrastype(opts, rootarr, '.js');
+
     (function nextgraph (graphnamearr, x, graphsobj) {
       if (!x--) return fn(null, graphsobj);
 

@@ -1,44 +1,22 @@
 // Filename: scrounge_opts.js  
-// Timestamp: 2016.04.14-11:35:24 (last modified)
+// Timestamp: 2017.04.23-11:20:51 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 var fs = require('fs'),
     path = require('path'),
     util = require('util'),
-    
+    castas = require('castas'),
     scrounge_file = require('./scrounge_file');
 
-var scrounge_opts = module.exports = (function (o) {
+var scrounge_opts = module.exports = (o => {
 
-  o = function (opts) {
-    return o.get(opts);
-  };
+  o = opts =>
+    o.get(opts);
 
-  o.ispathexist = function (filepath) {
-    return scrounge_file.isexist(filepath);
-  };
+  o.ispathexist = filepath =>
+    scrounge_file.isexist(filepath);
 
-  o.getasbool = function (val, defval) {
-    if (String(val) === 'true')  defval = true;
-    if (String(val) === 'false') defval = false;    
-
-    return defval ? true : false;    
-  };
-
-  o.getasstring = function (val, defval) {
-    if (typeof val === 'string' && val) defval = val;
-
-    return String(defval);
-  };
-
-  o.getasarr = function (val, defval) {
-    if (Array.isArray(val))      defval = val;
-    if (typeof val === 'string') defval = val.split(',');
-
-    return defval;
-  };
-
-  o.getassuffixed = function (pathval, suffix) {
+  o.getassuffixed = (pathval, suffix) => {
     var extn = path.extname(pathval),
         base = path.basename(pathval, extn),
         dir = path.dirname(pathval);
@@ -53,59 +31,61 @@ var scrounge_opts = module.exports = (function (o) {
       || opts.cssextnarr.find(extn => extn = fileextn);
   };
 
-  o.get = function (opt) {
+  o.get = (opt) => {
     var finopt = {};
 
     // all options optional
     opt = opt || {};
     
-    finopt.inputpath  = o.getasstring(opt.inputpath, './');
-    finopt.outputpath = o.getasstring(opt.outputpath, './www_');
-    finopt.publicpath = o.getasstring(opt.publicpath, './');
-    finopt.version    = o.getasstring(opt.version, '');
+    finopt.inputpath  = castas.str(opt.inputpath, './');
+    finopt.outputpath = castas.str(opt.outputpath, './www_');
+    finopt.publicpath = castas.str(opt.publicpath, './');
+    finopt.version    = castas.str(opt.version, '');
 
     finopt.tplextnarr = ['.mustache'];
     finopt.cssextnarr = ['.css', '.less'];
-    finopt.jsextnarr  = ['.js'];    
-
-    finopt.typearr    = o.getasarr(opt.typearr, []);
-    finopt.treearr    = o.getasarr(opt.treearr, []);
-    finopt.skipdeparr  = o.getasarr(opt.skipdeparr, []);  // depgraph
-    finopt.skippatharr = o.getasarr(opt.skippatharr, []); // scrounge
+    finopt.jsextnarr  = ['.js', '.ts'];
+    
+    finopt.tsconfig   = opt.tsconfig || {};
+    finopt.typearr    = castas.arr(opt.typearr, []);
+    finopt.treearr    = castas.arr(opt.treearr, []);
+    finopt.skipdeparr  = castas.arr(opt.skipdeparr, []);  // depgraph
+    finopt.skippatharr = castas.arr(opt.skippatharr, []); // scrounge
     finopt.treetype   = /full/.test(opt.treetype) ? 'full' : 'small';
-    finopt.embedarr   = o.getasarr(opt.embedarr, []);
-    finopt.globalarr  = o.getasarr(opt.globalarr, []);
-    finopt.prependarr = o.getasarr(opt.prependarr, []);
+    finopt.embedarr   = castas.arr(opt.embedarr, []);
+    finopt.globalarr  = castas.arr(opt.globalarr, []);
+    finopt.prependarr = castas.arr(opt.prependarr, []);
     
-    finopt.isconcat   = o.getasbool(opt.isconcatenated, true);
-    finopt.iscompress = o.getasbool(opt.iscompressed, false);
-    finopt.issilent   = o.getasbool(opt.issilent, false);
-    finopt.isupdate   = o.getasbool(opt.isupdateonly, false);
-    finopt.istpl      = o.getasbool(opt.istpl, false);
-    finopt.ises2015   = o.getasbool(opt.ises2015, true);
-    finopt.iscachemap = o.getasbool(opt.iscachemap, true);
-    finopt.browser    = o.getasbool(opt.isbrowser, true);    
-    finopt.iscircular = o.getasbool(opt.iscircular, false);
     
-    finopt.basepage   = o.getasstring(opt.basepage, '');
-    finopt.basepagein = o.getasstring(opt.basepagein, finopt.basepage);    
+    finopt.isconcat   = castas.bool(opt.isconcatenated, true);
+    finopt.iscompress = castas.bool(opt.iscompressed, false);
+    finopt.issilent   = castas.bool(opt.issilent, false);
+    finopt.isupdate   = castas.bool(opt.isupdateonly, false);
+    finopt.istpl      = castas.bool(opt.istpl, false);
+    finopt.ises2015   = castas.bool(opt.ises2015, true);
+    finopt.iscachemap = castas.bool(opt.iscachemap, true);
+    finopt.browser    = castas.bool(opt.isbrowser, true);    
+    finopt.iscircular = castas.bool(opt.iscircular, false);
+    
+    finopt.basepage   = castas.str(opt.basepage, '');
+    finopt.basepagein = castas.str(opt.basepagein, finopt.basepage);    
 
     finopt.preprocessarr = [
-      ['.js', function (opts, filename, str, fn) {
+      ['.js', (opts, filename, str, fn) => {
         try {
           fn(null, uglifyjs.minify(str, { fromString: true }).code);
         } catch (e) {
           fn(e);
         }
       }],
-      ['.css', function (opts, filename, str, fn) {
-        fn(null, new cleancss().minify(str));
-      }],
-      ['.less', function (opts, filename, str, fn) {
-        return less.render(str, function (err, output) {
+      ['.css', (opts, filename, str, fn) => (
+        fn(null, new cleancss().minify(str)))
+      ],
+      ['.less', (opts, filename, str, fn) => (
+        less.render(str, (err, output) => {
           fn(err, err || new cleancss().minify(output.css));
-        });                
-      }]
+        }))
+      ]
     ];
 
     if (finopt.basepagein) {
@@ -123,4 +103,4 @@ var scrounge_opts = module.exports = (function (o) {
 
   return o;
 
-}());
+})();

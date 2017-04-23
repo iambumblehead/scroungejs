@@ -1,15 +1,15 @@
 // Filename: scrounge_file.js  
-// Timestamp: 2015.12.19-23:10:34 (last modified)
+// Timestamp: 2017.04.23-10:37:13 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
-var fs = require('fs'),
-    path = require('path'),
-    mkdirp = require('mkdirp'),
-    pathpublic = require('pathpublic'),
-    scrounge_adapt = require('./scrounge_adapt'),
-    scrounge_log = require('./scrounge_log');
+const fs = require('fs'),
+      path = require('path'),
+      mkdirp = require('mkdirp'),
+      pathpublic = require('pathpublic'),
+      scrounge_adapt = require('./scrounge_adapt'),
+      scrounge_log = require('./scrounge_log');
 
-var scrounge_file = module.exports = (o => {
+const scrounge_file = module.exports = (o => {
 
   o.setextn = (filename, extn) => 
     path.join(

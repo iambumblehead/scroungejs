@@ -1,5 +1,5 @@
 // Filename: scrounge.js  
-// Timestamp: 2017.01.09-13:54:46 (last modified)
+// Timestamp: 2017.04.23-10:19:59 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
 const fs = require('fs'),
@@ -31,13 +31,13 @@ const scrounge = module.exports = (o => {
     // by default, this feature switch off
     //
     if (opts.istpl) {
-      var jsrootarr = scrounge_root.getnamearrastype(opts, Object.keys(rootobj), '.js');
-      var custopts = Object.create(opts);
+      let jsrootarr = scrounge_root.getnamearrastype(opts, Object.keys(rootobj), '.js'),
+          custopts = Object.create(opts);
 
       custopts.isconcat = false;
       custopts.iscompress = false;    
       
-      scrounge_depnode.getarrastypearr(rootobj[jsrootarr[0]], opts.tplextnarr, function (err, deparr) {
+      scrounge_depnode.getarrastypearr(rootobj[jsrootarr[0]], opts.tplextnarr, (err, deparr) => {
         if (err) return fn(err);
 
         var rootname = scrounge_file.setextn(jsrootarr[0], opts.tplextnarr[0]);
