@@ -1,14 +1,14 @@
 // Filename: scrounge_opts.js  
-// Timestamp: 2017.04.23-11:20:51 (last modified)
+// Timestamp: 2017.04.23-14:16:05 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-var fs = require('fs'),
-    path = require('path'),
-    util = require('util'),
-    castas = require('castas'),
-    scrounge_file = require('./scrounge_file');
+const fs = require('fs'),
+      path = require('path'),
+      util = require('util'),
+      castas = require('castas'),
+      scrounge_file = require('./scrounge_file');
 
-var scrounge_opts = module.exports = (o => {
+const scrounge_opts = module.exports = (o => {
 
   o = opts =>
     o.get(opts);
@@ -46,29 +46,31 @@ var scrounge_opts = module.exports = (o => {
     finopt.cssextnarr = ['.css', '.less'];
     finopt.jsextnarr  = ['.js', '.ts'];
     
-    finopt.tsconfig   = opt.tsconfig || {};
-    finopt.typearr    = castas.arr(opt.typearr, []);
-    finopt.treearr    = castas.arr(opt.treearr, []);
+    finopt.tsconfig    = opt.tsconfig || {};
+    finopt.typearr     = castas.arr(opt.typearr, []);
+    finopt.treearr     = castas.arr(opt.treearr, []);
     finopt.skipdeparr  = castas.arr(opt.skipdeparr, []);  // depgraph
     finopt.skippatharr = castas.arr(opt.skippatharr, []); // scrounge
-    finopt.treetype   = /full/.test(opt.treetype) ? 'full' : 'small';
-    finopt.embedarr   = castas.arr(opt.embedarr, []);
-    finopt.globalarr  = castas.arr(opt.globalarr, []);
-    finopt.prependarr = castas.arr(opt.prependarr, []);
+    finopt.treetype    = /full/.test(opt.treetype) ? 'full' : 'small';
+    finopt.embedarr    = castas.arr(opt.embedarr, []);
+    finopt.globalarr   = castas.arr(opt.globalarr, []);
+    finopt.prependarr  = castas.arr(opt.prependarr, []);
     
     
-    finopt.isconcat   = castas.bool(opt.isconcatenated, true);
-    finopt.iscompress = castas.bool(opt.iscompressed, false);
-    finopt.issilent   = castas.bool(opt.issilent, false);
-    finopt.isupdate   = castas.bool(opt.isupdateonly, false);
-    finopt.istpl      = castas.bool(opt.istpl, false);
-    finopt.ises2015   = castas.bool(opt.ises2015, true);
-    finopt.iscachemap = castas.bool(opt.iscachemap, true);
-    finopt.browser    = castas.bool(opt.isbrowser, true);    
-    finopt.iscircular = castas.bool(opt.iscircular, false);
+    finopt.isconcat    = castas.bool(opt.isconcatenated, true);
+    finopt.iscompress  = castas.bool(opt.iscompressed, false);
+    finopt.issilent    = castas.bool(opt.issilent, false);
+    finopt.isupdate    = castas.bool(opt.isupdateonly, false);
+    finopt.istpl       = castas.bool(opt.istpl, false);
+    finopt.ises2015    = castas.bool(opt.ises2015, true);
+    finopt.iscachemap  = castas.bool(opt.iscachemap, true);
+    finopt.browser     = castas.bool(opt.isbrowser, true);    
+    finopt.iscircular  = castas.bool(opt.iscircular, false);
+    finopt.istimestamp = castas.bool(opt.istimestamp, true);
     
-    finopt.basepage   = castas.str(opt.basepage, '');
-    finopt.basepagein = castas.str(opt.basepagein, finopt.basepage);    
+    finopt.buildts     = castas.ts(opt.buildts, Date.now());
+    finopt.basepage    = castas.str(opt.basepage, '');
+    finopt.basepagein  = castas.str(opt.basepagein, finopt.basepage);    
 
     finopt.preprocessarr = [
       ['.js', (opts, filename, str, fn) => {

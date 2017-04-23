@@ -1,12 +1,12 @@
 // Filename: scrounge_prepend.js  
-// Timestamp: 2016.04.14-14:15:33 (last modified)
+// Timestamp: 2017.04.23-13:48:08 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-var depgraph = require('depgraph');
+const depgraph = require('depgraph');
 
-var scrounge_prepend = module.exports = (function (o) {
+const scrounge_prepend = module.exports = (o => {
 
-  o.getprependobjtree = function (prependarr, treename) {
+  o.getprependobjtree = (prependarr, treename) => {
     var x, tree = null;
     
     for (x = prependarr.length; x--;) {
@@ -18,7 +18,7 @@ var scrounge_prepend = module.exports = (function (o) {
     return tree;
   };
   
-  o.getprenodearr = function (opts, rootname, fn) {
+  o.getprenodearr = (opts, rootname, fn) => {
     var prependobj = o.getprependobjtree(opts.prependarr, rootname),
         content = null;
 
@@ -29,7 +29,7 @@ var scrounge_prepend = module.exports = (function (o) {
 
   return o;
 
-}({}));
+})({});
 
 
 

@@ -1,5 +1,5 @@
 // Filename: scrounge_root.js  
-// Timestamp: 2017.04.23-10:47:55 (last modified)
+// Timestamp: 2017.04.23-13:46:54 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
@@ -28,12 +28,15 @@ const scrounge_root = module.exports = (o => {
     //depgraph.graph.getfromseedfile(
     //  path.join(opts.inputpath, rootname), opts, fn);
 
-  o.getfilenameasnode = (rootname, fn) => {
-    if (!/.js/.test(path.extname(rootname))) {
-      throw new Error('.js file required for deparr');
-    }
+  o.getfilenameasnode = (opts, rootname, fn) => {
+    let filepath = o.getrootnameaspath(opts, rootname);
 
-    depgraph.node.get_fromfilepath(rootname, fn);
+    if (!filepath) {
+      console.error(rootname, opts.inputpath);
+      throw new Error('rootname not found ' + filepath);
+    }
+    
+    depgraph.node.get_fromfilepath(filepath, fn);
   };
 
   o.getrootnameaspath = (opts, rootname) => 
@@ -48,7 +51,6 @@ const scrounge_root = module.exports = (o => {
     }
 
     let rootpath = o.getrootnameaspath(opts, rootname);
-    console.log('rootpath', rootpath);
 
     o.getasgraph(opts, rootpath, (err, graph) => {
       if (err) return fn(err);

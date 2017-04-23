@@ -1,6 +1,6 @@
 {
   "name": "scroungejs",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "license" : "MIT",
   "readmeFilename": "README.md",
   "main" : "src/scrounge.js",
@@ -25,9 +25,10 @@
     "babel-preset-es2015": "^6.3.13",    
     "babel-preset-es2015-script" : "^1.0.0",
     "typescript": "2.1.4",
+    "chokidar" : "^1.6.1",
     
     "clean-css": "^3.4.19",
-    "castas" : "^0.0.2",
+    "castas" : "^0.0.3",
     "archy" : "^1.0.0",
     "less" : "^2.7.2",
     "optfn" : "~0.0.x",    

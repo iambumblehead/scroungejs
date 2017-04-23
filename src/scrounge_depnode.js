@@ -1,76 +1,72 @@
 // Filename: scrounge_depnode.js  
-// Timestamp: 2016.02.11-11:46:00 (last modified)
+// Timestamp: 2017.04.23-14:35:02 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
-var fs = require('fs'),
-    path = require('path'),
+const fs = require('fs'),
+      path = require('path'),
 
-    scrounge_log = require('./scrounge_log'),
-    scrounge_file = require('./scrounge_file'),
-    scrounge_elem = require('./scrounge_elem'),    
-    scrounge_adapt = require('./scrounge_adapt');
+      scrounge_log = require('./scrounge_log'),
+      scrounge_file = require('./scrounge_file'),
+      scrounge_elem = require('./scrounge_elem'),    
+      scrounge_adapt = require('./scrounge_adapt');
 
-var scrounge_depnode = module.exports = (function (o) {
+const scrounge_depnode = module.exports = (o => {
 
-  o.getcontentadapted = function (opts, node, fn) {
+  o.getcontentadapted = (opts, node, fn) =>
     scrounge_adapt(opts, node, node.get('content'), fn);
-  };
 
   // for a node with filepath ~/software/node.js
   // return a 'css' type node if type is 'css' and
   // corresponding css file exists (~/software/node.css)
-  o.getastype = function (node, type, fn) {
+  o.getastype = (node, type, fn) => {
     var filepath = scrounge_file.setextn(node.get('filepath'), type);
 
-    fs.readFile(path.resolve(filepath), 'utf-8', function (err, content) {
+    fs.readFile(path.resolve(filepath), 'utf-8', (err, content) => {
       fn(err, err || node
          .set('filepath', filepath)
          .set('content', content));
     });
   };
 
-  o.getastypearr = function (node, typearr, fn) {
+  o.getastypearr = (node, typearr, fn) => 
     (function next (typearr, x) {
       if (!x--) return fn('type not found ' + typearr);
 
-      o.getastype(node, typearr[x], function (err, node) {
+      o.getastype(node, typearr[x], (err, node) => {
         if (err) return next(typearr, x);
         
         fn(null, node);
       });
 
     }(typearr, typearr.length));            
-  };
 
-  o.getarrastype = function (deparr, type, fn) {
+  o.getarrastype = (deparr, type, fn) => 
     (function next (deparr, x, finarr) {
       if (!x--) return fn(null, finarr);      
 
-      o.getastype(deparr[x], type, function (err, node) {
+      o.getastype(deparr[x], type, (err, node) => {
         if (err) return next(deparr, x, finarr);
 
         finarr.push(node);
         next(deparr, x, finarr);
       });
     }(deparr, deparr.length, []));      
-  };
 
-  o.getarrastypearr = function (deparr, typearr, fn) {
+  o.getarrastypearr = (deparr, typearr, fn) => 
     (function next (deparr, x, finarr) {
       if (!x--) return fn(null, finarr);      
 
-      o.getastypearr(deparr[x], typearr, function (err, node) {
+      o.getastypearr(deparr[x], typearr, (err, node) => {
         if (err) return next(deparr, x, finarr);
 
         finarr.push(node);
         next(deparr, x, finarr);
       });
     }(deparr, deparr.length, []));      
-  };
 
   // if basename has extension '.less',
   // extension returned may be '.css'  
-  o.setpublicextn = function (opts, filepath, rootname) {
+  o.setpublicextn = (opts, filepath, rootname) => {
     var rootextn = path.extname(rootname),
         fileextn = opts.jsextnarr.find(extn => 
           extn === rootextn
@@ -81,7 +77,7 @@ var scrounge_depnode = module.exports = (function (o) {
     return scrounge_file.setextn(filepath, fileextn);
   };
 
-  o.setpublicoutputpath = function (opts, node, rootname) {
+  o.setpublicoutputpath = (opts, node, rootname) => {
     var uid = node.get('uid'),
         filepath = node.get('filepath'),
         publicpath = opts.isconcat ?
@@ -92,7 +88,7 @@ var scrounge_depnode = module.exports = (function (o) {
     return scrounge_file.setpublicoutputpath(opts, publicpath, uid);
   };
 
-  o.setpublicoutputpathreal = function (opts, node, rootname) {
+  o.setpublicoutputpathreal = (opts, node, rootname) => {
     var uid = node.get('uid'),
         filepath = node.get('filepath'),
         publicpath = opts.isconcat ?
@@ -104,22 +100,15 @@ var scrounge_depnode = module.exports = (function (o) {
   };
 
   // for each node in the array build ordered listing of elements
-  o.arrgetincludetagarr = function (opts, depnodearr, rootname) {
-    if (opts.isconcat) {
-      return [
+  o.arrgetincludetagarr = (opts, depnodearr, rootname) =>  (
+    opts.isconcat
+      ? [scrounge_elem.getincludetag(
+        opts, o.setpublicoutputpath(opts, depnodearr[0], rootname))]
+      : depnodearr.map((node) => (
         scrounge_elem.getincludetag(
-          opts, o.setpublicoutputpath(opts, depnodearr[0], rootname)
-        )
-      ];
-    } else {
-      return depnodearr.map(function (node) {
-        return scrounge_elem.getincludetag(
           opts, o.setpublicoutputpath(opts, node, rootname)
-        );
-      }).reverse();
-    }
-  };  
+        ))).reverse());
 
   return o;
   
-}({}));
+})({});

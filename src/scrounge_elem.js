@@ -1,10 +1,11 @@
 // Filename: scrounge_elem.js  
-// Timestamp: 2016.04.06-15:18:24 (last modified)
+// Timestamp: 2017.04.23-14:16:53 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
-var path = require('path');
+const path = require('path'),
+      addquery = require('addquery');
 
-var scrounge_elem = module.exports = (o => {
+const scrounge_elem = module.exports = (o => {
 
   // include tags for css and js  
   o.includejstpl = '<script src="$" type="text/javascript"></script>';
@@ -31,8 +32,12 @@ var scrounge_elem = module.exports = (o => {
     }
 
     if (opts.version) {
-      filepath += '?version=' + opts.version;
-    }    
+      filepath = addquery(filepath, 'version=' + opts.version);
+    }
+    
+    if (opts.istimestamp) {
+      filepath = addquery(filepath, 'ts=' + opts.buildts);
+    }
 
     return include.replace(/\$/, filepath);
   };
