@@ -1,6 +1,6 @@
 {
   "name": "scroungejs",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "license" : "MIT",
   "readmeFilename": "README.md",
   "main" : "src/scrounge.js",
@@ -21,6 +21,7 @@
     "deploy"
   ],
   "dependencies": {
+    "addquery" : "^0.0.1",
     "babel-core" : "^6.24.1",
     "babel-preset-es2015": "^6.3.13",    
     "babel-preset-es2015-script" : "^1.0.0",
