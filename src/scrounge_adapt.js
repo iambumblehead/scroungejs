@@ -1,28 +1,22 @@
 // Filename: scrounge_adapt.js  
-// Timestamp: 2017.04.23-12:16:35 (last modified)
+// Timestamp: 2017.04.23-23:17:27 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-var umd = require('umd'),
-    path = require('path'),
-    less = require('less'),
-    babel = require('babel-core'),
-    babelpresetes2015 = require('babel-preset-es2015-script'),
-    umdname = require('umdname'),
-    cleancss = require('clean-css'),
-    bcjstocjs = require('bcjstocjs'),    
-    moduletype = require('moduletype'),
-    typescript = require('typescript'),
-    replacerequires = require('replace-requires'),
-    
-    scrounge_log = require('./scrounge_log');
+const umd = require('umd'),
+      path = require('path'),
+      less = require('less'),
+      babel = require('babel-core'),
+      babelpresetes2015 = require('babel-preset-es2015-script'),
+      umdname = require('umdname'),
+      cleancss = require('clean-css'),
+      bcjstocjs = require('bcjstocjs'),    
+      moduletype = require('moduletype'),
+      typescript = require('typescript'),
+      replacerequires = require('replace-requires'),
+      
+      scrounge_log = require('./scrounge_log');
 
-
-// [01:58:47] Finished 'scrounge' after 7.11 s
-// [02:03:16] Finished 'scrounge' after 7.1 s
-
-
-
-var scrounge_adapt = module.exports = (o => {
+const scrounge_adapt = module.exports = (o => {
 
   o = (opts, depmod, str, fn) => {
     var filepath = depmod.get('filepath'),
@@ -108,11 +102,12 @@ var scrounge_adapt = module.exports = (o => {
     }
   };
 
-  o.ts = (opts, depmod, str, fn) => {
-    let jsstr = typescript.transpileModule(str, opts.tsconfig || {}).outputText;
+  o.tsx = o.ts = (opts, depmod, str, fn) => {
+    let tsconfig = opts.tsconfig || {},
+        jsstr = typescript.transpileModule(str, tsconfig).outputText;
 
     o.js(opts, depmod, jsstr, fn);
-  };  
+  };    
   
   o.css = (opts, depmod, str, fn) => {
     fn(null, opts.iscompress ?

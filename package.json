@@ -1,10 +1,10 @@
 {
   "name": "scroungejs",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "license" : "MIT",
   "readmeFilename": "README.md",
   "main" : "src/scrounge.js",
-  "description": "compress, concatenate and/or timestamp your files as part of a build process for your web site.",
+  "description": "compress and concatenate web files incrementally.",
   "scripts" : {
     "test": "node node_modules/jasmine/bin/jasmine.js --verbose",
     "start" : "node test/testbuild1/build.js"
@@ -37,7 +37,7 @@
     "moduletype" : "^0.0.5",
     "simpletime" : ">=0.1.0",
     "pathpublic" : "^0.0.7",    
-    "depgraph" : "^0.2.1",
+    "depgraph" : "^0.2.2",
     "umdname" : "^0.0.7",
     "bcjstocjs" : "^0.0.2",
     "mkdirp" : "~0.5.x",

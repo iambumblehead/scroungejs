@@ -1,5 +1,5 @@
 // Filename: scrounge_opts.js  
-// Timestamp: 2017.04.23-14:16:05 (last modified)
+// Timestamp: 2017.04.23-22:35:41 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const fs = require('fs'),
@@ -44,7 +44,7 @@ const scrounge_opts = module.exports = (o => {
 
     finopt.tplextnarr = ['.mustache'];
     finopt.cssextnarr = ['.css', '.less'];
-    finopt.jsextnarr  = ['.js', '.ts'];
+    finopt.jsextnarr  = ['.js', '.ts', '.tsx'];
     
     finopt.tsconfig    = opt.tsconfig || {};
     finopt.typearr     = castas.arr(opt.typearr, []);
