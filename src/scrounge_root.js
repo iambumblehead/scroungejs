@@ -23,11 +23,10 @@ const scrounge_root = module.exports = (o => {
     );
 
   // return rootname as a graph
-  o.getasgraph = (opts, rootpath, fn) => 
+  o.getasgraph = (opts, rootpath, fn) => {
     depgraph.graph.getfromseedfile(rootpath, opts, fn);
-    //depgraph.graph.getfromseedfile(
-    //  path.join(opts.inputpath, rootname), opts, fn);
-
+  };
+  
   o.getfilenameasnode = (opts, rootname, fn) => {
     let filepath = o.getrootnameaspath(opts, rootname);
 
@@ -51,7 +50,10 @@ const scrounge_root = module.exports = (o => {
     }
 
     let rootpath = o.getrootnameaspath(opts, rootname);
-
+    if (!rootpath) {
+      return scrounge_log.rootfilenotfound(opts,rootname);
+    }
+    
     o.getasgraph(opts, rootpath, (err, graph) => {
       if (err) return fn(err);
       
@@ -66,7 +68,7 @@ const scrounge_root = module.exports = (o => {
   
   o.getrootarrasdeparr = (opts, rootarr, fn) => {
     let graphnamearr = o.getnamearrastype(opts, rootarr, '.js');
-
+    
     (function nextgraph (graphnamearr, x, graphsobj) {
       if (!x--) return fn(null, graphsobj);
 

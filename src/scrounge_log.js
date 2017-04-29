@@ -2,31 +2,30 @@
 // Timestamp: 2015.12.08-14:19:00 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
+const path = require('path'),
+      archy = require('archy'),
+      depgraph = require('depgraph');
 
-var path = require('path'),
-    archy = require('archy'),
-    depgraph = require('depgraph');
+const scrounge_log = module.exports = (o => {
 
-var scrounge_log = module.exports = (function (o) {
-
-  o = function (opts, msg) {
+  o = (opts, msg) => {
     if (!opts.issilent) console.log(msg);
   };
 
-  o.printroot = function (opts, rootname, tree) {
+  o.printroot = (opts, rootname, tree) => {
     o(opts, '[...] root: ' + rootname + '\n\n' + archy(tree));
   };
 
-  o.start = function (opts, time) {
+  o.start = (opts, time) => {
     o(opts, '');
     o(opts, '[...] start: ' + time);    
   };
 
-  o.finish = function (opts, time) {
+  o.finish = (opts, time) => {
     o(opts, '[...] finish: ' + time);
   };
 
-  o.rootjoin = function (opts, root, type, filename, inum, lnum, j) {
+  o.rootjoin = (opts, root, type, filename, inum, lnum, j) => {
     o(opts, '[...] :j: (:rootname, :roottype, :progress) :filename'
       .replace(':j', j)
       .replace(':rootname', root)
@@ -37,15 +36,15 @@ var scrounge_log = module.exports = (function (o) {
                .replace(process.env.HOME, '~')));
   };
 
-  o.rootjoinplainfile = function (opts, root, type, filename, inum, lnum, j) {
+  o.rootjoinplainfile = (opts, root, type, filename, inum, lnum, j) => {
     o.rootjoin(opts, root, type, filename, inum, lnum, 'join');
   };
 
-  o.rootjoinminfile = function (opts, root, type, filename, inum, lnum, j) {
+  o.rootjoinminfile = (opts, root, type, filename, inum, lnum, j) => {
     o.rootjoin(opts, root, type, filename, inum, lnum, 'ugly');
   };
 
-  o.rootjoinfile = function (opts, root, type, filename, inum, lnum, j) {
+  o.rootjoinfile = (opts, root, type, filename, inum, lnum, j) => {
     if (opts.iscompress) {
       o.rootjoinminfile.apply(0, arguments);
     } else {
@@ -53,13 +52,18 @@ var scrounge_log = module.exports = (function (o) {
     }
   };
 
-  o.unsupportedtype = function (opts, type, filename) {
+  o.unsupportedtype = (opts, type, filename) => {
     o(opts, '[...] unsupported type: :type, :filename'
       .replace(/:type/, type)
       .replace(/:filename/, filename));
   };
 
-  o.write = function (opts, filename) {
+  o.rootfilenotfound = (opts, rootname) => {
+    o(opts, '[...] root file not found: :rootname'
+      .replace(/:rootname/, rootname));
+  };  
+
+  o.write = (opts, filename) => {
     o(opts, '[...] write: :filename'
       .replace(/:filename/, path.resolve(filename)
                .replace(process.cwd(), '.')
@@ -68,4 +72,4 @@ var scrounge_log = module.exports = (function (o) {
   
   return o;
 
-}());
+})({});
