@@ -1,5 +1,5 @@
 // Filename: scrounge_opts.js  
-// Timestamp: 2017.04.23-22:35:41 (last modified)
+// Timestamp: 2017.05.26-15:13:58 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const fs = require('fs'),
@@ -55,7 +55,7 @@ const scrounge_opts = module.exports = (o => {
     finopt.embedarr    = castas.arr(opt.embedarr, []);
     finopt.globalarr   = castas.arr(opt.globalarr, []);
     finopt.prependarr  = castas.arr(opt.prependarr, []);
-    
+    finopt.aliasarr    = castas.arr(opt.aliasarr, []);
     
     finopt.isconcat    = castas.bool(opt.isconcatenated, true);
     finopt.iscompress  = castas.bool(opt.iscompressed, false);
