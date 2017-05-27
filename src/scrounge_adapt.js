@@ -1,5 +1,5 @@
 // Filename: scrounge_adapt.js  
-// Timestamp: 2017.05.26-18:06:43 (last modified)
+// Timestamp: 2017.05.26-18:17:49 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const umd = require('umd'),
@@ -80,7 +80,7 @@ const scrounge_adapt = module.exports = (o => {
       umdstr = umd(modname, str, { commonJS : true });
       umdstr = replacerequires(umdstr, depmod.get('outarr').reduce((prev, cur) => {
         let refname = cur.get('refname'),
-            depname = o.uidsanitised(cur.get('uid');
+            depname = o.uidsanitised(cur.get('uid'));
 
         opts.aliasarr.map(([matchname, newname]) => (
           newname === refname &&
