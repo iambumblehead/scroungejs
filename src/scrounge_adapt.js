@@ -1,5 +1,5 @@
 // Filename: scrounge_adapt.js  
-// Timestamp: 2017.04.23-23:17:27 (last modified)
+// Timestamp: 2017.05.26-18:06:43 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const umd = require('umd'),
@@ -79,7 +79,17 @@ const scrounge_adapt = module.exports = (o => {
     } else if (moduletype.cjs(str)) {
       umdstr = umd(modname, str, { commonJS : true });
       umdstr = replacerequires(umdstr, depmod.get('outarr').reduce((prev, cur) => {
-        return prev[cur.get('refname')] = o.uidsanitised(cur.get('uid')), prev;
+        let refname = cur.get('refname'),
+            depname = o.uidsanitised(cur.get('uid');
+
+        opts.aliasarr.map(([matchname, newname]) => (
+          newname === refname &&
+            (prev[matchname] = depname)
+        ));
+
+        prev[refname] = depname;
+
+        return prev;
       }, {}));
     } else if (moduletype.amd(str) || moduletype.esm(str)) {
       scrounge_log.unsupportedtype(opts, moduletype.is(str), modname);
