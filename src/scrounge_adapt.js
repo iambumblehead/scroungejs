@@ -1,5 +1,5 @@
 // Filename: scrounge_adapt.js  
-// Timestamp: 2017.05.26-18:17:49 (last modified)
+// Timestamp: 2017.07.29-19:16:36 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const umd = require('umd'),
@@ -16,7 +16,7 @@ const umd = require('umd'),
       
       scrounge_log = require('./scrounge_log');
 
-const scrounge_adapt = module.exports = (o => {
+module.exports = (o => {
 
   o = (opts, depmod, str, fn) => {
     var filepath = depmod.get('filepath'),

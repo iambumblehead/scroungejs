@@ -1,5 +1,5 @@
 // Filename: scrounge_root.js  
-// Timestamp: 2017.04.23-13:46:54 (last modified)
+// Timestamp: 2017.07.29-19:19:32 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
@@ -7,10 +7,11 @@ const path = require('path'),
 
       scrounge_log = require('./scrounge_log'),
       scrounge_file = require('./scrounge_file'),
+      scrounge_opts = require('./scrounge_opts'),
       scrounge_prepend = require('./scrounge_prepend'),
       scrounge_depnode = require('./scrounge_depnode');
 
-const scrounge_root = module.exports = (o => {
+module.exports = (o => {
 
   // converts rootname array to one of the specified type
   // filters the result so that all values are unique
@@ -28,7 +29,7 @@ const scrounge_root = module.exports = (o => {
   };
   
   o.getfilenameasnode = (opts, rootname, fn) => {
-    let filepath = o.getrootnameaspath(opts, rootname);
+    const filepath = o.getrootnameaspathextn(opts, rootname);
 
     if (!filepath) {
       console.error(rootname, opts.inputpath);
@@ -42,6 +43,17 @@ const scrounge_root = module.exports = (o => {
     opts.jsextnarr.map(extn => (
       scrounge_file.setextn(path.join(opts.inputpath, rootname), extn)
     )).find(scrounge_file.isexist);
+
+  // returns extn-sensitive rootname (less or css)
+  o.getrootnameaspathextn = (opts, rootname) => {
+    const extnarr = scrounge_opts.filenamesupportedcss(opts, rootname)
+          ? opts.cssextnarr
+          : opts.jsextnarr;
+
+    return extnarr.map(extn => (
+      scrounge_file.setextn(path.join(opts.inputpath, rootname), extn)
+    )).find(scrounge_file.isexist);
+  };
 
   // return rootname as a graph deparr
   o.getasdeparr = (opts, rootname, fn) => {
@@ -132,7 +144,6 @@ const scrounge_root = module.exports = (o => {
             opts.jsextnarr.find(extn => extn === rootextn) ||
             opts.cssextnarr.find(extn => extn === rootextn) ||
             rootextn;
-
       
       filepath = scrounge_file.setextn(filepath, fileextn);
       scrounge_file.write(opts, filepath, content, fn);

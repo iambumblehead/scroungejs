@@ -1,5 +1,5 @@
 // Filename: scrounge_build.js  
-// Timestamp: 2017.04.23-14:26:49 (last modified)
+// Timestamp: 2017.07.29-19:18:07 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
 const fs = require('fs'),
@@ -16,7 +16,7 @@ const fs = require('fs'),
       scrounge_opts = require('./scrounge_opts'),
       scrounge_log = require('./scrounge_log');
 
-const scrounge_build = module.exports = (o => {
+module.exports = (o => {
 
   o = (opts, fn) => 
     o.build(opts, fn);
@@ -109,12 +109,15 @@ const scrounge_build = module.exports = (o => {
 
     if (opts.isconcat === false &&
         scrounge_opts.isfilenamesupportedtype(opts, srcfilename)) {
-      
+
       o.readbasepage(opts, (err, rootsarr) => {
         if (err) return o.throwerror(err, fn);
 
         scrounge_root.getfilenameasnode(opts, path.basename(srcfilename), (err, node) => {
           if (err) return o.throwerror(err, fn);
+
+          rootsarr = rootsarr.filter(root => (
+            scrounge_opts.issamesupportedtype(opts, node.get('filepath'), root)));
           
           scrounge_cache.recoverrootarrcachemapnode(opts, rootsarr, node, (err, rootnodescached) => {
             if (err) return o.throwerror(err, fn);
@@ -124,7 +127,6 @@ const scrounge_build = module.exports = (o => {
             if (opts.basepage &&
                 opts.istimestamp) {
               scrounge_basepage.writeelemone(opts, opts.basepage, srcfilename, node, fn);
-              //scrounge_basepage.writeelemone(opts)
             }
           });
         });

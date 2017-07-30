@@ -1,12 +1,12 @@
 // Filename: scrounge_watch.js  
-// Timestamp: 2017.04.23-13:53:10 (last modified)
+// Timestamp: 2017.07.29-19:20:06 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const chokidar = require('chokidar'),
 
       scrounge_build = require('./scrounge_build');
 
-const scrounge_watch = module.exports = (o => {
+module.exports = (o => {
 
   // var watcher = chokidar.watch(globs, opts);
   o = (globs, opts = {}) => {

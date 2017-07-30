@@ -1,5 +1,5 @@
 // Filename: scrounge_opts.js  
-// Timestamp: 2017.05.26-15:13:58 (last modified)
+// Timestamp: 2017.07.29-19:15:07 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const fs = require('fs'),
@@ -8,7 +8,7 @@ const fs = require('fs'),
       castas = require('castas'),
       scrounge_file = require('./scrounge_file');
 
-const scrounge_opts = module.exports = (o => {
+module.exports = (o => {
 
   o = opts =>
     o.get(opts);
@@ -24,12 +24,23 @@ const scrounge_opts = module.exports = (o => {
     return path.join(dir, base + '.tpl' + extn);
   };
 
-  o.isfilenamesupportedtype = (opts, filename) => {
-    const fileextn = path.extname(filename);
-    
-    return opts.jsextnarr.find(extn => extn === fileextn)
-      || opts.cssextnarr.find(extn => extn = fileextn);
+  o.filenamesupportedcss = (opts, filename, fileextn = path.extname(filename)) => 
+    opts.cssextnarr.find(extn => extn = fileextn);
+
+  o.filenamesupportedjs = (opts, filename, fileextn = path.extname(filename)) => 
+    opts.jsextnarr.find(extn => extn === fileextn);    
+
+  o.isfilenamesupportedtype = (opts, filename, fileextn = path.extname(filename)) => 
+    o.filenamesupportedjs(opts, filename, fileextn) ||
+    o.filenamesupportedcss(opts, filename, fileextn);
+
+  o.issamesupportedtype = (opts, filenamea, filenameb) => {
+    let supportedextna = o.isfilenamesupportedtype(opts, filenamea),
+        supportedextnb = o.isfilenamesupportedtype(opts, filenameb);
+
+    return supportedextna === supportedextnb;
   };
+    
 
   o.get = (opt) => {
     var finopt = {};
