@@ -1,5 +1,5 @@
 // Filename: scrounge_opts.js  
-// Timestamp: 2017.07.29-19:15:07 (last modified)
+// Timestamp: 2017.07.29-19:37:13 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const fs = require('fs'),
@@ -25,7 +25,7 @@ module.exports = (o => {
   };
 
   o.filenamesupportedcss = (opts, filename, fileextn = path.extname(filename)) => 
-    opts.cssextnarr.find(extn => extn = fileextn);
+    opts.cssextnarr.find(extn => extn === fileextn);
 
   o.filenamesupportedjs = (opts, filename, fileextn = path.extname(filename)) => 
     opts.jsextnarr.find(extn => extn === fileextn);    
