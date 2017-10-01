@@ -6,7 +6,7 @@ const umd = require('umd'),
       path = require('path'),
       less = require('less'),
       babel = require('babel-core'),
-      babelpresetes2015 = require('babel-preset-es2015-script'),
+      babelpresetenv = require('babel-preset-env'),
       umdname = require('umdname'),
       cleancss = require('clean-css'),
       bcjstocjs = require('bcjstocjs'),    
@@ -59,15 +59,13 @@ module.exports = (o => {
         ),
         umdstr;
 
-    //if (opts.ises2015 && !skip) {
     if (!skip) {
       //str = uglifyjs.minify(str, { fromString: true }).code;
 
       str = babel.transform(str, {
-        //compact: false,
-        compact: opts.iscompress && !skip,//true,
+        compact: opts.iscompress && !skip,
         presets: opts.ises2015 ? [
-          babelpresetes2015
+          babelpresetenv
         ] : []
       }).code;
     }

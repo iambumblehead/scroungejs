@@ -73,7 +73,7 @@ module.exports = (o => {
     finopt.issilent    = castas.bool(opt.issilent, false);
     finopt.isupdate    = castas.bool(opt.isupdateonly, false);
     finopt.istpl       = castas.bool(opt.istpl, false);
-    finopt.ises2015    = castas.bool(opt.ises2015, true);
+    finopt.ises2015    = castas.bool(opt.ises2015, false);
     finopt.iscachemap  = castas.bool(opt.iscachemap, true);
     finopt.browser     = castas.bool(opt.isbrowser, true);    
     finopt.iscircular  = castas.bool(opt.iscircular, false);
