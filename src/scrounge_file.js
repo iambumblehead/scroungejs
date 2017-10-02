@@ -1,5 +1,5 @@
 // Filename: scrounge_file.js  
-// Timestamp: 2017.04.23-10:37:13 (last modified)
+// Timestamp: 2017.10.01-21:11:23 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>  
 
 const fs = require('fs'),
@@ -30,8 +30,13 @@ const scrounge_file = module.exports = (o => {
     if (!opts.isconcat) {
       filepath = o.setposixbasename(filepath, uid);
     }
-    
-    return pathpublic.get(filepath, opts.publicpath);    
+
+    let publicpath = pathpublic.get(filepath, opts.publicpath);
+    // if !publicpath... publicpath dir not found in filepath
+    //   use publicpath and root directory
+    return typeof publicpath === 'string'
+      ? publicpath    
+      : path.join(opts.publicpath, path.basename(filepath));
   };
 
   o.setpublicoutputpath = (opts, filepath, uid) =>
