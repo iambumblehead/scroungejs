@@ -1,5 +1,5 @@
 // Filename: scrounge_adapt.js  
-// Timestamp: 2017.10.07-01:38:29 (last modified)
+// Timestamp: 2017.10.07-01:46:00 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const umd = require('umd'),
