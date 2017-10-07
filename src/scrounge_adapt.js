@@ -1,5 +1,5 @@
 // Filename: scrounge_adapt.js  
-// Timestamp: 2017.07.29-19:16:36 (last modified)
+// Timestamp: 2017.10.07-01:38:29 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const umd = require('umd'),
@@ -61,12 +61,12 @@ module.exports = (o => {
 
     if (!skip) {
       //str = uglifyjs.minify(str, { fromString: true }).code;
-
       str = babel.transform(str, {
         compact: opts.iscompress && !skip,
         presets: opts.ises2015 ? [
           babelpresetenv
-        ] : []
+        ] : [],
+        plugins: opts.babelpluginarr || []
       }).code;
     }
 
