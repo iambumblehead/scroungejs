@@ -34,7 +34,7 @@ const scrounge_file = module.exports = (o => {
     let publicpath = pathpublic.get(filepath, opts.publicpath);
     // if !publicpath... publicpath dir not found in filepath
     //   use publicpath and root directory
-    return typeof publicpath === 'string'
+    return (typeof publicpath === 'string' && publicpath.startsWith(opts.publicpath))
       ? publicpath    
       : path.join(opts.publicpath, path.basename(filepath));
   };
