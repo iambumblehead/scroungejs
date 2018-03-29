@@ -7,3 +7,5 @@ testbuildFin
 index.html
 npm-debug.log
 .tern-port
+.scrounge
+package-lock.json

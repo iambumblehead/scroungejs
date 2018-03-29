@@ -1,4 +1,4 @@
-// Filename: scrounge_root.js  
+// Filename: scrounge_root.js
 // Timestamp: 2017.07.29-19:37:31 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
@@ -16,10 +16,10 @@ module.exports = (o => {
   // converts rootname array to one of the specified type
   // filters the result so that all values are unique
   //
-  o.getnamearrastype = (opts, rootnamearr, type) => 
-    rootnamearr.map(root => 
+  o.getnamearrastype = (opts, rootnamearr, type) =>
+    rootnamearr.map(root =>
       scrounge_file.setextn(root, type)
-    ).sort().filter((root, index, arr) => 
+    ).sort().filter((root, index, arr) =>
       index < 1 || root !== arr[index - 1]
     );
 
@@ -27,19 +27,19 @@ module.exports = (o => {
   o.getasgraph = (opts, rootpath, fn) => {
     depgraph.graph.getfromseedfile(rootpath, opts, fn);
   };
-  
+
   o.getfilenameasnode = (opts, rootname, fn) => {
     const filepath = o.getrootnameaspathextn(opts, rootname);
 
     if (!filepath) {
       console.error(rootname, opts.inputpath);
-      throw new Error('rootname not found ' + filepath);
+      throw new Error(`rootname not found ${filepath}`);
     }
-    
+
     depgraph.node.get_fromfilepath(filepath, fn);
   };
 
-  o.getrootnameaspath = (opts, rootname) => 
+  o.getrootnameaspath = (opts, rootname) =>
     opts.jsextnarr.map(extn => (
       scrounge_file.setextn(path.join(opts.inputpath, rootname), extn)
     )).find(scrounge_file.isexist);
@@ -47,8 +47,8 @@ module.exports = (o => {
   // returns extn-sensitive rootname (less or css)
   o.getrootnameaspathextn = (opts, rootname) => {
     const extnarr = scrounge_opts.filenamesupportedcss(opts, rootname)
-          ? opts.cssextnarr
-          : opts.jsextnarr;
+      ? opts.cssextnarr
+      : opts.jsextnarr;
 
     return extnarr.map(extn => (
       scrounge_file.setextn(path.join(opts.inputpath, rootname), extn)
@@ -63,24 +63,24 @@ module.exports = (o => {
 
     let rootpath = o.getrootnameaspath(opts, rootname);
     if (!rootpath) {
-      return scrounge_log.rootfilenotfound(opts,rootname);
+      return scrounge_log.rootfilenotfound(opts, rootname);
     }
-    
+
     o.getasgraph(opts, rootpath, (err, graph) => {
       if (err) return fn(err);
-      
+
       scrounge_log.printroot(
-        opts, rootname, opts.treetype === 'small' ?
-          depgraph.tree.getfromgraphsmall(graph):
-          depgraph.tree.getfromgraph(graph));
-      
+        opts, rootname, opts.treetype === 'small'
+          ? depgraph.tree.getfromgraphsmall(graph)
+          : depgraph.tree.getfromgraph(graph));
+
       fn(null, depgraph.graph.getdeparr(graph).reverse());
     });
   };
-  
+
   o.getrootarrasdeparr = (opts, rootarr, fn) => {
     let graphnamearr = o.getnamearrastype(opts, rootarr, '.js');
-    
+
     (function nextgraph (graphnamearr, x, graphsobj) {
       if (!x--) return fn(null, graphsobj);
 
@@ -95,7 +95,7 @@ module.exports = (o => {
           if (prenodearr) {
             graphsobj[graphnamearr[x]] = deparr.concat(prenodearr);
           }
-          
+
           nextgraph(graphnamearr, x, graphsobj);
         });
       });
@@ -110,10 +110,10 @@ module.exports = (o => {
       (function next (rootarr, x, len, jsdeparrobj, deparrobj) {
         if (x >= len) return fn(null, deparrobj);
 
-        var rootname = rootarr[x],
+        let rootname = rootarr[x],
             rootextn = path.extname(rootname),
             jsdeparr = jsdeparrobj[scrounge_file.setextn(rootname, '.js')];
-        
+
         if (rootextn === '.js') {
           deparrobj[rootname] = jsdeparrobj[rootname];
 
@@ -133,33 +133,33 @@ module.exports = (o => {
   // matches should be build and constructed ahead of this point,
   // to be reused for write at basepage
   o.write = (opts, rootname, graphobj, fn) => {
-    var rootextn = path.extname(rootname),
+    let rootextn = path.extname(rootname),
         graphname = scrounge_file.setextn(rootname, '.js'),
-        deparr = graphobj[rootname];
+        deparr = graphobj[rootname],
 
-    var nodewrite = (opts, node, rootname, content, fn) => {
-      var filepath = scrounge_depnode.setpublicoutputpathreal(opts, node, rootname),
-          rootextn = path.extname(rootname),
-          fileextn =
-            opts.jsextnarr.find(extn => extn === rootextn) ||
-            opts.cssextnarr.find(extn => extn === rootextn) ||
-            rootextn;
-      
-      filepath = scrounge_file.setextn(filepath, fileextn);
-      scrounge_file.write(opts, filepath, content, fn);
-    };    
-        
+        nodewrite = (opts, node, rootname, content, fn) => {
+          let filepath = scrounge_depnode.setpublicoutputpathreal(opts, node, rootname),
+              rootextn = path.extname(rootname),
+              fileextn =
+                opts.jsextnarr.find(extn => extn === rootextn) ||
+                opts.cssextnarr.find(extn => extn === rootextn) ||
+                rootextn;
+
+          filepath = scrounge_file.setextn(filepath, fileextn);
+          scrounge_file.write(opts, filepath, content, fn);
+        };
+
     if (opts.isconcat) {
       (function nextdep (dep, x, contentarr) {
-        if (!x--) return nodewrite(opts, dep[0], rootname, contentarr.join('\n'), fn);       
+        if (!x--) return nodewrite(opts, dep[0], rootname, contentarr.join('\n'), fn);
 
         scrounge_depnode.getcontentadapted(opts, dep[x], (err, res) => {
-          if (err) return fn(err);          
+          if (err) return fn(err);
 
           scrounge_log.rootjoinfile(
             opts, graphname, rootextn, dep[x].get('filepath'), x, deparr.length
           );
-          
+
           contentarr.push(res);
           nextdep(deparr, x, contentarr);
         });
@@ -171,7 +171,7 @@ module.exports = (o => {
         scrounge_depnode.getcontentadapted(opts, dep[x], (err, res) => {
           if (err) return fn(err);
 
-          nodewrite(opts, dep[x], rootname, res, (err, res) => {
+          nodewrite(opts, dep[x], rootname, res, err => {
             if (err) return fn(err);
 
             nextdep(dep, x);
@@ -184,9 +184,9 @@ module.exports = (o => {
   o.writearr = (opts, rootnamearr, graphobj, fn) => {
     if (rootnamearr.length) {
       if (graphobj[rootnamearr[0]] && graphobj[rootnamearr[0]].length) {
-        o.write(opts, rootnamearr[0], graphobj, (err, res) => {
+        o.write(opts, rootnamearr[0], graphobj, err => {
           if (err) return fn(err);
-          
+
           o.writearr(opts, rootnamearr.slice(1), graphobj, fn);
         });
       } else {
@@ -198,5 +198,4 @@ module.exports = (o => {
   };
 
   return o;
-  
 })({});

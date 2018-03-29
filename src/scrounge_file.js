@@ -1,6 +1,6 @@
-// Filename: scrounge_file.js  
+// Filename: scrounge_file.js
 // Timestamp: 2017.10.01-21:11:23 (last modified)
-// Author(s): bumblehead <chris@bumblehead.com>  
+// Author(s): bumblehead <chris@bumblehead.com>
 
 const fs = require('fs'),
       path = require('path'),
@@ -9,9 +9,8 @@ const fs = require('fs'),
       scrounge_adapt = require('./scrounge_adapt'),
       scrounge_log = require('./scrounge_log');
 
-const scrounge_file = module.exports = (o => {
-
-  o.setextn = (filename, extn) => 
+module.exports = (o => {
+  o.setextn = (filename, extn) =>
     path.join(
       path.dirname(filename),
       path.basename(filename, path.extname(filename)) + extn);
@@ -20,11 +19,11 @@ const scrounge_file = module.exports = (o => {
     o.setbasename(filepath, uid).replace(/\\/g, '/');
 
   o.setbasename = (filepath, uid) => {
-    var dirname = path.dirname(filepath),
+    let dirname = path.dirname(filepath),
         extname = path.extname(filepath);
 
     return path.join(dirname, scrounge_adapt.uidsanitised(uid) + extname);
-  };  
+  };
 
   o.setpublicpath = (opts, filepath, uid) => {
     if (!opts.isconcat) {
@@ -35,7 +34,7 @@ const scrounge_file = module.exports = (o => {
     // if !publicpath... publicpath dir not found in filepath
     //   use publicpath and root directory
     return (typeof publicpath === 'string' && publicpath.startsWith(opts.publicpath))
-      ? publicpath    
+      ? publicpath
       : path.join(opts.publicpath, path.basename(filepath));
   };
 
@@ -50,17 +49,17 @@ const scrounge_file = module.exports = (o => {
     }
 
     return path.join(opts.outputpath, path.basename(filepath));
-  };  
+  };
 
   o.setoutputpath = (opts, filepath) =>
     path.join(opts.outputpath, path.basename(filepath));
 
   o.isexist = filepath => {
-    var isexists = false;
-    
+    let isexists = false;
+
     try {
       isexists = fs.statSync(filepath).isFile();
-    } catch (err) { }
+    } catch (err) { /* */ }
 
     return isexists;
   };
@@ -71,7 +70,7 @@ const scrounge_file = module.exports = (o => {
   o.writesilent = (opts, filepath, content, fn) =>
     mkdirp(path.dirname(filepath), err => {
       if (err) return fn(err);
-      
+
       fs.writeFile(path.resolve(filepath), content, fn);
     });
 
@@ -88,7 +87,5 @@ const scrounge_file = module.exports = (o => {
       o.write(opts, filepathout, res, fn);
     });
 
-
   return o;
-  
 })({});

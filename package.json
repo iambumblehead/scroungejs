@@ -6,8 +6,9 @@
   "main": "src/scrounge.js",
   "description": "compress and concatenate web files incrementally.",
   "scripts": {
-    "test": "node node_modules/jasmine/bin/jasmine.js --verbose",
-    "start": "node test/testbuild1/build.js"
+    "lint": "eslint 'src/*.js'",
+    "test": "jasmine --verbose",
+    "start": "node spec/testbuild1/build.js"
   },
   "repository": {
     "type": "git",
@@ -42,7 +43,18 @@
     "umd": "~3.0.x"
   },
   "devDependencies": {
+    "pre-commit": "^1.2.2",
+    "babel-eslint": "^7.2.3",
+    "eslint": "^4.7.2",
+    "eslint-config-airbnb-base": "^11.2.0",
+    "eslint-plugin-import": "^2.9.0",
     "jasmine": "2.5.3",
     "jasmine-spec-reporter": "4.2.1"
+  },
+  "pre-commit": {
+    "silent": true,
+    "run": [
+      "lint"
+    ]
   }
 }

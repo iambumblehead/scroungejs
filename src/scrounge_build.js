@@ -1,28 +1,23 @@
-// Filename: scrounge_build.js  
+// Filename: scrounge_build.js
 // Timestamp: 2017.07.29-19:37:37 (last modified)
-// Author(s): bumblehead <chris@bumblehead.com>  
+// Author(s): bumblehead <chris@bumblehead.com>
 
-const fs = require('fs'),
-      path = require('path'),
+const path = require('path'),
       optfn = require('optfn'),
       simpletime = require('simpletime'),
 
       scrounge_basepage = require('./scrounge_basepage'),
       scrounge_depnode = require('./scrounge_depnode'),
-      scrounge_watch = require('./scrounge_watch'),
       scrounge_cache = require('./scrounge_cache'),
-      scrounge_root = require('./scrounge_root'),    
-      scrounge_file = require('./scrounge_file'),    
+      scrounge_root = require('./scrounge_root'),
+      scrounge_file = require('./scrounge_file'),
       scrounge_opts = require('./scrounge_opts'),
       scrounge_log = require('./scrounge_log');
 
 module.exports = (o => {
-
-  o = (opts, fn) => 
+  o = (opts, fn) =>
     o.build(opts, fn);
 
-  //o.watch = scrounge_watch;
-  
   o.writeroots = (opts, rootarr, rootobj, fn) =>
     scrounge_root.writearr(opts, rootarr, rootobj, fn);
 
@@ -38,21 +33,21 @@ module.exports = (o => {
           custopts = Object.create(opts);
 
       custopts.isconcat = false;
-      custopts.iscompress = false;    
-      
+      custopts.iscompress = false;
+
       scrounge_depnode.getarrastypearr(rootobj[jsrootarr[0]], opts.tplextnarr, (err, deparr) => {
         if (err) return fn(err);
 
-        var rootname = scrounge_file.setextn(jsrootarr[0], opts.tplextnarr[0]);
+        let rootname = scrounge_file.setextn(jsrootarr[0], opts.tplextnarr[0]);
         rootobj[rootname] = deparr;
-        
+
         scrounge_root.write(custopts, rootname, rootobj, fn);
       });
     } else {
       fn(null);
     }
   };
-  
+
   // returned object uses rootnames as named-properties defined w/ rootarr
   //
   // existance of template and stylesheet files is checked here
@@ -61,13 +56,12 @@ module.exports = (o => {
 
   // if baseage does not exist, skip read/write with no failure
   o.writebasepage = (opts, rootarr, rootobj, fn) => {
-    const basepage = opts.basepage,
-          basepagein = opts.basepagein;
+    const { basepage, basepagein } = opts;
 
     if (basepage && !scrounge_file.isexist(basepage)) {
-      scrounge_file.copy(opts, basepagein, basepage, (err, res) => {
+      scrounge_file.copy(opts, basepagein, basepage, err => {
         if (err) return fn(err);
-        
+
         scrounge_basepage.writeelemarr(opts, basepage, rootarr, rootobj, fn);
       });
     } else if (basepage && scrounge_file.isexist(basepage)) {
@@ -76,11 +70,10 @@ module.exports = (o => {
       fn(null);
     }
   };
-  
+
   o.readbasepage = (opts, fn) => {
-    const basepage = opts.basepage,
-          basepagein = opts.basepagein;
-    
+    const { basepage, basepagein } = opts;
+
     if (basepage && scrounge_file.isexist(basepagein)) {
       scrounge_basepage.getrootnamearr(opts, basepagein, (err, res) => {
         if (err) return fn(err);
@@ -109,7 +102,6 @@ module.exports = (o => {
 
     if (opts.isconcat === false &&
         scrounge_opts.isfilenamesupportedtype(opts, srcfilename)) {
-
       o.readbasepage(opts, (err, rootsarr) => {
         if (err) return o.throwerror(err, fn);
 
@@ -118,10 +110,10 @@ module.exports = (o => {
 
           rootsarr = rootsarr.filter(root => (
             scrounge_opts.issamesupportedtype(opts, node.get('filepath'), root)));
-          
+
           scrounge_cache.recoverrootarrcachemapnode(opts, rootsarr, node, (err, rootnodescached) => {
             if (err) return o.throwerror(err, fn);
-            
+
             o.writeroots(opts, rootsarr, rootnodescached, fn);
 
             if (opts.basepage &&
@@ -135,11 +127,11 @@ module.exports = (o => {
   };
 
   o.buildcachemap = (opts, fn) => {
-    var datebgn = new Date();
+    let datebgn = new Date();
 
     fn = optfn(fn);
     opts = scrounge_opts(opts);
-    
+
     scrounge_log.start(opts, datebgn);
 
     o.readbasepage(opts, (err, rootsarr) => {
@@ -148,9 +140,9 @@ module.exports = (o => {
       o.buildrootobj(opts, rootsarr, (err, rootobj) => {
         if (err) return o.throwerror(err, fn);
 
-        scrounge_cache.buildmaps(opts, rootsarr, rootobj, (err, res) => {
+        scrounge_cache.buildmaps(opts, rootsarr, rootobj, (err) => {
           if (err) return o.throwerror(err, fn);
-          
+
           scrounge_log.finish(opts, simpletime.getElapsedTimeFormatted(datebgn, new Date()));
         });
       });
@@ -158,11 +150,11 @@ module.exports = (o => {
   };
 
   o.build = (opts, fn) => {
-    var datebgn = new Date();
+    let datebgn = new Date();
 
     fn = optfn(fn);
     opts = scrounge_opts(opts);
-    
+
     scrounge_log.start(opts, datebgn);
 
     o.readbasepage(opts, (err, rootsarr) => {
@@ -174,11 +166,11 @@ module.exports = (o => {
         if (opts.iscachemap) {
           scrounge_cache.buildmaps(opts, rootsarr, rootobj);
         }
-        
-        o.writeroots(opts, rootsarr, rootobj, (err, nodearr) => {
+
+        o.writeroots(opts, rootsarr, rootobj, err => {
           if (err) return o.throwerror(err, fn);
 
-          o.copyroottpl(opts, rootobj, (err) => {
+          o.copyroottpl(opts, rootobj, err => {
             if (err) return o.throwerror(err, fn);
 
             o.writebasepage(opts, rootsarr, rootobj, (err, res) => {
@@ -189,11 +181,10 @@ module.exports = (o => {
               fn(err, res);
             });
           });
-        });          
+        });
       });
     });
   };
 
   return o;
-  
 })({});

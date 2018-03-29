@@ -1,4 +1,4 @@
-// Filename: scrounge_adapt.js  
+// Filename: scrounge_adapt.js
 // Timestamp: 2017.10.07-01:46:00 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
@@ -8,28 +8,26 @@ const umd = require('umd'),
       babel = require('babel-core'),
       babelpresetenv = require('babel-preset-env'),
       umdname = require('umdname'),
-      cleancss = require('clean-css'),
-      bcjstocjs = require('bcjstocjs'),    
+      Cleancss = require('clean-css'),
       moduletype = require('moduletype'),
       typescript = require('typescript'),
       replacerequires = require('replace-requires'),
-      
       scrounge_log = require('./scrounge_log');
 
 module.exports = (o => {
 
   o = (opts, depmod, str, fn) => {
-    var filepath = depmod.get('filepath'),
+    let filepath = depmod.get('filepath'),
         extname = path.extname(filepath).slice(1);
 
-    opts.embedarr.map((embed) => {
+    opts.embedarr.map(embed => {
       if (~filepath.indexOf(embed.filepath)) {
         str = embed.content + str;
       }
     });
 
-    opts.globalarr.map((global) => {
-      // module namespace defined on user-given name 
+    opts.globalarr.map(global => {
+      // module namespace defined on user-given name
       if (~filepath.indexOf(global.filepath)) {
         str += '\nif (typeof window === "object") window.:NAME = :UID;'
           .replace(/:NAME/g, global.name)
@@ -46,27 +44,26 @@ module.exports = (o => {
 
   o.uidsanitised = uid =>
     uid
-      .replace(/\.[^\.]*$/, '')     // remove extension from uid
-      .replace(/-|\/|\\/gi, '_')        // remove slash and dash
+      .replace(/\.[^.]*$/, '') // remove extension from uid
+      .replace(/-|\/|\\/gi, '_') // remove slash and dash
       .replace(/[^a-z0-9_]+/gi, '');
 
   o.js = (opts, depmod, str, fn) => {
-    var filepath = depmod.get('filepath'),
+    let filepath = depmod.get('filepath'),
         modname = o.uidsanitised(depmod.get('uid')),
-        outarr = depmod.get('outarr'),
         skip = opts.skippatharr.some(path =>
           filepath.indexOf(path) !== -1
         ),
         umdstr;
 
     if (!skip) {
-      //str = uglifyjs.minify(str, { fromString: true }).code;
+      // str = uglifyjs.minify(str, { fromString: true }).code;
       str = babel.transform(str, {
-        compact: opts.iscompress && !skip,
-        presets: opts.ises2015 ? [
+        compact : opts.iscompress && !skip,
+        presets : opts.ises2015 ? [
           babelpresetenv
         ] : [],
-        plugins: opts.babelpluginarr || []
+        plugins : opts.babelpluginarr || []
       }).code;
     }
 
@@ -80,7 +77,7 @@ module.exports = (o => {
         let refname = cur.get('refname'),
             depname = o.uidsanitised(cur.get('uid'));
 
-        opts.aliasarr.map(([matchname, newname]) => (
+        opts.aliasarr.map(([ matchname, newname ]) => (
           newname === refname &&
             (prev[matchname] = depname)
         ));
@@ -91,7 +88,7 @@ module.exports = (o => {
       }, {}));
     } else if (moduletype.amd(str) || moduletype.esm(str)) {
       scrounge_log.unsupportedtype(opts, moduletype.is(str), modname);
-      return fn('[!!!] unsupported module');      
+      return fn('[!!!] unsupported module');
     } else {
       umdstr = str;
     }
@@ -99,10 +96,10 @@ module.exports = (o => {
     if (opts.iscompress && !skip) {
       try {
         fn(null, umdstr);
-        //fn(null, uglifyjs.minify(umdstr, { fromString: true }).code);
+        // fn(null, uglifyjs.minify(umdstr, { fromString: true }).code);
       } catch (e) {
-        console.error('[!!!] parse error ' + filepath);
-        
+        console.error(`[!!!] parse error ${filepath}`);
+
         fn(e);
       }
     } else {
@@ -110,16 +107,18 @@ module.exports = (o => {
     }
   };
 
-  o.tsx = o.ts = (opts, depmod, str, fn) => {
+  o.tsx = (opts, depmod, str, fn) => {
     let tsconfig = opts.tsconfig || {},
         jsstr = typescript.transpileModule(str, tsconfig).outputText;
 
     o.js(opts, depmod, jsstr, fn);
-  };    
-  
+  };
+
+  o.ts = o.tsx;
+
   o.css = (opts, depmod, str, fn) => {
     fn(null, opts.iscompress ?
-       new cleancss().minify(str).styles : str);
+      new Cleancss().minify(str).styles : str);
   };
 
   o.less = (opts, depmod, str, fn) => {
@@ -127,11 +126,10 @@ module.exports = (o => {
       filename : path.resolve(depmod.get('filepath'))
     }, (err, output) => {
       if (err) console.error(err);
-      
-      err ? fn(err) : o.css(opts, depmod, output.css, fn);
+
+      return err ? fn(err) : o.css(opts, depmod, output.css, fn);
     });
   };
-  
+
   return o;
-  
 })({});
