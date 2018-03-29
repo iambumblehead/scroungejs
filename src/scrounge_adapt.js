@@ -1,5 +1,5 @@
 // Filename: scrounge_adapt.js
-// Timestamp: 2018.03.29-00:54:33 (last modified)
+// Timestamp: 2018.03.29-06:20:46 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const umd = require('umd'),
@@ -7,6 +7,7 @@ const umd = require('umd'),
       less = require('less'),
       babel = require('babel-core'),
       babelpresetenv = require('babel-preset-env'),
+      babelimport = require('babel-plugin-syntax-dynamic-import'),
       umdname = require('umdname'),
       Cleancss = require('clean-css'),
       moduletype = require('moduletype'),
@@ -60,7 +61,8 @@ module.exports = (o => {
       str = babel.transform(str, {
         compact : opts.iscompress && !skip,
         presets : opts.ises2015 ? [
-          babelpresetenv
+          babelpresetenv,
+          babelimport
         ] : [],
         plugins : opts.babelpluginarr || []
       }).code;
