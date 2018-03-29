@@ -1,12 +1,14 @@
-// Filename: app.js  
-// Timestamp: 2015.12.15-08:36:39 (last modified)
-// Author(s): Bumblehead (www.bumblehead.com)  
+// Filename: app.js
+// Timestamp: 2018.03.29-00:42:04 (last modified)
+// Author(s): Bumblehead (www.bumblehead.com)
 
-var viewsall = require('./views/viewsall.js'),
-    testbowercomponent = require('testbowercomponent');
+const viewsall = require('./views/viewsall.js');
 
-window.app = {
-  start : function () {
+let app = {
+  start : () => {
     viewsall.start();
   }
 };
+
+if (typeof window === 'object')
+  window.app = app;

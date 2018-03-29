@@ -1,6 +1,6 @@
-// Filename: viewa.js  
-// Timestamp: 2015.12.07-20:16:12 (last modified)
-// Author(s): bumblehead <chris@bumblehead.com>  
+// Filename: viewa.js
+// Timestamp: 2018.03.29-00:40:34 (last modified)
+// Author(s): bumblehead <chris@bumblehead.com>
 
 var viewa = {
   ctrlsall : require('../controls/ctrlsall')

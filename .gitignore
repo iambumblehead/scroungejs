@@ -9,3 +9,4 @@ npm-debug.log
 .tern-port
 .scrounge
 package-lock.json
+.DS_Store
