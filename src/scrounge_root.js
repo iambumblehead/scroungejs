@@ -1,10 +1,11 @@
 // Filename: scrounge_root.js
-// Timestamp: 2017.07.29-19:37:31 (last modified)
+// Timestamp: 2018.03.29-01:19:04 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
       depgraph = require('depgraph'),
-
+      moduletype = require('moduletype'),
+      
       scrounge_log = require('./scrounge_log'),
       scrounge_file = require('./scrounge_file'),
       scrounge_opts = require('./scrounge_opts'),
@@ -87,7 +88,11 @@ module.exports = (o => {
       o.getasdeparr(opts, graphnamearr[x], (err, deparr) => {
         if (err) return fn(err);
 
-        graphsobj[graphnamearr[x]] = deparr;
+        graphsobj[graphnamearr[x]] = deparr.map(depnode => (
+          depnode.set(
+            'moduletype', moduletype.is(
+              depnode.get('content')) === 'esm' ? 'module' : 'text/javascript')
+        ));
 
         scrounge_prepend.getprenodearr(opts, graphnamearr[x], (err, prenodearr) => {
           if (err) return fn(err);

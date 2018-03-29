@@ -1,5 +1,5 @@
 // Filename: scrounge_elem.js
-// Timestamp: 2017.04.23-14:16:53 (last modified)
+// Timestamp: 2018.03.29-01:20:05 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
@@ -7,17 +7,21 @@ const path = require('path'),
 
 module.exports = (o => {
   // include tags for css and js
-  o.includejstpl = '<script src="$" type="text/javascript"></script>';
+  //
+  // type="text/javascript"
+  // type="module"
+  o.includejstpl = '<script src="$" type=":type"></script>';
   o.includecsstpl = '<link href="$" rel="stylesheet" type="text/css">';
 
   o.elemre = / *<!-- <scrounge([\s\S]*?)> -->([\s\S]*?)<!-- <\/scrounge> -->/gmi;
   o.elemrootre = /root="([\s\S]*?)"/;
   o.elemtypere = /type="(\.[cj]ss?)?"/;
 
-  o.getincludetag = (opts, filepath) => {
+  o.getincludetag = (opts, filepath, moduletype) => {
     let extn = path.extname(filepath),
         include;
 
+    console.log('moduletype', moduletype);
     if (opts.cssextnarr.find(cssextn =>
       cssextn === extn
     )) {
@@ -36,7 +40,9 @@ module.exports = (o => {
     if (opts.istimestamp)
       filepath = addquery(filepath, `ts=${opts.buildts}`);
 
-    return include.replace(/\$/, filepath);
+    return include
+      .replace(/\$/, filepath)
+      .replace(/:type/, moduletype);
   };
 
   o.getrootarr = str => {

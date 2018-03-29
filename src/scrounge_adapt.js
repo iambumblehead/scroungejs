@@ -1,5 +1,5 @@
 // Filename: scrounge_adapt.js
-// Timestamp: 2017.10.07-01:46:00 (last modified)
+// Timestamp: 2018.03.29-00:54:33 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const umd = require('umd'),
@@ -15,7 +15,6 @@ const umd = require('umd'),
       scrounge_log = require('./scrounge_log');
 
 module.exports = (o => {
-
   o = (opts, depmod, str, fn) => {
     let filepath = depmod.get('filepath'),
         extname = path.extname(filepath).slice(1);
@@ -86,7 +85,10 @@ module.exports = (o => {
 
         return prev;
       }, {}));
-    } else if (moduletype.amd(str) || moduletype.esm(str)) {
+    } else if (moduletype.esm(str)) {
+      umdstr = str;
+      // } else if (moduletype.amd(str) || moduletype.esm(str)) {
+    } else if (moduletype.amd(str)) {
       scrounge_log.unsupportedtype(opts, moduletype.is(str), modname);
       return fn('[!!!] unsupported module');
     } else {

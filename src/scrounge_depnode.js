@@ -1,5 +1,5 @@
 // Filename: scrounge_depnode.js
-// Timestamp: 2017.07.29-18:59:41 (last modified)
+// Timestamp: 2018.03.29-01:13:38 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const fs = require('fs'),
@@ -10,7 +10,6 @@ const fs = require('fs'),
       scrounge_adapt = require('./scrounge_adapt');
 
 module.exports = (o => {
-
   o.getcontentadapted = (opts, node, fn) =>
     scrounge_adapt(opts, node, node.get('content'), fn);
 
@@ -22,6 +21,7 @@ module.exports = (o => {
 
     fs.readFile(path.resolve(filepath), 'utf-8', (err, content) => {
       fn(err, err || node
+        .set('moduletype', 'text/css')
         .set('filepath', filepath)
         .set('content', content));
     });
@@ -100,12 +100,15 @@ module.exports = (o => {
 
   // for each node in the array build ordered listing of elements
   o.arrgetincludetagarr = (opts, depnodearr, rootname) => (
+    console.log('getincludtagarr', opts.isconcat, depnodearr),
     opts.isconcat
       ? [ scrounge_elem.getincludetag(
-        opts, o.setpublicoutputpath(opts, depnodearr[0], rootname)) ]
+        opts, o.setpublicoutputpath(opts, depnodearr[0], rootname),
+        depnodearr[0].get('moduletype')) ]
       : depnodearr.map(node => (
         scrounge_elem.getincludetag(
-          opts, o.setpublicoutputpath(opts, node, rootname)
+          opts, o.setpublicoutputpath(opts, node, rootname),
+          node.get('moduletype')
         ))).reverse());
 
   return o;
