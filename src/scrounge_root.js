@@ -5,7 +5,7 @@
 const path = require('path'),
       depgraph = require('depgraph'),
       moduletype = require('moduletype'),
-      
+
       scrounge_log = require('./scrounge_log'),
       scrounge_file = require('./scrounge_file'),
       scrounge_opts = require('./scrounge_opts'),
@@ -13,7 +13,6 @@ const path = require('path'),
       scrounge_depnode = require('./scrounge_depnode');
 
 module.exports = (o => {
-
   // converts rootname array to one of the specified type
   // filters the result so that all values are unique
   //

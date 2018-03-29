@@ -36,7 +36,6 @@ module.exports = (o => {
 
         fn(null, node);
       });
-
     }(typearr, typearr.length));
 
   o.getarrastype = (deparr, type, fn) =>
