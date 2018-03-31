@@ -1,5 +1,5 @@
 // Filename: scrounge_build.js
-// Timestamp: 2017.07.29-19:37:37 (last modified)
+// Timestamp: 2018.03.31-13:27:22 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
@@ -7,9 +7,9 @@ const path = require('path'),
       simpletime = require('simpletime'),
 
       scrounge_basepage = require('./scrounge_basepage'),
-      scrounge_depnode = require('./scrounge_depnode'),
       scrounge_cache = require('./scrounge_cache'),
       scrounge_root = require('./scrounge_root'),
+      scrounge_node = require('./scrounge_node'),
       scrounge_file = require('./scrounge_file'),
       scrounge_opts = require('./scrounge_opts'),
       scrounge_log = require('./scrounge_log');
@@ -35,7 +35,7 @@ module.exports = (o => {
       custopts.isconcat = false;
       custopts.iscompress = false;
 
-      scrounge_depnode.getarrastypearr(rootobj[jsrootarr[0]], opts.tplextnarr, (err, deparr) => {
+      scrounge_node.getarrastypearr(rootobj[jsrootarr[0]], opts.tplextnarr, (err, deparr) => {
         if (err) return fn(err);
 
         let rootname = scrounge_file.setextn(jsrootarr[0], opts.tplextnarr[0]);

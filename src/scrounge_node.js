@@ -1,5 +1,5 @@
-// Filename: scrounge_depnode.js
-// Timestamp: 2018.03.31-01:25:25 (last modified)
+// Filename: scrounge_node.js
+// Timestamp: 2018.03.31-13:26:22 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const fs = require('fs'),
@@ -116,12 +116,12 @@ module.exports = (o => {
 
 
   // for each node in the array build ordered listing of elements
-  o.arrgetincludetagarr = (opts, depnodearr, rootname) => (
+  o.arrgetincludetagarr = (opts, nodearr, rootname) => (
     opts.isconcat
       ? [ scrounge_elem.getincludetag(
-        opts, o.setpublicoutputpath(opts, depnodearr[0], rootname),
-        depnodearr[0].get('moduletype')) ]
-      : depnodearr.map(node => (
+        opts, o.setpublicoutputpath(opts, nodearr[0], rootname),
+        nodearr[0].get('moduletype')) ]
+      : nodearr.map(node => (
         scrounge_elem.getincludetag(
           opts, o.setpublicoutputpath(opts, node, rootname),
           node.get('moduletype')

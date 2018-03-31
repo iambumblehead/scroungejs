@@ -1,5 +1,5 @@
 // Filename: scrounge_root.js
-// Timestamp: 2018.03.31-01:36:35 (last modified)
+// Timestamp: 2018.03.31-13:42:27 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
@@ -9,9 +9,9 @@ const path = require('path'),
       scrounge_log = require('./scrounge_log'),
       scrounge_file = require('./scrounge_file'),
       scrounge_opts = require('./scrounge_opts'),
+      scrounge_node = require('./scrounge_node'),
       scrounge_adapt = require('./scrounge_adapt'),
-      scrounge_prepend = require('./scrounge_prepend'),
-      scrounge_depnode = require('./scrounge_depnode');
+      scrounge_prepend = require('./scrounge_prepend');
 
 module.exports = (o => {
   // converts rootname array to one of the specified type
@@ -88,10 +88,10 @@ module.exports = (o => {
       o.getasdeparr(opts, graphnamearr[x], (err, deparr) => {
         if (err) return fn(err);
 
-        graphsobj[graphnamearr[x]] = deparr.map(depnode => (
-          depnode.set(
+        graphsobj[graphnamearr[x]] = deparr.map(node => (
+          node.set(
             'moduletype', moduletype.is(
-              depnode.get('content')) === 'esm' ? 'module' : 'text/javascript')
+              node.get('content')) === 'esm' ? 'module' : 'text/javascript')
         ));
 
         scrounge_prepend.getprenodearr(opts, graphnamearr[x], (err, prenodearr) => {
@@ -124,7 +124,7 @@ module.exports = (o => {
 
           next(rootarr, ++x, len, jsdeparrobj, deparrobj);
         } else if (rootextn === '.css') {
-          scrounge_depnode.getarrastypearr(jsdeparr, opts.cssextnarr, (err, deparr) => {
+          scrounge_node.getarrastypearr(jsdeparr, opts.cssextnarr, (err, deparr) => {
             if (err) return fn(err);
 
             deparrobj[rootname] = deparr;
@@ -143,7 +143,7 @@ module.exports = (o => {
         deparr = graphobj[rootname],
 
         nodewrite = (opts, node, rootname, content, fn) => {
-          let filepath = scrounge_depnode.setpublicoutputpathreal(opts, node, rootname),
+          let filepath = scrounge_node.setpublicoutputpathreal(opts, node, rootname),
               rootextn = path.extname(rootname),
               fileextn =
                 opts.jsextnarr.find(extn => extn === rootextn) ||
@@ -173,7 +173,7 @@ module.exports = (o => {
       (function nextdep (dep, x) {
         if (!x--) return fn(null, 'success');
 
-        // scrounge_depnode.getcontentadapted(opts, dep[x], (err, res) => {
+        // scrounge_node.getcontentadapted(opts, dep[x], (err, res) => {
         scrounge_adapt(opts, dep[x], (err, res) => {
           if (err) return fn(err);
 

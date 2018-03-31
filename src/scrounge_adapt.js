@@ -1,5 +1,5 @@
 // Filename: scrounge_adapt.js
-// Timestamp: 2018.03.31-01:38:11 (last modified)
+// Timestamp: 2018.03.31-13:26:44 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const umd = require('umd'),
@@ -14,7 +14,7 @@ const umd = require('umd'),
       replacerequires = require('replace-requires'),
       replaceimports = require('replace-imports'),
 
-      scrounge_depnode = require('./scrounge_depnode'),
+      scrounge_node = require('./scrounge_node'),
       scrounge_uid = require('./scrounge_uid'),
       scrounge_log = require('./scrounge_log');
 
@@ -76,7 +76,7 @@ module.exports = (o => {
         umdstr = str;
       }
 
-      let replacements = scrounge_depnode.buildimportreplacements(opts, node);
+      let replacements = scrounge_node.buildimportreplacements(opts, node);
       umdstr = replacerequires(umdstr, replacements);
 
       if (moduletype.esm(str)) {

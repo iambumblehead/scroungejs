@@ -1,8 +1,8 @@
 // Filename: scrounge_basepage.js
-// Timestamp: 2017.04.23-15:06:08 (last modified)
+// Timestamp: 2018.03.31-13:26:52 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-const scrounge_depnode = require('./scrounge_depnode'),
+const scrounge_node = require('./scrounge_node'),
       scrounge_elem = require('./scrounge_elem'),
       scrounge_file = require('./scrounge_file');
 
@@ -50,7 +50,7 @@ module.exports = (o => {
             nodearrobj[root] && nodearrobj[root].length
           )).map(root => (
             // each node in the array returns ordered listing of elements
-            scrounge_depnode.arrgetincludetagarr(opts, nodearrobj[root], root)
+            scrounge_node.arrgetincludetagarr(opts, nodearrobj[root], root)
               .map(elem => indent + elem).join('\n')
           )).join('\n')
         ));
