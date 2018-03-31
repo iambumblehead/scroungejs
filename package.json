@@ -25,6 +25,7 @@
     "addquery": "^0.0.1",
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.0",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "typescript": "latest",
     "chokidar": "^1.7.0",
     "clean-css": "^3.4.19",
