@@ -38,7 +38,7 @@
     "moduletype": "^0.0.6",
     "simpletime": "^0.1.28",
     "pathpublic": "^0.0.8",
-    "depgraph": "^0.3.0",
+    "depgraph": "^0.3.4",
     "umdname": "^0.0.7",
     "bcjstocjs": "^0.0.2",
     "mkdirp": "~0.5.x",
