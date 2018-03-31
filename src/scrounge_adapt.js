@@ -1,5 +1,5 @@
 // Filename: scrounge_adapt.js
-// Timestamp: 2018.03.31-13:26:44 (last modified)
+// Timestamp: 2018.03.31-14:42:32 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const umd = require('umd'),
@@ -109,14 +109,18 @@ module.exports = (o => {
     }
   };
 
-  o.tsx = (opts, node, str, fn) => {
+  // perform o.js on mjs files
+  o.mjs = o.js;
+
+  o.ts = (opts, node, str, fn) => {
     let tsconfig = opts.tsconfig || {},
         jsstr = typescript.transpileModule(str, tsconfig).outputText;
 
     o.js(opts, node, jsstr, fn);
   };
 
-  o.ts = o.tsx;
+  // perform o.ts on tsx files
+  o.tsx = o.ts;
 
   o.css = (opts, node, str, fn) => {
     fn(null, opts.iscompress ?

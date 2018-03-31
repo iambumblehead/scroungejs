@@ -1,48 +1,63 @@
-scrounge.js
+scroungejs
 ===========
-**(c)[Bumblehead][0], 2012-2016** [MIT-license](#license)
+**(c)[Bumblehead][0]** [MIT-license](#license)
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand3.png)
 
-__NOT FOR PRODUCTION USE -ALPHA QUALITY__
+Scroungejs is an old and obscure build tool. It started as an emacs/elisp script in 2009 and was first ported to javascript and published to npm in 2012. It supports ES6 and CommonJS modules and is mostly a wrapper around tools like [depgraph][1], [replace-requires][2], and [detective][5].
 
-scrounge.js is a narrow use-case build-tool of minimal setup. It is a decision-making wrapper around tools like [depgraph][1], [replace-requires][2], [uglifyjs2][3], [umd][4] and [detective][5]. features include:
+I never marketed scroungejs and its README was not kept up-to-date. 'Scrounge historically offered advantages over other popular build tools. For example, before module systems such as CommonJS or AMD, scroungejs supported its own system. Scroungejs was always simple to setup and never required "global" installations. Concatenation is/was always optional, and so watching and deploying live-modified source files was fast with scroungejs.
 
- * **supports CommonJS** and NPM/Bower module resolution and _**does not support**_ **AMD, ES6 or other module formats**
- * compression and concatenation are enabled or disabled for each build (useful during development)
- * does not require unusual tags or attributes added to markup files
- * handles ".css" and ".less" stylesheets
+Scroungejs was used by foxsports.com and ties.com, but I'm likely the only person using it these days.
 
-Clone and try out the test with `npm start`.
+I plan to continue maintaining and using scroungejs. Scroungejs currently supports ES6 and CommonJS modules.
 
 [0]: http://www.bumblehead.com                                     "bumblehead"
 [1]: https://github.com/iambumblehead/depgraph                       "depgraph"
 [2]: https://github.com/bendrucker/replace-requires          "replace-requires"
-[3]: http://github.com/mishoo/UglifyJS2                             "uglifyjs2"
+[3]: https://github.com/mishoo/UglifyJS2                             "uglifyjs2"
 [4]: https://github.com/ForbesLindesay/umd                                "umd"
 [5]: https://github.com/substack/node-detective                "node-detective"
 
 ---------------------------------------------------------
-#### <a id="get-started"></a>get started
+#### <a id="info"></a>info
 
-A sample scrounge.js configuration found in test/,
+![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand10.png)
+
+A sample scroungejs configuration is found in spec/. But here's one with several common configuration options.
 
 ```javascript
 scroungejs.build({
-  inputpath      : './test/testbuild1/testbuildSrc',
-  outputpath     : './test/testbuild1/testbuildFin',
-  publicpath     : './testbuildFin',
-  basepage       : './test/testbuild1/index.html',
+  version        : require('./package.json').version,
   iscompressed   : true,
   isconcatenated : false,
-  roots          : 'app.js'
+  inputpath      : './src/',
+  outputpath     : './build/',
+  basepagein     : './src/index.tpl.html',
+  basepage       : './build/index.html',
+  prependarr : [{
+    treename : myapprootfile.js',
+    sourcearr : [
+      './node_modules/three/build/three.js',
+      './node_modules/hls.js/dist/hls.min.js'
+    ]
+  }],
+
+  skipdeparr : [
+    '/hls.js'
+  ],
+
+  treearr : [
+    'myapprootfile.js',
+    'myapprootfile.css'
+  ]
 }, function (err, res) {
   if (err) return console.log(err);
   console.log('finished!');
 });
 ```
 
-It console prints this when it runs,
 
+The example in spec console prints something like this when it runs,
 ```bash
 [...] start: Mon Dec 07 2015 22:09:36 GMT-0800 (PST)
 [...] root: app.js
@@ -92,8 +107,7 @@ It reads index.tpl.html,
 </html>
 ```
 
-It then creates or updates index.html to look like this,
-
+It creates and updates a resulting index.html to look like this,
 ```html
 <!DOCTYPE html>
 <html>
@@ -113,69 +127,13 @@ It then creates or updates index.html to look like this,
 </html>
 ```
 
-That's the basic functionality with details explained below. Pull Requests are liberally accepted.
+That's the basic functionality.
 
----------------------------------------------------------
-#### <a id="modifiers"></a>modifiers
-
-![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand10.png)
-
- - **inputpath= _path_**, _default: ./_
-   
-   a systempath to a directory
-
- - **outputpath= _path_**, _default: ./www\__
- 
-   a systempath to a directory or file
-   
- - **publicpath= _path_**, _default: null_
-   
-   a path to files created by scrounge.js used with basepage 
-
-   `./getStarted/app/cmpr/app.js`, with publicpath `/cmpr/`
-
-   ```html
-   <script src="/cmpr/app.js" type="text/javascript"></script>';
-   ```
-
- - **isunique= _bool_**, _default: false_
-
-   add a unique argument to reference paths in include elements
-   
-   ```html
-   <script src="Main.js?u=1370491167925" type="text/javascript"></script>';
-   <link href="Main.css?u=1370491167926" rel="stylesheet" type="text/css">
-   ```
-
- - **iscompressed= _bool_**, _default: false_
-
-   compress scripts and styles before writing them.
-
- - **isconcatenated= _bool_**, _default: false_
-
-   concatenate scripts and stylesheets files before writing them.
-
- - **issilent= _bool_**, _default: false_
-
-   supress console messages.
-
- - **isbrowser= _bool_**, _default: true_
-
-   locate files defined to the "browser" property defined in package.json and bower.json files.
-   
- - **basepage= _basepage_**, _default: null_
-   
-   update scrounge tags in the defined basepage. basepage is not modified if it does not contain scrounge tags.
-
-
----------------------------------------------------------
-#### <a id="license"></a>license
-
- ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand.png) 
+![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand.png) 
 
 (The MIT License)
 
-Copyright (c) 2012-2016 [Bumblehead][0] <chris@bumblehead.com>
+Copyright (c) [Bumblehead][0] <chris@bumblehead.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
