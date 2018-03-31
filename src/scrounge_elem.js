@@ -1,5 +1,5 @@
 // Filename: scrounge_elem.js
-// Timestamp: 2018.03.29-01:20:05 (last modified)
+// Timestamp: 2018.03.30-01:04:22 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
@@ -21,7 +21,6 @@ module.exports = (o => {
     let extn = path.extname(filepath),
         include;
 
-    console.log('moduletype', moduletype);
     if (opts.cssextnarr.find(cssextn =>
       cssextn === extn
     )) {

@@ -1,18 +1,15 @@
 // Filename: scrounge_depnode.js
-// Timestamp: 2018.03.29-01:13:38 (last modified)
+// Timestamp: 2018.03.31-01:25:25 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const fs = require('fs'),
       path = require('path'),
 
+      scrounge_uid = require('./scrounge_uid'),
       scrounge_file = require('./scrounge_file'),
-      scrounge_elem = require('./scrounge_elem'),
-      scrounge_adapt = require('./scrounge_adapt');
+      scrounge_elem = require('./scrounge_elem');
 
 module.exports = (o => {
-  o.getcontentadapted = (opts, node, fn) =>
-    scrounge_adapt(opts, node, node.get('content'), fn);
-
   // for a node with filepath ~/software/node.js
   // return a 'css' type node if type is 'css' and
   // corresponding css file exists (~/software/node.css)
@@ -78,8 +75,9 @@ module.exports = (o => {
   o.setpublicoutputpath = (opts, node, rootname) => {
     let uid = node.get('uid'),
         filepath = node.get('filepath'),
-        publicpath = opts.isconcat ?
-          scrounge_file.setbasename(filepath, rootname) : filepath;
+        publicpath = opts.isconcat
+          ? scrounge_file.setbasename(filepath, rootname)
+          : filepath;
 
     publicpath = o.setpublicextn(opts, publicpath, rootname);
 
@@ -97,9 +95,28 @@ module.exports = (o => {
     return scrounge_file.setoutputpathreal(opts, publicpath, uid);
   };
 
+  //
+  // return a mapping of import paths
+  // and the values they should be replaced with
+  //
+  o.buildimportreplacements = (opts, node) =>
+    node.get('outarr').reduce((prev, cur) => {
+      let refname = cur.get('refname'),
+          depname = scrounge_uid.sanitised(cur.get('uid'));
+
+      opts.aliasarr.map(([ matchname, newname ]) => (
+        newname === refname &&
+          (prev[matchname] = depname)
+      ));
+
+      prev[refname] = depname;
+
+      return prev;
+    }, {});
+
+
   // for each node in the array build ordered listing of elements
   o.arrgetincludetagarr = (opts, depnodearr, rootname) => (
-    console.log('getincludtagarr', opts.isconcat, depnodearr),
     opts.isconcat
       ? [ scrounge_elem.getincludetag(
         opts, o.setpublicoutputpath(opts, depnodearr[0], rootname),
