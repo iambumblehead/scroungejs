@@ -18,13 +18,9 @@ I plan to continue maintaining and using scroungejs. Scroungejs currently suppor
 [4]: https://github.com/ForbesLindesay/umd                                "umd"
 [5]: https://github.com/substack/node-detective                "node-detective"
 
----------------------------------------------------------
-#### <a id="info"></a>info
-
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand10.png)
 
-A sample scroungejs configuration is found in spec/. But here's one with several common configuration options.
-
+A sample scroungejs configuration is found in spec/. But here's one with several common configuration options,
 ```javascript
 scroungejs.build({
   version        : require('./package.json').version,
@@ -35,7 +31,7 @@ scroungejs.build({
   basepagein     : './src/index.tpl.html',
   basepage       : './build/index.html',
   prependarr : [{
-    treename : myapprootfile.js',
+    treename : 'myapprootfile.js',
     sourcearr : [
       './node_modules/three/build/three.js',
       './node_modules/hls.js/dist/hls.min.js'
