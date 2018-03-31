@@ -140,7 +140,7 @@ module.exports = (o => {
       o.buildrootobj(opts, rootsarr, (err, rootobj) => {
         if (err) return o.throwerror(err, fn);
 
-        scrounge_cache.buildmaps(opts, rootsarr, rootobj, (err) => {
+        scrounge_cache.buildmaps(opts, rootsarr, rootobj, err => {
           if (err) return o.throwerror(err, fn);
 
           scrounge_log.finish(opts, simpletime.getElapsedTimeFormatted(datebgn, new Date()));

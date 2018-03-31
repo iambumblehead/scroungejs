@@ -1,16 +1,22 @@
-// Filename: viewsall.js  
-// Timestamp: 2015.12.07-20:15:20 (last modified)
-// Author(s): Bumblehead (www.bumblehead.com)  
+// Filename: viewsall.js
+// Timestamp: 2018.03.30-01:00:11 (last modified)
+// Author(s): Bumblehead (www.bumblehead.com)
 
-var viewsall = {
+
+
+let viewsall = {
   viewa : require('./viewa'),
   viewb : require('./viewb')
 };
 
+const hello = () => 'hello',
+      start = () => {
+        viewsall.viewa.start();
+        viewsall.viewb.start();
+      };
 
-module.exports = {
-  start : function () {
-    viewsall.viewa.start();
-    viewsall.viewb.start();
-  }
+// mo-dule.exp-orts = {
+export default {
+  start,
+  hello
 };

@@ -1,18 +1,19 @@
 // Filename: scrounge_root.js
-// Timestamp: 2017.07.29-19:37:31 (last modified)
+// Timestamp: 2018.03.31-01:36:35 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
       depgraph = require('depgraph'),
+      moduletype = require('moduletype'),
 
       scrounge_log = require('./scrounge_log'),
       scrounge_file = require('./scrounge_file'),
       scrounge_opts = require('./scrounge_opts'),
+      scrounge_adapt = require('./scrounge_adapt'),
       scrounge_prepend = require('./scrounge_prepend'),
       scrounge_depnode = require('./scrounge_depnode');
 
 module.exports = (o => {
-
   // converts rootname array to one of the specified type
   // filters the result so that all values are unique
   //
@@ -87,7 +88,11 @@ module.exports = (o => {
       o.getasdeparr(opts, graphnamearr[x], (err, deparr) => {
         if (err) return fn(err);
 
-        graphsobj[graphnamearr[x]] = deparr;
+        graphsobj[graphnamearr[x]] = deparr.map(depnode => (
+          depnode.set(
+            'moduletype', moduletype.is(
+              depnode.get('content')) === 'esm' ? 'module' : 'text/javascript')
+        ));
 
         scrounge_prepend.getprenodearr(opts, graphnamearr[x], (err, prenodearr) => {
           if (err) return fn(err);
@@ -153,7 +158,7 @@ module.exports = (o => {
       (function nextdep (dep, x, contentarr) {
         if (!x--) return nodewrite(opts, dep[0], rootname, contentarr.join('\n'), fn);
 
-        scrounge_depnode.getcontentadapted(opts, dep[x], (err, res) => {
+        scrounge_adapt(opts, dep[x], (err, res) => {
           if (err) return fn(err);
 
           scrounge_log.rootjoinfile(
@@ -168,7 +173,8 @@ module.exports = (o => {
       (function nextdep (dep, x) {
         if (!x--) return fn(null, 'success');
 
-        scrounge_depnode.getcontentadapted(opts, dep[x], (err, res) => {
+        // scrounge_depnode.getcontentadapted(opts, dep[x], (err, res) => {
+        scrounge_adapt(opts, dep[x], (err, res) => {
           if (err) return fn(err);
 
           nodewrite(opts, dep[x], rootname, res, err => {

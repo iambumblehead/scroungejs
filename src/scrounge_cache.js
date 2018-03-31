@@ -1,17 +1,18 @@
+
 // Filename: scrounge_cache.js
-// Timestamp: 2017.07.29-19:16:21 (last modified)
+// Timestamp: 2018.03.31-00:57:56 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
       optfn = require('optfn'),
       depgraph = require('depgraph'),
 
-      scrounge_adapt = require('./scrounge_adapt'),
+      scrounge_uid = require('./scrounge_uid'),
       scrounge_file = require('./scrounge_file');
 
 module.exports = (o => {
   o.recoverrootcachemapnode = (opts, rootname, node, fn) => {
-    const nodeuid = scrounge_adapt.uidsanitised(node.get('uid')),
+    const nodeuid = scrounge_uid.sanitised(node.get('uid')),
           cachepath = path.join('./.scrounge', rootname, nodeuid);
 
     scrounge_file.read(opts, cachepath, (err, res) => {
@@ -39,7 +40,7 @@ module.exports = (o => {
   };
 
   o.persistrootcachemapfile = (opts, rootname, node, fn) => {
-    const nodeuid = scrounge_adapt.uidsanitised(node.get('uid')),
+    const nodeuid = scrounge_uid.sanitised(node.get('uid')),
           nodejson = JSON.stringify(node.delete('content').toJS(), null, '  '),
           cachepath = path.join('./.scrounge', rootname, nodeuid);
 

@@ -1,5 +1,5 @@
 // Filename: scrounge_adapt.js
-// Timestamp: 2017.10.07-01:46:00 (last modified)
+// Timestamp: 2018.03.31-01:38:11 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const umd = require('umd'),
@@ -12,13 +12,17 @@ const umd = require('umd'),
       moduletype = require('moduletype'),
       typescript = require('typescript'),
       replacerequires = require('replace-requires'),
+      replaceimports = require('replace-imports'),
+
+      scrounge_depnode = require('./scrounge_depnode'),
+      scrounge_uid = require('./scrounge_uid'),
       scrounge_log = require('./scrounge_log');
 
 module.exports = (o => {
-
-  o = (opts, depmod, str, fn) => {
-    let filepath = depmod.get('filepath'),
-        extname = path.extname(filepath).slice(1);
+  o = (opts, node, fn) => {
+    let filepath = node.get('filepath'),
+        extname = path.extname(filepath).slice(1),
+        str = node.get('content');
 
     opts.embedarr.map(embed => {
       if (~filepath.indexOf(embed.filepath)) {
@@ -31,26 +35,20 @@ module.exports = (o => {
       if (~filepath.indexOf(global.filepath)) {
         str += '\nif (typeof window === "object") window.:NAME = :UID;'
           .replace(/:NAME/g, global.name)
-          .replace(/:UID/g, o.uidsanitised(depmod.get('uid')));
+          .replace(/:UID/g, scrounge_uid.sanitised(node.get('uid')));
       }
     });
 
     if (extname && typeof o[extname] === 'function') {
-      o[extname](opts, depmod, str, fn);
+      o[extname](opts, node, str, fn);
     } else {
       fn(null, str);
     }
   };
 
-  o.uidsanitised = uid =>
-    uid
-      .replace(/\.[^.]*$/, '') // remove extension from uid
-      .replace(/-|\/|\\/gi, '_') // remove slash and dash
-      .replace(/[^a-z0-9_]+/gi, '');
-
-  o.js = (opts, depmod, str, fn) => {
-    let filepath = depmod.get('filepath'),
-        modname = o.uidsanitised(depmod.get('uid')),
+  o.js = (opts, node, str, fn) => {
+    let filepath = node.get('filepath'),
+        modname = scrounge_uid.sanitised(node.get('uid')),
         skip = opts.skippatharr.some(path =>
           filepath.indexOf(path) !== -1
         ),
@@ -71,22 +69,26 @@ module.exports = (o => {
       umdstr = str;
     } else if (moduletype.umd(str)) {
       umdstr = umdname(str, modname);
-    } else if (moduletype.cjs(str)) {
-      umdstr = umd(modname, str, { commonJS : true });
-      umdstr = replacerequires(umdstr, depmod.get('outarr').reduce((prev, cur) => {
-        let refname = cur.get('refname'),
-            depname = o.uidsanitised(cur.get('uid'));
+    } else if (moduletype.cjs(str) || moduletype.esm(str)) {
+      if (moduletype.cjs(str) && !moduletype.esm(str)) {
+        umdstr = umd(modname, str, { commonJS : true });
+      } else {
+        umdstr = str;
+      }
 
-        opts.aliasarr.map(([ matchname, newname ]) => (
-          newname === refname &&
-            (prev[matchname] = depname)
-        ));
+      let replacements = scrounge_depnode.buildimportreplacements(opts, node);
+      umdstr = replacerequires(umdstr, replacements);
 
-        prev[refname] = depname;
+      if (moduletype.esm(str)) {
+        replacements = Object.keys(replacements).reduce((prev, key) => {
+          prev[key] = `./${replacements[key]}.js`;
 
-        return prev;
-      }, {}));
-    } else if (moduletype.amd(str) || moduletype.esm(str)) {
+          return prev;
+        }, {});
+        // https://babeljs.io/docs/plugins/transform-es2015-modules-commonjs/
+        umdstr = replaceimports(umdstr, replacements);
+      }
+    } else if (moduletype.amd(str)) {
       scrounge_log.unsupportedtype(opts, moduletype.is(str), modname);
       return fn('[!!!] unsupported module');
     } else {
@@ -107,27 +109,27 @@ module.exports = (o => {
     }
   };
 
-  o.tsx = (opts, depmod, str, fn) => {
+  o.tsx = (opts, node, str, fn) => {
     let tsconfig = opts.tsconfig || {},
         jsstr = typescript.transpileModule(str, tsconfig).outputText;
 
-    o.js(opts, depmod, jsstr, fn);
+    o.js(opts, node, jsstr, fn);
   };
 
   o.ts = o.tsx;
 
-  o.css = (opts, depmod, str, fn) => {
+  o.css = (opts, node, str, fn) => {
     fn(null, opts.iscompress ?
       new Cleancss().minify(str).styles : str);
   };
 
-  o.less = (opts, depmod, str, fn) => {
+  o.less = (opts, node, str, fn) => {
     less.render(str, {
-      filename : path.resolve(depmod.get('filepath'))
+      filename : path.resolve(node.get('filepath'))
     }, (err, output) => {
       if (err) console.error(err);
 
-      return err ? fn(err) : o.css(opts, depmod, output.css, fn);
+      return err ? fn(err) : o.css(opts, node, output.css, fn);
     });
   };
 

@@ -1,14 +1,9 @@
 // Filename: app.js
-// Timestamp: 2018.03.29-00:42:04 (last modified)
+// Timestamp: 2018.03.29-23:05:38 (last modified)
 // Author(s): Bumblehead (www.bumblehead.com)
 
-const viewsall = require('./views/viewsall.js');
+// const viewsall = req-uire('./views/viewsall.js');
+import viewsall from './views/viewsall';
+console.log('starting ', viewsall);
 
-let app = {
-  start : () => {
-    viewsall.start();
-  }
-};
-
-if (typeof window === 'object')
-  window.app = app;
+viewsall.start();

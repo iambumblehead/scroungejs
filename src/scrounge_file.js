@@ -1,12 +1,12 @@
 // Filename: scrounge_file.js
-// Timestamp: 2017.10.01-21:11:23 (last modified)
+// Timestamp: 2018.03.31-00:56:32 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const fs = require('fs'),
       path = require('path'),
       mkdirp = require('mkdirp'),
       pathpublic = require('pathpublic'),
-      scrounge_adapt = require('./scrounge_adapt'),
+      scrounge_uid = require('./scrounge_uid'),
       scrounge_log = require('./scrounge_log');
 
 module.exports = (o => {
@@ -22,7 +22,7 @@ module.exports = (o => {
     let dirname = path.dirname(filepath),
         extname = path.extname(filepath);
 
-    return path.join(dirname, scrounge_adapt.uidsanitised(uid) + extname);
+    return path.join(dirname, scrounge_uid.sanitised(uid) + extname);
   };
 
   o.setpublicpath = (opts, filepath, uid) => {
