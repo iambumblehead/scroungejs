@@ -3,13 +3,9 @@ scroungejs
 **(c)[Bumblehead][0]** [MIT-license](#license)
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand3.png)
 
-Scroungejs is an old and obscure build tool. It started as an emacs/elisp script in 2009 and was first ported to javascript and published to npm in 2012. It supports ES6 and CommonJS modules and is mostly a wrapper around tools like [depgraph][1], [replace-requires][2], and [detective][5].
+Scroungejs is an old and obscure build tool. It started as an emacs elisp script in 2009. It supports ES6 and CommonJS modules and is mostly a wrapper around tools like [depgraph][1], [replace-requires][2], and [detective][5].
 
-I never marketed scroungejs and its README was not kept up-to-date. 'Scrounge historically offered advantages over other popular build tools. For example, before module systems such as CommonJS or AMD, scroungejs supported its own system. Scroungejs was always simple to setup and never required "global" installations. Concatenation is/was always optional, and so watching and deploying live-modified source files was fast with scroungejs.
-
-Scroungejs was used by foxsports.com and ties.com, but I'm likely the only person using it these days.
-
-I plan to continue maintaining and using scroungejs. Scroungejs currently supports ES6 and CommonJS modules.
+Scroungejs was used by foxsports.com and ties.com. It currently supports ES6 and CommonJS modules.
 
 [0]: http://www.bumblehead.com                                     "bumblehead"
 [1]: https://github.com/iambumblehead/depgraph                       "depgraph"
@@ -129,7 +125,7 @@ It creates and updates a resulting index.html to look like this,
 That's the basic functionality.
 
 
-[6]: https://github.com/iambumblehead/scroungejs/raw/master/src/scrounge_opts.js  "scrounge_opts.js"
+[6]: https://github.com/iambumblehead/scroungejs/blob/master/src/scrounge_opts.js  "scrounge_opts.js"
 
 
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand.png) 
