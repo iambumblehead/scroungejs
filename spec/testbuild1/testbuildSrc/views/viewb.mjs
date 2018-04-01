@@ -2,10 +2,9 @@
 // Timestamp: 2018.03.31-14:12:45 (last modified)
 // Author(s): Bumblehead (www.bumblehead.com)
 
-var viewb = {
+let viewb = {
   ctrlsall : require('../controls/ctrlsall')
 };
-
 
 export default {
   start : () => {

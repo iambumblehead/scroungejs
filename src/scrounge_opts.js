@@ -1,5 +1,5 @@
 // Filename: scrounge_opts.js
-// Timestamp: 2018.03.31-17:00:37 (last modified)
+// Timestamp: 2018.03.31-17:55:10 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
@@ -47,6 +47,15 @@ module.exports = (o => {
     finopt.inputpath = castas.str(opt.inputpath, './');
     finopt.outputpath = castas.str(opt.outputpath, './www_');
     finopt.publicpath = castas.str(opt.publicpath, './');
+
+    // deploytype is 'script' or 'module'.
+    //
+    // If 'module' is used, ES6-style modules are deployed in 'module' format
+    // and must be 'imported' (ES6) by other scripts and NOT 'required' (CJS)
+    //
+    // if 'script' is used, ES6-style modules are converted to UMD and may be
+    // 'required' or 'imported' by any dpendant script
+    finopt.deploytype = castas.str(opt.deploytype, 'script'); // script|module
     finopt.version = castas.str(opt.version, '');
 
     finopt.tplextnarr = [ '.mustache' ];
@@ -65,6 +74,15 @@ module.exports = (o => {
     finopt.aliasarr = castas.arr(opt.aliasarr, []);
     finopt.babelpluginarr = castas.arr(opt.babelpluginarr, []);
 
+    if (finopt.deploytype === 'script') {
+      // ES6 modules converted to CJS and then again from CJS to UMD
+      finopt.babelpluginarr.push([
+        require('babel-plugin-transform-es2015-modules-commonjs'), {
+          noMangle : true
+        }
+      ]);
+    }
+
     finopt.isconcat = castas.bool(opt.isconcatenated, true);
     finopt.iscompress = castas.bool(opt.iscompressed, false);
     finopt.issilent = castas.bool(opt.issilent, false);
@@ -80,15 +98,12 @@ module.exports = (o => {
     finopt.basepage = castas.str(opt.basepage, '');
     finopt.basepagein = castas.str(opt.basepagein, finopt.basepage);
 
-    if (finopt.basepagein) {
-      if (!o.ispathexist(finopt.basepagein)) {
-        if (o.ispathexist(o.getassuffixed(finopt.basepage, 'tpl'))) {
+    if (finopt.basepagein)
+      if (!o.ispathexist(finopt.basepagein))
+        if (o.ispathexist(o.getassuffixed(finopt.basepage, 'tpl')))
           finopt.basepagein = o.getassuffixed(finopt.basepage, 'tpl');
-        } else {
+        else
           throw new Error(`basepagein, file not found ${finopt.basepagein}`);
-        }
-      }
-    }
 
     return finopt;
   };

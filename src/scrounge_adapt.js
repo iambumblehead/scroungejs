@@ -1,5 +1,5 @@
 // Filename: scrounge_adapt.js
-// Timestamp: 2018.03.31-14:42:32 (last modified)
+// Timestamp: 2018.03.31-17:45:56 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const umd = require('umd'),
@@ -55,7 +55,6 @@ module.exports = (o => {
         umdstr;
 
     if (!skip) {
-      // str = uglifyjs.minify(str, { fromString: true }).code;
       str = babel.transform(str, {
         compact : opts.iscompress && !skip,
         presets : opts.ises2015 ? [
@@ -85,7 +84,7 @@ module.exports = (o => {
 
           return prev;
         }, {});
-        // https://babeljs.io/docs/plugins/transform-es2015-modules-commonjs/
+
         umdstr = replaceimports(umdstr, replacements);
       }
     } else if (moduletype.amd(str)) {
@@ -98,7 +97,6 @@ module.exports = (o => {
     if (opts.iscompress && !skip) {
       try {
         fn(null, umdstr);
-        // fn(null, uglifyjs.minify(umdstr, { fromString: true }).code);
       } catch (e) {
         console.error(`[!!!] parse error ${filepath}`);
 

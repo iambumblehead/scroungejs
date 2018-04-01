@@ -1,5 +1,5 @@
 // Filename: scrounge_elem.js
-// Timestamp: 2018.03.31-14:52:21 (last modified)
+// Timestamp: 2018.03.31-17:44:35 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
@@ -38,6 +38,11 @@ module.exports = (o => {
 
     if (opts.istimestamp)
       filepath = addquery(filepath, `ts=${opts.buildts}`);
+
+    if (opts.deploytype === 'script' &&
+        moduletype === 'module') {
+      moduletype = 'text/javascript';
+    }
 
     return include
       .replace(/\$/, filepath)

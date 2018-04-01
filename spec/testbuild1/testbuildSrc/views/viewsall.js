@@ -1,13 +1,16 @@
 // Filename: viewsall.js
-// Timestamp: 2018.03.30-01:00:11 (last modified)
+// Timestamp: 2018.03.31-17:36:37 (last modified)
 // Author(s): Bumblehead (www.bumblehead.com)
 
-
+import viewb from './viewb';
 
 let viewsall = {
   viewa : require('./viewa'),
-  viewb : require('./viewb')
+  viewb
+  //viewb : require('./viewb').default
 };
+
+console.log('viewb', viewsall.viewb);
 
 const hello = () => 'hello',
       start = () => {
