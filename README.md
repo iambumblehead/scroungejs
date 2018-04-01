@@ -4,7 +4,7 @@ scroungejs
 
 An obscure build tool starting as an emacs elisp script in 2009, scroungejs supports ES6 and CommonJS modules and wraps scripts like [depgraph][1], [replace-requires][2], and [detective][5].
 
-Scroungejs was used by [foxsports.com](https://www.glassdoor.com/Reviews/FOX-Sports-Reviews-E14925.htm) and [ties.com](http://ties.com).
+Scroungejs was used by [foxsports.com](https://www.indeed.com/cmp/Fox-Sports/reviews?id=d7e68378fcca1bb0) and [ties.com](http://ties.com).
 
 [0]: http://www.bumblehead.com                                     "bumblehead"
 [1]: https://github.com/iambumblehead/depgraph                       "depgraph"
