@@ -3,7 +3,7 @@ scroungejs
 **(c)[Bumblehead][0]** [MIT-license](#license)
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand3.png)
 
-An obscure build tool started as an emacs elisp script in 2009. Scroungejs supports ES6 and CommonJS modules and wraps tools like [depgraph][1], [replace-requires][2], and [detective][5].
+An obscure build tool starting as an emacs elisp script in 2009, scroungejs supports ES6 and CommonJS modules and wraps scripts like [depgraph][1], [replace-requires][2], and [detective][5].
 
 Scroungejs was used by foxsports.com and ties.com.
 
