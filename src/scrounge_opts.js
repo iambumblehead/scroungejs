@@ -1,5 +1,5 @@
 // Filename: scrounge_opts.js
-// Timestamp: 2018.03.31-14:37:46 (last modified)
+// Timestamp: 2018.03.31-17:00:37 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
@@ -79,24 +79,6 @@ module.exports = (o => {
     finopt.buildts = castas.ts(opt.buildts, Date.now());
     finopt.basepage = castas.str(opt.basepage, '');
     finopt.basepagein = castas.str(opt.basepagein, finopt.basepage);
-
-    finopt.preprocessarr = [
-    //  ['.js', (opts, filename, str, fn) => {
-    //    try {
-    //      fn(null, uglifyjs.minify(str, { fromString: true }).code);
-    //    } catch (e) {
-    //      fn(e);
-    //    }
-    //  }],
-    //  ['.css', (opts, filename, str, fn) => (
-    //    fn(null, new cleancss().minify(str)))
-    //  ],
-    //  ['.less', (opts, filename, str, fn) => (
-    //    less.render(str, (err, output) => {
-    //      fn(err, err || new cleancss().minify(output.css));
-    //    }))
-    //  ]
-    ];
 
     if (finopt.basepagein) {
       if (!o.ispathexist(finopt.basepagein)) {

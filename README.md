@@ -20,7 +20,7 @@ I plan to continue maintaining and using scroungejs. Scroungejs currently suppor
 
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand10.png)
 
-A sample scroungejs configuration is found in spec/. But here's one with several common configuration options,
+A sample scroungejs configuration is found in spec/. But here's one with several common configuration options. Configuration properties are optional and if you're unsure about an option, you probably don't need it.
 ```javascript
 scroungejs.build({
   version        : require('./package.json').version,
