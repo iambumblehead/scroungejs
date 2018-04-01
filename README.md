@@ -3,9 +3,9 @@ scroungejs
 **(c)[Bumblehead][0]** [MIT-license](#license)
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand3.png)
 
-Scroungejs is an old and obscure build tool. It started as an emacs elisp script in 2009. It supports ES6 and CommonJS modules and is mostly a wrapper around tools like [depgraph][1], [replace-requires][2], and [detective][5].
+An obscure build tool started as an emacs elisp script in 2009. Scroungejs supports ES6 and CommonJS modules and wraps tools like [depgraph][1], [replace-requires][2], and [detective][5].
 
-Scroungejs was used by foxsports.com and ties.com. It currently supports ES6 and CommonJS modules.
+Scroungejs was used by foxsports.com and ties.com.
 
 [0]: http://www.bumblehead.com                                     "bumblehead"
 [1]: https://github.com/iambumblehead/depgraph                       "depgraph"
@@ -16,10 +16,7 @@ Scroungejs was used by foxsports.com and ties.com. It currently supports ES6 and
 
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand10.png)
 
-A sample scroungejs configuration is found in spec/. But here's one with several common configuration options. Configuration properties are optional and if you're unsure about an option, you probably don't need it.
-
-All options with some descriptions are found in [scrounge_opts.js][6].
-
+A test configuration is found in spec/. Here's a config with some common options. [All options][6] are optional and if you're unsure about an option, you likey don't need it.
 ```javascript
 scroungejs.build({
   version        : require('./package.json').version,
@@ -27,8 +24,12 @@ scroungejs.build({
   isconcatenated : false,
   inputpath      : './src/',
   outputpath     : './build/',
+  
+  // read this template html and output to basepage
   basepagein     : './src/index.tpl.html',
   basepage       : './build/index.html',
+  
+  // join contents of these files to top of this tree's file
   prependarr : [{
     treename : 'myapprootfile.js',
     sourcearr : [
@@ -41,6 +42,7 @@ scroungejs.build({
     '/hls.js'
   ],
 
+  // write these trees, the root file of a tree the treename
   treearr : [
     'myapprootfile.js',
     'myapprootfile.css'
@@ -121,8 +123,6 @@ It creates and updates a resulting index.html to look like this,
   </body>
 </html>
 ```
-
-That's the basic functionality.
 
 
 [6]: https://github.com/iambumblehead/scroungejs/blob/master/src/scrounge_opts.js  "scrounge_opts.js"
