@@ -4,7 +4,7 @@
   "license": "MIT",
   "readmeFilename": "README.md",
   "main": "src/scrounge.js",
-  "description": "compress and concatenate web files incrementally.",
+  "description": "An obscure build tool starting as an emacs elisp script in 2009",
   "scripts": {
     "lint": "eslint 'src/*.js'",
     "test": "jasmine --verbose",
