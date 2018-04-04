@@ -1,5 +1,5 @@
 // Filename: scrounge_file.js
-// Timestamp: 2018.03.31-00:56:32 (last modified)
+// Timestamp: 2018.04.04-00:17:28 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const fs = require('fs'),
@@ -53,6 +53,9 @@ module.exports = (o => {
 
   o.setoutputpath = (opts, filepath) =>
     path.join(opts.outputpath, path.basename(filepath));
+
+  o.rminputpath = (opts, filepath) =>
+    path.resolve(filepath).replace(path.resolve(opts.inputpath), '');
 
   o.isexist = filepath => {
     let isexists = false;

@@ -1,5 +1,5 @@
 // Filename: scrounge_opts.js
-// Timestamp: 2018.03.31-17:55:10 (last modified)
+// Timestamp: 2018.04.04-00:31:32 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
@@ -9,34 +9,6 @@ const path = require('path'),
 module.exports = (o => {
   o = opts =>
     o.get(opts);
-
-  o.ispathexist = filepath =>
-    scrounge_file.isexist(filepath);
-
-  o.getassuffixed = pathval => {
-    let extn = path.extname(pathval),
-        base = path.basename(pathval, extn),
-        dir = path.dirname(pathval);
-
-    return path.join(dir, `${base}.tpl${extn}`);
-  };
-
-  o.filenamesupportedcss = (opts, filename, fileextn = path.extname(filename)) =>
-    opts.cssextnarr.find(extn => extn === fileextn);
-
-  o.filenamesupportedjs = (opts, filename, fileextn = path.extname(filename)) =>
-    opts.jsextnarr.find(extn => extn === fileextn);
-
-  o.isfilenamesupportedtype = (opts, filename, fileextn = path.extname(filename)) =>
-    o.filenamesupportedjs(opts, filename, fileextn) ||
-    o.filenamesupportedcss(opts, filename, fileextn);
-
-  o.issamesupportedtype = (opts, filenamea, filenameb) => {
-    let supportedextna = o.isfilenamesupportedtype(opts, filenamea),
-        supportedextnb = o.isfilenamesupportedtype(opts, filenameb);
-
-    return supportedextna === supportedextnb;
-  };
 
   o.get = opt => {
     let finopt = {};
@@ -83,13 +55,14 @@ module.exports = (o => {
       ]);
     }
 
-    finopt.isconcat = castas.bool(opt.isconcatenated, true);
-    finopt.iscompress = castas.bool(opt.iscompressed, false);
-    finopt.issilent = castas.bool(opt.issilent, false);
-    finopt.isupdate = castas.bool(opt.isupdateonly, false);
-    finopt.istpl = castas.bool(opt.istpl, false);
-    finopt.ises2015 = castas.bool(opt.ises2015, false);
+    finopt.iswatch = castas.bool(opt.iswatch, true);
     finopt.iscachemap = castas.bool(opt.iscachemap, true);
+    finopt.iscompress = castas.bool(opt.iscompress, false);
+    finopt.isconcat = castas.bool(opt.isconcat, true);
+    finopt.issilent = castas.bool(opt.issilent, false);
+    finopt.ises2015 = castas.bool(opt.ises2015, false);
+    finopt.istpl = castas.bool(opt.istpl, false);
+
     finopt.browser = castas.bool(opt.isbrowser, true);
     finopt.iscircular = castas.bool(opt.iscircular, false);
     finopt.istimestamp = castas.bool(opt.istimestamp, true);
@@ -99,13 +72,38 @@ module.exports = (o => {
     finopt.basepagein = castas.str(opt.basepagein, finopt.basepage);
 
     if (finopt.basepagein)
-      if (!o.ispathexist(finopt.basepagein))
-        if (o.ispathexist(o.getassuffixed(finopt.basepage, 'tpl')))
+      if (!scrounge_file.isexist(finopt.basepagein))
+        if (scrounge_file.isexist(o.getassuffixed(finopt.basepage, 'tpl')))
           finopt.basepagein = o.getassuffixed(finopt.basepage, 'tpl');
         else
           throw new Error(`basepagein, file not found ${finopt.basepagein}`);
 
     return finopt;
+  };
+
+  o.getassuffixed = pathval => {
+    let extn = path.extname(pathval),
+        base = path.basename(pathval, extn),
+        dir = path.dirname(pathval);
+
+    return path.join(dir, `${base}.tpl${extn}`);
+  };
+
+  o.filenamesupportedcss = (opts, filename, fileextn = path.extname(filename)) =>
+    opts.cssextnarr.find(extn => extn === fileextn);
+
+  o.filenamesupportedjs = (opts, filename, fileextn = path.extname(filename)) =>
+    opts.jsextnarr.find(extn => extn === fileextn);
+
+  o.isfilenamesupportedtype = (opts, filename, fileextn = path.extname(filename)) =>
+    o.filenamesupportedjs(opts, filename, fileextn) ||
+    o.filenamesupportedcss(opts, filename, fileextn);
+
+  o.issamesupportedtype = (opts, filenamea, filenameb) => {
+    let supportedextna = o.isfilenamesupportedtype(opts, filenamea),
+        supportedextnb = o.isfilenamesupportedtype(opts, filenameb);
+
+    return supportedextna === supportedextnb;
   };
 
   return o;

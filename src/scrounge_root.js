@@ -1,5 +1,5 @@
 // Filename: scrounge_root.js
-// Timestamp: 2018.03.31-13:42:27 (last modified)
+// Timestamp: 2018.04.04-00:20:48 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
@@ -32,12 +32,10 @@ module.exports = (o => {
   o.getfilenameasnode = (opts, rootname, fn) => {
     const filepath = o.getrootnameaspathextn(opts, rootname);
 
-    if (!filepath) {
-      console.error(rootname, opts.inputpath);
-      throw new Error(`rootname not found ${filepath}`);
-    }
-
-    depgraph.node.get_fromfilepath(filepath, fn);
+    if (filepath)
+      depgraph.node.get_fromfilepath(filepath, fn);
+    else
+      console.log(`rootname not found ${filepath}`);
   };
 
   o.getrootnameaspath = (opts, rootname) =>

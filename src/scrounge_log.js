@@ -1,5 +1,5 @@
 // Filename: scrounge_log.js
-// Timestamp: 2015.12.08-14:19:00 (last modified)
+// Timestamp: 2018.04.04-00:22:34 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
@@ -19,6 +19,9 @@ module.exports = (o => {
 
   o.finish = (opts, time) =>
     o(opts, `[...] finish: ${time}`);
+
+  o.updatenode = (opts, uid) =>
+    o(opts, `[...] update: ${uid}`);
 
   o.rootjoin = (opts, root, type, filename, inum, lnum, j) =>
     o(opts, '[...] :j: (:rootname, :roottype, :progress) :filename'

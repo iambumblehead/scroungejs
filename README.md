@@ -19,10 +19,10 @@ A test configuration is found in spec/. Here's a config with some common options
 ```javascript
 scroungejs.build({
   version        : require('./package.json').version,
-  iscompressed   : true,
-  isconcatenated : false,
-  inputpath      : './src/',
-  outputpath     : './build/',
+  iscompress : true,
+  isconcat   : false,
+  inputpath  : './src/',
+  outputpath : './build/',
   
   // read this template html and output to basepage
   basepagein     : './src/index.tpl.html',
@@ -114,6 +114,12 @@ It creates and updates a resulting index.html to look like this,
   </head>
   <body></body>
 </html>
+```
+
+If you update a file and contenate is false, you'll see this,
+```bash
+[...] update: scroungejs-1.3.6:~/test/src/lib/library.js
+[...] write: ./index.html
 ```
 
 

@@ -1,12 +1,12 @@
 // Filename: scrounge_build.js
-// Timestamp: 2018.03.31-13:27:22 (last modified)
+// Timestamp: 2018.04.04-00:34:08 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-const path = require('path'),
-      optfn = require('optfn'),
+const optfn = require('optfn'),
       simpletime = require('simpletime'),
 
       scrounge_basepage = require('./scrounge_basepage'),
+      scrounge_watch = require('./scrounge_watch'),
       scrounge_cache = require('./scrounge_cache'),
       scrounge_root = require('./scrounge_root'),
       scrounge_node = require('./scrounge_node'),
@@ -100,14 +100,16 @@ module.exports = (o => {
     fn = optfn(fn);
     opts = scrounge_opts(opts);
 
-    if (opts.isconcat === false &&
-        scrounge_opts.isfilenamesupportedtype(opts, srcfilename)) {
+    if (!opts.isconcat && scrounge_opts.isfilenamesupportedtype(opts, srcfilename)) {
       o.readbasepage(opts, (err, rootsarr) => {
         if (err) return o.throwerror(err, fn);
 
-        scrounge_root.getfilenameasnode(opts, path.basename(srcfilename), (err, node) => {
+        srcfilename = scrounge_file.rminputpath(opts, srcfilename);
+
+        scrounge_root.getfilenameasnode(opts, srcfilename, (err, node) => {
           if (err) return o.throwerror(err, fn);
 
+          scrounge_log.updatenode(opts, node.get('uid'));
           rootsarr = rootsarr.filter(root => (
             scrounge_opts.issamesupportedtype(opts, node.get('filepath'), root)));
 
@@ -177,6 +179,11 @@ module.exports = (o => {
               if (err) return o.throwerror(err, fn);
 
               scrounge_log.finish(opts, simpletime.getElapsedTimeFormatted(datebgn, new Date()));
+
+              if (opts.iswatch)
+                scrounge_watch(opts.inputpath, {}, path => (
+                  o.updatedestfile(opts, path)));
+
 
               fn(err, res);
             });

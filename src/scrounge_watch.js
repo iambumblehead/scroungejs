@@ -1,22 +1,16 @@
 // Filename: scrounge_watch.js
-// Timestamp: 2017.07.29-19:20:06 (last modified)
+// Timestamp: 2018.04.04-00:07:24 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-const chokidar = require('chokidar'),
-
-      scrounge_build = require('./scrounge_build');
+const chokidar = require('chokidar');
 
 module.exports = (o => {
-  // var watcher = chokidar.watch(globs, opts);
-  o = (globs, opts = {}) => {
-    let watcher = chokidar.watch(globs, opts.watch || {});
+  o = (globs, opts = {}, fn) => {
+    let watcher = chokidar.watch(globs, opts.watch || {
+      cwd : '.'
+    });
 
-    // persistent true
-    watcher
-      // .on('add', path => console.log(`File ${path} has been added`))
-      // .on('change', path => console.log(`File ${path} has been changed`));
-      .on('change', path => (
-        scrounge_build.updatedestfile(opts, path)));
+    watcher.on('change', fn);
   };
 
   return o;
