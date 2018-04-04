@@ -60,13 +60,13 @@ The example in test/ console prints something like this when it runs,
 
 scroungejs-1.3.6:~/test/src/app.js
 └─┬ scroungejs-1.3.6:~/test/src/views/viewsall.js
-  ├─┬ scroungejs-1.3.6:~/test/src/views/viewb.mjs
-  │ └─┬ scroungejs-1.3.6:~/test/src/controls/ctrlsall.js
-  │   ├─┬ scroungejs-1.3.6:~/test/src/controls/ctrla.js
-  │   │ └── scroungejs-1.3.6:~/test/src/models/modela.js
-  │   └─┬ scroungejs-1.3.6:~/test/src/controls/ctrlb.js
-  │     └── scroungejs-1.3.6:~/test/src/models/modelb.js
-  └── scroungejs-1.3.6:~/test/src/views/viewa.js
+. ├─┬ scroungejs-1.3.6:~/test/src/views/viewb.mjs
+. │ └─┬ scroungejs-1.3.6:~/test/src/controls/ctrlsall.js
+. │   ├─┬ scroungejs-1.3.6:~/test/src/controls/ctrla.js
+. │   │ └── scroungejs-1.3.6:~/test/src/models/modela.js
+. │   └─┬ scroungejs-1.3.6:~/test/src/controls/ctrlb.js
+. │     └── scroungejs-1.3.6:~/test/src/models/modelb.js
+. └── scroungejs-1.3.6:~/test/src/views/viewa.js
 
 [...] ugly: (app.js, .css, 1/2) ./src/views/viewa.less
 [...] ugly: (app.js, .css, 2/2) ./src/views/viewb.less
