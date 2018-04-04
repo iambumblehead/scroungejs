@@ -1,6 +1,6 @@
 {
   "name": "scroungejs",
-  "version": "1.3.5",
+  "version": "1.3.6",
   "license": "MIT",
   "readmeFilename": "README.md",
   "main": "src/scrounge.js",
@@ -8,7 +8,7 @@
   "scripts": {
     "lint": "eslint 'src/*.js'",
     "test": "jasmine --verbose",
-    "start": "node spec/testbuild1/build.js"
+    "start": "cd test && node build.js"
   },
   "repository": {
     "type": "git",

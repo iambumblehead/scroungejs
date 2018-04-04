@@ -1,8 +1,8 @@
 // Filename: build.js
-// Timestamp: 2018.04.03-23:08:27 (last modified)
+// Timestamp: 2018.04.03-23:12:20 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-const scroungejs = require('../../'),
+const scroungejs = require('../'),
       express = require('express'),
       http = require('http'),
       path = require('path'),
@@ -10,27 +10,22 @@ const scroungejs = require('../../'),
       app = express();
 
 scroungejs.build({
-  //inputpath : './spec/testbuild1/src',
   inputpath : './src',
-  //outputpath : './spec/testbuild1/out',
   outputpath : './out',
-  publicpath : './testbuildFin',
-  //basepage : './spec/testbuild1/index.html',
+  publicpath : './out/',
   basepage : './index.html',
-  iscompressed : false,
-  isconcatenated : false,
+  iscompressed : true,
+  isconcatenated : true,
   roots : 'app.js',
   deploytype : 'module'
 }, err => {
   if (err)
     console.log(err);
   else {
-    // app.use('/', express.static(path.join(__dirname, 'testbuildFin')));
     app.use('/', express.static(path.join(__dirname, '')));
 
     http.createServer(app).listen(port);
 
-    // use /etc/hosts to use a test domain
     console.log(`[...] localhost:${port}/`);
   }
 });

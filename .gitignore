@@ -4,6 +4,7 @@ README.html
 tests/
 testrun/
 testbuildFin
+out
 index.html
 npm-debug.log
 .tern-port
