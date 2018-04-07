@@ -15,22 +15,22 @@ Scroungejs was used by [foxsports.com](https://espn.com) and [ties.com](http://t
 
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand10.png)
 
-A test configuration is found in spec/. Here's a config with some common options. [All options][6] are optional and if you're unsure about an option, you likey don't need it.
+A test configuration is found in spec/. Below is a config with common options. [All options][6] are optional and if you're unsure about an option, you likely don't need it.
 ```javascript
-scroungejs.build({
-  version        : require('./package.json').version,
-  iscompress : true,
-  isconcat   : false,
-  inputpath  : './src/',
+scroungejs({
+  version : require('./package.json').version,
+  inputpath : './src/',
   outputpath : './build/',
+  iscompress : true,
+  isconcat : false,
   
   // read this template html and output to basepage
-  basepagein     : './src/index.tpl.html',
-  basepage       : './build/index.html',
+  basepagein : './src/index.tpl.html',
+  basepage : './build/index.html',
   
   // join contents of these files to top of this tree's file
   prependarr : [{
-    treename : 'myapprootfile.js',
+    treename : 'app.js',
     sourcearr : [
       './node_modules/three/build/three.js',
       './node_modules/hls.js/dist/hls.min.js'
@@ -43,17 +43,16 @@ scroungejs.build({
 
   // write these trees, the root file of a tree the treename
   treearr : [
-    'myapprootfile.js',
-    'myapprootfile.css'
+    'app.js',
+    'app.css'
   ]
-}, function (err, res) {
-  if (err) return console.log(err);
-  console.log('finished!');
+}, (err, res) => {
+  console.log(err || 'finished');
 });
 ```
 
 
-The example in test/ console prints something like this when it runs,
+The example in test/ console-prints something like this when it runs,
 ```bash
 [...] start: Tue Apr 03 2018 23:12:23 GMT-0700 (PDT)
 [...] root: app.js
@@ -86,7 +85,6 @@ scroungejs-1.3.6:~/test/src/app.js
 ```
 
 It reads index.tpl.html,
-
 ```html
 <!DOCTYPE html>
 <html>
@@ -100,7 +98,7 @@ It reads index.tpl.html,
 </html>
 ```
 
-It creates and updates a resulting index.html to look like this,
+It creates and updates a resulting index.html,
 ```html
 <!DOCTYPE html>
 <html>
@@ -116,7 +114,7 @@ It creates and updates a resulting index.html to look like this,
 </html>
 ```
 
-If you update a file and contenate is false, you'll see this,
+If you update a file and concatenate is false, you'll see this,
 ```bash
 [...] update: scroungejs-1.3.6:~/test/src/lib/library.js
 [...] write: ./index.html
