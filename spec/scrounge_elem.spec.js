@@ -74,7 +74,7 @@ describe('scrounge_elem.getincludetag', () => {
     expect(scrounge_elem.getincludetag(scrounge_opts({
       version : 10,
       buildts : 10
-    }), './out/view.js', 'text/javascript')).toBe(
+    }), './out/view.js', 'cjs')).toBe(
       '<script src="./out/view.js?v=10&ts=10" type="text/javascript"></script>');
   });
 
@@ -83,7 +83,7 @@ describe('scrounge_elem.getincludetag', () => {
       deploytype : 'module',
       version : 10,
       buildts : 10
-    }), './out/view.js', 'module')).toBe(
+    }), './out/view.js', 'esm')).toBe(
       '<script src="./out/view.js?v=10&ts=10" type="module"></script>');
   });
 
@@ -91,7 +91,7 @@ describe('scrounge_elem.getincludetag', () => {
     expect(scrounge_elem.getincludetag(scrounge_opts({
       version : 10,
       buildts : 10
-    }), './out/view.css', 'text/css')).toBe(
+    }), './out/view.css', 'css')).toBe(
       '<link href="./out/view.css?v=10&ts=10" rel="stylesheet" type="text/css">');
   });
 
@@ -100,7 +100,7 @@ describe('scrounge_elem.getincludetag', () => {
       scrounge_elem.getincludetag(scrounge_opts({
         version : 10,
         buildts : 10
-      }), './out/view.zs', 'text/css')
+      }), './out/view.zs', 'css')
     )).toThrow(new Error('Invalid type, .zs'));
   });
 });

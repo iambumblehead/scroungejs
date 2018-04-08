@@ -17,6 +17,10 @@ module.exports = (o => {
   o.elemrootre = /root="([\s\S]*?)"/;
   o.elemtypere = /type="(\.[cj]ss?)?"/;
 
+  // moduletype definion 'css', 'cjs', 'esm' becomes
+  //
+  //   'text/css', 'text/javascript', or 'module'
+  //
   o.getincludetag = (opts, filepath, moduletype) => {
     let extn = path.extname(filepath),
         include;
@@ -34,7 +38,11 @@ module.exports = (o => {
     if (opts.istimestamp)
       filepath = addquery(filepath, `ts=${opts.buildts}`);
 
-    if (opts.deploytype === 'script' && moduletype === 'module')
+    if (moduletype === 'css')
+      moduletype = 'test/css';
+    else if (opts.deploytype === 'module' && moduletype === 'esm')
+      moduletype = 'module';
+    else
       moduletype = 'text/javascript';
 
     return include

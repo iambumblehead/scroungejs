@@ -4,7 +4,6 @@
 
 const path = require('path'),
       depgraph = require('depgraph'),
-      moduletype = require('moduletype'),
 
       scrounge_log = require('./scrounge_log'),
       scrounge_file = require('./scrounge_file'),
@@ -25,9 +24,8 @@ module.exports = (o => {
     );
 
   // return rootname as a graph
-  o.getasgraph = (opts, rootpath, fn) => {
+  o.getasgraph = (opts, rootpath, fn) =>
     depgraph.graph.getfromseedfile(rootpath, opts, fn);
-  };
 
   o.getfilenameasnode = (opts, rootname, fn) => {
     const filepath = o.getrootnameaspathextn(opts, rootname);
@@ -85,12 +83,6 @@ module.exports = (o => {
 
       o.getasdeparr(opts, graphnamearr[x], (err, deparr) => {
         if (err) return fn(err);
-
-        graphsobj[graphnamearr[x]] = deparr.map(node => (
-          node.set(
-            'moduletype', moduletype.is(
-              node.get('content')) === 'esm' ? 'module' : 'text/javascript')
-        ));
 
         scrounge_prepend.getprenodearr(opts, graphnamearr[x], (err, prenodearr) => {
           if (err) return fn(err);

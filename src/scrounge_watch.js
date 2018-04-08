@@ -10,7 +10,9 @@ module.exports = (o => {
       cwd : '.'
     });
 
-    watcher.on('change', fn);
+    // you may choose to disable watch w/ opts.iswatch = false
+    if (typeof fn === 'function')
+      watcher.on('change', fn);
   };
 
   return o;

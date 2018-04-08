@@ -19,7 +19,7 @@ module.exports = (o => {
 
     fs.readFile(path.resolve(filepath), 'utf-8', (err, content) => {
       fn(err, err || node
-        .set('moduletype', 'text/css')
+        .set('module', 'css')
         .set('filepath', filepath)
         .set('content', content));
     });
@@ -91,11 +91,11 @@ module.exports = (o => {
     opts.isconcat
       ? [ scrounge_elem.getincludetag(
         opts, o.getoutputpathpublic(opts, nodearr[0], rootname),
-        nodearr[0].get('moduletype')) ]
+        nodearr[0].get('module')) ]
       : nodearr.map(node => (
         scrounge_elem.getincludetag(
           opts, o.getoutputpathpublic(opts, node, rootname),
-          node.get('moduletype')
+          node.get('module')
         ))).reverse());
 
   return o;
