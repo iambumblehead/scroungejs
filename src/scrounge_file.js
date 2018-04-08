@@ -1,5 +1,5 @@
 // Filename: scrounge_file.js
-// Timestamp: 2018.04.04-00:17:28 (last modified)
+// Timestamp: 2018.04.08-01:40:55 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const fs = require('fs'),
@@ -10,61 +10,67 @@ const fs = require('fs'),
       scrounge_log = require('./scrounge_log');
 
 module.exports = (o => {
-  o.setextn = (filename, extn) =>
-    path.join(
-      path.dirname(filename),
-      path.basename(filename, path.extname(filename)) + extn);
+  o.setextn = (filename, extn) => path.join(
+    path.dirname(filename),
+    path.basename(filename, path.extname(filename)) + extn);
 
-  o.setposixbasename = (filepath, uid) =>
-    o.setbasename(filepath, uid).replace(/\\/g, '/');
+  o.setbasename = (filepath, uid) => path.join(
+    path.dirname(filepath),
+    scrounge_uid.sanitised(uid) + path.extname(filepath));
 
-  o.setbasename = (filepath, uid) => {
-    let dirname = path.dirname(filepath),
-        extname = path.extname(filepath);
-
-    return path.join(dirname, scrounge_uid.sanitised(uid) + extname);
-  };
-
-  o.setpublicpath = (opts, filepath, uid) => {
-    if (!opts.isconcat) {
-      filepath = o.setposixbasename(filepath, uid);
-    }
-
+  o.setpublicpath = (opts, filepath) => {
+    // if publicpath not found in filepath, returns null
     let publicpath = pathpublic.get(filepath, opts.publicpath);
-    // if !publicpath... publicpath dir not found in filepath
-    //   use publicpath and root directory
-    return (typeof publicpath === 'string' && publicpath.startsWith(opts.publicpath))
+
+    return publicpath && publicpath.startsWith(opts.publicpath)
       ? publicpath
-      : path.join(opts.publicpath, path.basename(filepath));
+      : o.setpath(opts.publicpath, path.basename(filepath));
   };
 
-  o.setpublicoutputpath = (opts, filepath, uid) =>
-    o.setpublicpath(opts, path.join(
-      opts.outputpath, path.basename(filepath)
-    ), uid);
+  //
+  // the final output path combined w/ public path to generate final path
+  // replace windows-style '\' w/ posix style '/'
+  //
+  o.setpublicoutputpath = (opts, filepath, uid) => o.setpublicpath(
+    opts, o.setoutputpathreal(opts, filepath, uid)).replace(/\\/g, '/');
 
-  o.setoutputpathreal = (opts, filepath, uid) => {
-    if (!opts.isconcat && !/.mustache$/.test(filepath)) {
+  //
+  // 'real' outputpath, because this is the systempath
+  // to which the file is saved
+  //
+  o.setoutputpathreal = ({ outputpath, isconcat }, filepath, uid) => {
+    if (!isconcat)
       filepath = o.setbasename(filepath, uid);
-    }
 
-    return path.join(opts.outputpath, path.basename(filepath));
+    return path.join(outputpath, path.basename(filepath));
   };
 
-  o.setoutputpath = (opts, filepath) =>
-    path.join(opts.outputpath, path.basename(filepath));
+  //
+  // path.join, but don't lose relative './' if present
+  //
+  o.setpath = (newpath, filepath) => (/^\.\//.test(newpath) ? './' : '') +
+    path.join(newpath, path.basename(filepath));
 
-  o.rminputpath = (opts, filepath) =>
-    path.resolve(filepath).replace(path.resolve(opts.inputpath), '');
+  // ({ outputpath: './hey' }, '/path/to/file.js')
+  //
+  // return './hey/file.js'
+  //
+  o.setoutputpath = ({ outputpath }, filepath) =>
+    o.setpath(outputpath, path.basename(filepath));
+
+  // ({ inputpath: './path/' }, 'a/wonderful/path/to/file.js')
+  //
+  // return 'to/file.js'
+  //
+  o.rminputpath = ({ inputpath }, filepath) =>
+    path.resolve(filepath).replace(path.resolve(inputpath) + path.sep, '');
 
   o.isexist = filepath => {
-    let isexists = false;
-
     try {
-      isexists = fs.statSync(filepath).isFile();
+      return fs.statSync(filepath).isFile();
     } catch (err) { /* */ }
 
-    return isexists;
+    return false;
   };
 
   o.read = (opts, filepath, fn) =>
