@@ -1,5 +1,5 @@
 // Filename: scrounge_build.js
-// Timestamp: 2018.04.04-00:34:08 (last modified)
+// Timestamp: 2018.04.08-02:32:04 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const optfn = require('optfn'),
@@ -120,7 +120,7 @@ module.exports = (o => {
 
             if (opts.basepage &&
                 opts.istimestamp) {
-              scrounge_basepage.writeelemone(opts, opts.basepage, srcfilename, node, fn);
+              scrounge_basepage.writeelemone(opts, opts.basepage, node, fn);
             }
           });
         });

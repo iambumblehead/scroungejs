@@ -1,5 +1,5 @@
 // Filename: scrounge_node.js
-// Timestamp: 2018.04.07-19:02:07 (last modified)
+// Timestamp: 2018.04.08-03:00:11 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 //
 // node : { moduletype, filepath, content }
@@ -61,16 +61,13 @@ module.exports = (o => {
     }(deparr, deparr.length, []));
 
   // if basename has extension '.less',
-  // extension returned may be '.css'
+  // extension returned would be '.css'
   o.setpublicextn = (opts, filepath, rootname) => {
-    let rootextn = path.extname(rootname),
-        fileextn = opts.jsextnarr.find(extn =>
-          extn === rootextn
-        ) || opts.cssextnarr.find(extn =>
-          extn === rootextn
-        ) || rootextn;
+    let rootextn = path.extname(rootname);
 
-    return scrounge_file.setextn(filepath, fileextn);
+    return scrounge_file.setextn(filepath, (
+      opts.jsextnarr.find(extn => extn === rootextn) ||
+      opts.cssextnarr.find(extn => extn === rootextn) || rootextn));
   };
 
   o.setpublicoutputpath = (opts, node, rootname) => {
@@ -88,8 +85,9 @@ module.exports = (o => {
   o.setpublicoutputpathreal = (opts, node, rootname) => {
     let uid = node.get('uid'),
         filepath = node.get('filepath'),
-        publicpath = opts.isconcat ?
-          scrounge_file.setbasename(filepath, rootname) : filepath;
+        publicpath = opts.isconcat
+          ? scrounge_file.setbasename(filepath, rootname)
+          : filepath;
 
     publicpath = o.setpublicextn(opts, publicpath, rootname);
 

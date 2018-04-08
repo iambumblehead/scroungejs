@@ -1,5 +1,5 @@
 // Filename: scrounge_elem.js
-// Timestamp: 2018.03.31-17:44:35 (last modified)
+// Timestamp: 2018.04.08-02:20:24 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
@@ -21,17 +21,12 @@ module.exports = (o => {
     let extn = path.extname(filepath),
         include;
 
-    if (opts.cssextnarr.find(cssextn =>
-      cssextn === extn
-    )) {
+    if (opts.cssextnarr.find(cssextn => cssextn === extn))
       include = o.includecsstpl;
-    } else if (opts.jsextnarr.find(jsextn =>
-      jsextn === extn
-    )) {
+    else if (opts.jsextnarr.find(jsextn => jsextn === extn))
       include = o.includejstpl;
-    } else {
+    else
       throw new Error(`Invalid type, ${extn}`);
-    }
 
     if (opts.version)
       filepath = addquery(filepath, `version=${opts.version}`);
@@ -39,10 +34,8 @@ module.exports = (o => {
     if (opts.istimestamp)
       filepath = addquery(filepath, `ts=${opts.buildts}`);
 
-    if (opts.deploytype === 'script' &&
-        moduletype === 'module') {
+    if (opts.deploytype === 'script' && moduletype === 'module')
       moduletype = 'text/javascript';
-    }
 
     return include
       .replace(/\$/, filepath)
@@ -50,16 +43,11 @@ module.exports = (o => {
   };
 
   o.getrootarr = str => {
-    let rootmatch = str.match(o.elemrootre),
-        rootarr = [];
+    let rootmatch = str.match(o.elemrootre);
 
-    if (rootmatch && rootmatch[1]) {
-      rootarr = rootmatch[1].split(/,/).map(root =>
-        root.trim()
-      );
-    }
-
-    return rootarr;
+    return (rootmatch && rootmatch[1])
+      ? rootmatch[1].split(/,/).map(root => root.trim())
+      : [];
   };
 
   // return the indentation behind the scounge tag

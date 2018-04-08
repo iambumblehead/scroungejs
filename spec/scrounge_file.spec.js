@@ -1,5 +1,5 @@
 // Filename: scrounge_file.spec.js
-// Timestamp: 2018.04.08-01:41:53 (last modified)
+// Timestamp: 2018.04.08-02:01:29 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
@@ -69,7 +69,7 @@ describe('scrounge_file.setpublicpath', () => {
 });
 
 describe('scrounge_file.setpublicoutputpath', () => {
-  it('should return unconcatenated paths, with uid"', () => {
+  it('should return unconcatenated paths, with uid', () => {
     expect(
       scrounge_file.setpublicoutputpath({
         isconcat : false,
@@ -79,7 +79,7 @@ describe('scrounge_file.setpublicoutputpath', () => {
     ).toBe('./public/dir/uid.js');
   });
 
-  it('should return concatenated paths, without uid"', () => {
+  it('should return concatenated paths, without uid', () => {
     expect(
       scrounge_file.setpublicoutputpath({
         isconcat : true,
@@ -157,7 +157,7 @@ describe('scrounge_file.setpublicoutputpath', () => {
 });
 
 describe('scrounge_file.rminputpath', () => {
-  it('should return inputpath-removed path"', () => {
+  it('should return inputpath-removed path', () => {
     expect(
       scrounge_file.rminputpath({
         inputpath : './path'

@@ -91,9 +91,9 @@ It reads index.tpl.html,
 <!DOCTYPE html>
 <html>
   <head>
-    <!-- <scrounge trees="app.css"> -->
+    <!-- <scrounge root="app.css"> -->
     <!-- </scrounge> -->
-    <!-- <scrounge trees="app.js"> -->
+    <!-- <scrounge root="app.js"> -->
     <!-- </scrounge> -->
   </head>
   <body></body>
@@ -105,10 +105,10 @@ It creates and updates a resulting index.html,
 <!DOCTYPE html>
 <html>
   <head>
-    <!-- <scrounge trees="app.css"> -->
+    <!-- <scrounge root="app.css"> -->
     <link href="./out/app.css" rel="stylesheet" type="text/css">
     <!-- </scrounge> -->
-    <!-- <scrounge trees="app.js"> -->
+    <!-- <scrounge root="app.js"> -->
     <script src="./out/app.js" type="text/javascript"></script>
     <!-- </scrounge> -->
   </head>
