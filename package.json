@@ -1,6 +1,6 @@
 {
   "name": "scroungejs",
-  "version": "1.3.9",
+  "version": "1.4.0",
   "license": "MIT",
   "readmeFilename": "README.md",
   "main": "src/scrounge.js",
@@ -38,7 +38,7 @@
     "castas": "^0.0.3",
     "archy": "^1.0.0",
     "less": "^3.0.1",
-    "optfn": "~0.0.x",
+    "optfn": "^0.0.7",
     "replace-requires": "^1.1.0",
     "replace-imports": "^0.0.2",
     "moduletype": "^0.0.8",
@@ -46,9 +46,8 @@
     "pathpublic": "^0.0.8",
     "depgraph": "^0.3.4",
     "umdname": "^0.0.7",
-    "bcjstocjs": "^0.0.2",
-    "mkdirp": "~0.5.x",
-    "umd": "~3.0.x"
+    "mkdirp": "^0.5.1",
+    "umd": "^3.0.3"
   },
   "devDependencies": {
     "express": "^4.16.3",
