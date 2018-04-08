@@ -1,5 +1,5 @@
 // Filename: scrounge_node.js
-// Timestamp: 2018.04.08-03:00:11 (last modified)
+// Timestamp: 2018.04.08-13:52:41 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 //
 // node : { moduletype, filepath, content }
@@ -62,47 +62,39 @@ module.exports = (o => {
 
   // if basename has extension '.less',
   // extension returned would be '.css'
-  o.setpublicextn = (opts, filepath, rootname) => {
-    let rootextn = path.extname(rootname);
-
-    return scrounge_file.setextn(filepath, (
+  o.setpublicextn = (opts, filepath, rootextn) => scrounge_file.setextn(
+    filepath, (
       opts.jsextnarr.find(extn => extn === rootextn) ||
       opts.cssextnarr.find(extn => extn === rootextn) || rootextn));
-  };
 
-  o.setpublicoutputpath = (opts, node, rootname) => {
-    let uid = node.get('uid'),
-        filepath = node.get('filepath'),
-        publicpath = opts.isconcat
-          ? scrounge_file.setbasename(filepath, rootname)
-          : filepath;
+  o.setoutputname = (opts, filepath, rootname) => o.setpublicextn(opts, (
+    opts.isconcat
+      ? scrounge_file.setbasename(filepath, rootname)
+      : filepath), path.extname(rootname));
 
-    publicpath = o.setpublicextn(opts, publicpath, rootname);
+  //
+  // return 'public' output path of node, path given to browser
+  //
+  o.getoutputpathpublic = (opts, node, rootname) => o.setoutputname(
+    opts, scrounge_file.setpublicoutputpath(
+      opts, node.get('filepath'), node.get('uid')), rootname);
 
-    return scrounge_file.setpublicoutputpath(opts, publicpath, uid);
-  };
-
-  o.setpublicoutputpathreal = (opts, node, rootname) => {
-    let uid = node.get('uid'),
-        filepath = node.get('filepath'),
-        publicpath = opts.isconcat
-          ? scrounge_file.setbasename(filepath, rootname)
-          : filepath;
-
-    publicpath = o.setpublicextn(opts, publicpath, rootname);
-
-    return scrounge_file.setoutputpathreal(opts, publicpath, uid);
-  };
+  //
+  // return final real system output path of node
+  //
+  o.getoutputpathreal = (opts, node, rootname) => o.setoutputname(
+    opts, scrounge_file.setoutputpathreal(
+      opts, node.get('filepath'), node.get('uid')), rootname);
 
   // for each node in the array build ordered listing of elements
   o.arrgetincludetagarr = (opts, nodearr, rootname) => (
     opts.isconcat
       ? [ scrounge_elem.getincludetag(
-        opts, o.setpublicoutputpath(opts, nodearr[0], rootname),
+        opts, o.getoutputpathpublic(opts, nodearr[0], rootname),
         nodearr[0].get('moduletype')) ]
       : nodearr.map(node => (
         scrounge_elem.getincludetag(
-          opts, o.setpublicoutputpath(opts, node, rootname),
+          opts, o.getoutputpathpublic(opts, node, rootname),
           node.get('moduletype')
         ))).reverse());
 

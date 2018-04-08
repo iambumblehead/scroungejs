@@ -1,5 +1,5 @@
 // Filename: scrounge_root.js
-// Timestamp: 2018.04.04-00:20:48 (last modified)
+// Timestamp: 2018.04.08-13:39:06 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
@@ -141,7 +141,7 @@ module.exports = (o => {
         deparr = graphobj[rootname],
 
         nodewrite = (opts, node, rootname, content, fn) => {
-          let filepath = scrounge_node.setpublicoutputpathreal(opts, node, rootname),
+          let filepath = scrounge_node.getoutputpathreal(opts, node, rootname),
               rootextn = path.extname(rootname),
               fileextn =
                 opts.jsextnarr.find(extn => extn === rootextn) ||

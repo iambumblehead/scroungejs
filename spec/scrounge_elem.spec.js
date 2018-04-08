@@ -1,5 +1,5 @@
 // Filename: scrounge_elem.spec.js
-// Timestamp: 2018.04.08-06:10:29 (last modified)
+// Timestamp: 2018.04.08-11:59:51 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const scrounge_elem = require('../src/scrounge_elem'),
@@ -7,6 +7,8 @@ const scrounge_elem = require('../src/scrounge_elem'),
 
 describe('scrounge_elem.getindentation', () => {
   it('should return carriage-return indentation', () => {
+    // may 'appear' the same as other tests, but some of the whitespace
+    // below is different from normal whitespace
     expect(scrounge_elem.getindentation(
       '	   <!-- <scrounge.js> -->'
     )).toBe(

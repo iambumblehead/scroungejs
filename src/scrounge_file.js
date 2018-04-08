@@ -1,5 +1,5 @@
 // Filename: scrounge_file.js
-// Timestamp: 2018.04.08-01:40:55 (last modified)
+// Timestamp: 2018.04.08-13:12:03 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const fs = require('fs'),
