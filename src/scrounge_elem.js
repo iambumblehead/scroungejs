@@ -1,5 +1,5 @@
 // Filename: scrounge_elem.js
-// Timestamp: 2018.04.08-02:20:24 (last modified)
+// Timestamp: 2018.04.08-06:10:37 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
@@ -21,15 +21,15 @@ module.exports = (o => {
     let extn = path.extname(filepath),
         include;
 
-    if (opts.cssextnarr.find(cssextn => cssextn === extn))
+    if (opts.cssextnarr.includes(extn))
       include = o.includecsstpl;
-    else if (opts.jsextnarr.find(jsextn => jsextn === extn))
+    else if (opts.jsextnarr.includes(extn))
       include = o.includejstpl;
     else
       throw new Error(`Invalid type, ${extn}`);
 
     if (opts.version)
-      filepath = addquery(filepath, `version=${opts.version}`);
+      filepath = addquery(filepath, `v=${opts.version}`);
 
     if (opts.istimestamp)
       filepath = addquery(filepath, `ts=${opts.buildts}`);
@@ -68,11 +68,27 @@ module.exports = (o => {
   o.getelemarr = content =>
     content.match(o.elemre) || [];
 
-  o.getpopulated = (elem, body) => {
-    let indent = o.getindentation(elem);
-
-    return elem.replace(elem.replace(o.elemre, '$2'), `\n${body}\n${indent}`);
-  };
+  // (re)populate scrounge 'elem' body with 'body'
+  //
+  // elem,
+  //
+  //   <!-- <scrounge root="app.css"> -->
+  //   <!-- </scrounge> -->
+  //
+  // body,
+  //
+  //   <link href="./out/viewa.css?ts=152" rel="stylesheet" type="text/css">
+  //   <link href="./out/viewb.css?ts=152" rel="stylesheet" type="text/css">
+  //
+  // return,
+  //
+  //   <!-- <scrounge root="app.css"> -->
+  //   <link href="./out/viewa.css?ts=123" rel="stylesheet" type="text/css">
+  //   <link href="./out/viewb.css?ts=123" rel="stylesheet" type="text/css">
+  //   <!-- </scrounge> -->
+  //
+  o.getpopulated = (elem, body) => elem.replace(
+    elem.replace(o.elemre, '$2'), `\n${body}\n${o.getindentation(elem)}`);
 
   return o;
 })({});
