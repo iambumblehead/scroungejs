@@ -1,5 +1,5 @@
 // Filename: scrounge_adapt.js
-// Timestamp: 2018.04.07-19:01:44 (last modified)
+// Timestamp: 2018.04.08-03:46:11 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const umd = require('umd'),
@@ -57,8 +57,9 @@ module.exports = (o => {
   o.js = (opts, node, str, fn) => {
     let filepath = node.get('filepath'),
         modname = scrounge_uid.sanitised(node.get('uid')),
-        skip = opts.skippatharr
-          .some(path => ~filepath.indexOf(path));
+        skip = opts.skippatharr.some(path => ~filepath.indexOf(path)),
+        iscjs,
+        isesm;
 
     if (skip)
       return fn(null, str);
@@ -72,13 +73,14 @@ module.exports = (o => {
         plugins : opts.babelpluginarr || []
       })).code);
 
+    iscjs = moduletype.cjs(str);
+    isesm = moduletype.esm(str);
+
     if (moduletype.umd(str)) {
       str = umdname(str, modname);
-    } else if (moduletype.cjs(str) ||
-               moduletype.esm(str)) {
-      if (moduletype.cjs(str) && !moduletype.esm(str)) {
+    } else if (iscjs || isesm) {
+      if (iscjs && !isesm)
         str = umd(modname, str, { commonJS : true });
-      }
 
       // build import and require replacement mappings
       let replace = node.get('outarr').reduce((prev, cur) => {
@@ -99,8 +101,11 @@ module.exports = (o => {
         import : {}
       });
 
-      str = replacerequires(str, replace.require);
-      str = replaceimports(str, replace.import);
+      if (iscjs)
+        str = replacerequires(str, replace.require);
+
+      if (isesm)
+        str = replaceimports(str, replace.import);
     }
 
     fn(null, str);
