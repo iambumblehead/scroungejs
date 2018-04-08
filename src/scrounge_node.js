@@ -1,11 +1,12 @@
 // Filename: scrounge_node.js
-// Timestamp: 2018.03.31-13:26:22 (last modified)
+// Timestamp: 2018.04.07-19:02:07 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
+//
+// node : { moduletype, filepath, content }
 
 const fs = require('fs'),
       path = require('path'),
 
-      scrounge_uid = require('./scrounge_uid'),
       scrounge_file = require('./scrounge_file'),
       scrounge_elem = require('./scrounge_elem');
 
@@ -94,26 +95,6 @@ module.exports = (o => {
 
     return scrounge_file.setoutputpathreal(opts, publicpath, uid);
   };
-
-  //
-  // return a mapping of import paths
-  // and the values they should be replaced with
-  //
-  o.buildimportreplacements = (opts, node) =>
-    node.get('outarr').reduce((prev, cur) => {
-      let refname = cur.get('refname'),
-          depname = scrounge_uid.sanitised(cur.get('uid'));
-
-      opts.aliasarr.map(([ matchname, newname ]) => (
-        newname === refname &&
-          (prev[matchname] = depname)
-      ));
-
-      prev[refname] = depname;
-
-      return prev;
-    }, {});
-
 
   // for each node in the array build ordered listing of elements
   o.arrgetincludetagarr = (opts, nodearr, rootname) => (

@@ -1,6 +1,8 @@
-scroungejs
-===========
+# scroungejs
+
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand3.png)
+
+[![Build Status](https://travis-ci.org/iambumblehead/scroungejs.svg?branch=master)](https://travis-ci.org/iambumblehead/scroungejs)
 
 An obscure build tool starting as an emacs elisp script in 2009, scroungejs supports ES6 and CommonJS modules and wraps scripts like [depgraph][1], [replace-requires][2], and [detective][5].
 

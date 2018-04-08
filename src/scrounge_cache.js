@@ -1,6 +1,5 @@
-
 // Filename: scrounge_cache.js
-// Timestamp: 2018.03.31-00:57:56 (last modified)
+// Timestamp: 2018.04.07-18:52:37 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
@@ -71,9 +70,8 @@ module.exports = (o => {
     }(Object.keys(rootobj)));
   };
 
-  o.buildmaps = (opts, rootsarr, rootobj, fn = optfn()) => {
+  o.buildmaps = (opts, rootsarr, rootobj, fn = optfn()) =>
     o.buildrootobjcachemap(opts, rootobj, fn);
-  };
 
   return o;
 })({});

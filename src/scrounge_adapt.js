@@ -1,5 +1,5 @@
 // Filename: scrounge_adapt.js
-// Timestamp: 2018.03.31-17:45:56 (last modified)
+// Timestamp: 2018.04.07-19:01:44 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const umd = require('umd'),
@@ -14,9 +14,7 @@ const umd = require('umd'),
       replacerequires = require('replace-requires'),
       replaceimports = require('replace-imports'),
 
-      scrounge_node = require('./scrounge_node'),
-      scrounge_uid = require('./scrounge_uid'),
-      scrounge_log = require('./scrounge_log');
+      scrounge_uid = require('./scrounge_uid');
 
 module.exports = (o => {
   o = (opts, node, fn) => {
@@ -46,65 +44,66 @@ module.exports = (o => {
     }
   };
 
+  o.try = (path, fn) => {
+    try {
+      return fn();
+    } catch (e) {
+      console.error(e);
+
+      throw new Error(`[!!!] parse error ${path}`);
+    }
+  };
+
   o.js = (opts, node, str, fn) => {
     let filepath = node.get('filepath'),
         modname = scrounge_uid.sanitised(node.get('uid')),
-        skip = opts.skippatharr.some(path =>
-          filepath.indexOf(path) !== -1
-        ),
-        umdstr;
+        skip = opts.skippatharr
+          .some(path => ~filepath.indexOf(path));
 
-    if (!skip) {
-      str = babel.transform(str, {
+    if (skip)
+      return fn(null, str);
+
+    str = o.try(filepath, () => (
+      babel.transform(str, {
         compact : opts.iscompress && !skip,
         presets : opts.ises2015 ? [
           babelpresetenv
         ] : [],
         plugins : opts.babelpluginarr || []
-      }).code;
-    }
+      })).code);
 
-    if (skip) {
-      umdstr = str;
-    } else if (moduletype.umd(str)) {
-      umdstr = umdname(str, modname);
-    } else if (moduletype.cjs(str) || moduletype.esm(str)) {
+    if (moduletype.umd(str)) {
+      str = umdname(str, modname);
+    } else if (moduletype.cjs(str) ||
+               moduletype.esm(str)) {
       if (moduletype.cjs(str) && !moduletype.esm(str)) {
-        umdstr = umd(modname, str, { commonJS : true });
-      } else {
-        umdstr = str;
+        str = umd(modname, str, { commonJS : true });
       }
 
-      let replacements = scrounge_node.buildimportreplacements(opts, node);
-      umdstr = replacerequires(umdstr, replacements);
+      // build import and require replacement mappings
+      let replace = node.get('outarr').reduce((prev, cur) => {
+        let refname = cur.get('refname'),
+            depname = scrounge_uid.sanitised(cur.get('uid'));
 
-      if (moduletype.esm(str)) {
-        replacements = Object.keys(replacements).reduce((prev, key) => {
-          prev[key] = `./${replacements[key]}.js`;
+        opts.aliasarr.map(([ matchname, newname ]) => (
+          newname === refname &&
+            (prev[matchname] = depname)
+        ));
 
-          return prev;
-        }, {});
+        prev.require[refname] = depname;
+        prev.import[refname] = `./${depname}.js`;
 
-        umdstr = replaceimports(umdstr, replacements);
-      }
-    } else if (moduletype.amd(str)) {
-      scrounge_log.unsupportedtype(opts, moduletype.is(str), modname);
-      return fn('[!!!] unsupported module');
-    } else {
-      umdstr = str;
+        return prev;
+      }, {
+        require : {},
+        import : {}
+      });
+
+      str = replacerequires(str, replace.require);
+      str = replaceimports(str, replace.import);
     }
 
-    if (opts.iscompress && !skip) {
-      try {
-        fn(null, umdstr);
-      } catch (e) {
-        console.error(`[!!!] parse error ${filepath}`);
-
-        fn(e);
-      }
-    } else {
-      fn(null, umdstr);
-    }
+    fn(null, str);
   };
 
   // perform o.js on mjs files
