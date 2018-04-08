@@ -1,5 +1,5 @@
 // Filename: scrounge_file.spec.js
-// Timestamp: 2018.04.08-01:36:05 (last modified)
+// Timestamp: 2018.04.08-01:41:53 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
@@ -17,7 +17,7 @@ describe('scrounge_file.setoutputpath', () => {
 });
 
 describe('scrounge_file.setpublicpath', () => {
-  it('should return smart public paths"', () => {
+  it('should return smart public paths', () => {
     expect(
       scrounge_file.setpublicpath({
         publicpath : './public'
@@ -89,7 +89,7 @@ describe('scrounge_file.setpublicoutputpath', () => {
     ).toBe('./public/dir/file.js');
   });
 
-  it('should return smart public paths"', () => {
+  it('should return smart public paths', () => {
     expect(
       scrounge_file.setpublicoutputpath({
         isconcat : true,
