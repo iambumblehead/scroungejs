@@ -67,10 +67,23 @@ module.exports = (o => {
     str = o.try(filepath, () => (
       babel.transform(str, {
         compact : opts.iscompress && !skip,
-        presets : opts.ises2015 ? [
-          babelpresetenv
-        ] : [],
-        plugins : opts.babelpluginarr || []
+        plugins : opts.babelpluginarr || [],
+        presets : [
+          //
+          // rather than try to manage many presets and plugins,
+          // this single preset trys to deliver working output for the
+          // given module definition
+          //
+          // do not convert umd or module-deployed esm
+          //
+          [ babelpresetenv, {
+            modules : (
+              node.get('module') === 'umd' || (
+                node.get('module') === 'esm' && opts.deploytype === 'module'))
+              ? false
+              : 'commonjs'
+          } ]
+        ]
       })).code);
 
     iscjs = moduletype.cjs(str);
@@ -87,10 +100,13 @@ module.exports = (o => {
         let refname = cur.get('refname'),
             depname = scrounge_uid.sanitised(cur.get('uid'));
 
+        // alias allows build to map customm paths values
+        // to the require/import value
+        // aliasarr scenario needs tests
         opts.aliasarr.map(([ matchname, newname ]) => (
-          newname === refname &&
-            (prev[matchname] = depname)
-        ));
+          newname === refname && (
+            prev.require[matchname] = depname,
+            prev.import[matchname] = `/${depname}.js`)));
 
         prev.require[refname] = depname;
         prev.import[refname] = `./${depname}.js`;

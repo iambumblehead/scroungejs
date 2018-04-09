@@ -46,15 +46,6 @@ module.exports = (o => {
     finopt.aliasarr = castas.arr(opt.aliasarr, []);
     finopt.babelpluginarr = castas.arr(opt.babelpluginarr, []);
 
-    if (finopt.deploytype === 'script') {
-      // ES6 modules converted to CJS and then again from CJS to UMD
-      finopt.babelpluginarr.push([
-        require('babel-plugin-transform-es2015-modules-commonjs'), {
-          noMangle : true
-        }
-      ]);
-    }
-
     finopt.iswatch = castas.bool(opt.iswatch, true);
     finopt.iscachemap = castas.bool(opt.iscachemap, true);
     finopt.iscompress = castas.bool(opt.iscompress, false);
