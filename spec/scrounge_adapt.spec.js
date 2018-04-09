@@ -38,7 +38,6 @@ describe('scrounge_adapt(opts, node, str, fn)', () => {
         umd('cjsnode', babel.transform(test_cjs_root, {
           compact : false,
           presets : [ [ babelpresetenv, {
-            //modules : opts.deploytype === 'module'
             modules : 'commonjs'
           } ] ]
         }).code, { commonJS : true }));
@@ -190,6 +189,26 @@ describe('scrounge_adapt(opts, node, str, fn)', () => {
     }), rootmjsnode, test_mjs_root, (err, res) => {
       expect(replacedimp.test(res)).toBe(true);
       expect(originalimp.test(res)).toBe(false);
+
+      done();
+    });
+  });
+
+  it('should handle aliases', done => {
+    let aliascjsnode = depgraph.node.setedgeout(
+      depgraph.node.get('./cjs_alias.js', [
+        'const inferno = require("inferno");'
+      ].join(''), 'cjsnode'), 'infernoedge', 'inferno/dist/inferno');
+
+    scrounge_adapt.js(scrounge_opts({
+      iscompress : false,
+      aliasarr : [ [
+        'inferno',
+        'inferno/dist/inferno'
+      ] ]
+    }), aliascjsnode, aliascjsnode.get('content'), (err, res) => {
+      expect(/inferno = require\("inferno"\)/.test(res)).toBe(false);
+      expect(/inferno = infernoedge/.test(res)).toBe(true);
 
       done();
     });
