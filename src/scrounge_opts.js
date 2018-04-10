@@ -1,5 +1,5 @@
 // Filename: scrounge_opts.js
-// Timestamp: 2018.04.04-00:31:32 (last modified)
+// Timestamp: 2018.04.09-22:12:19 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
@@ -37,12 +37,57 @@ module.exports = (o => {
     finopt.tsconfig = opt.tsconfig || {};
     finopt.typearr = castas.arr(opt.typearr, []);
     finopt.treearr = castas.arr(opt.treearr, []);
+
+    // do not follow dependencies from files w/ filenames including
+    // the given substring. more specific substring is recommended
+    //
+    // skipdeparr: [
+    //   '/webvr-polyfill.js',
+    //   '/amplitude.js'
+    // ]
+    //
     finopt.skipdeparr = castas.arr(opt.skipdeparr, []); // depgraph
+
+    // disable scroungejs' adaptation of files w/ matching filename.
+    //
+    // skipdeparr: [
+    //   '/three.js'
+    // ]
+    //
     finopt.skippatharr = castas.arr(opt.skippatharr, []); // scrounge
-    finopt.treetype = /full/.test(opt.treetype) ? 'full' : 'small';
+
+    // change the appearance of the tree
+    //
+    finopt.treetype = [
+      'full', // list each leaf one time only
+      'small', // list full tree, same leaf may appear multipl times
+      'none' //  do not render tree (use for unit-testing)
+    ].find(t => t === String(opt.treetype).toLowerCase()) || 'small';
+
     finopt.embedarr = castas.arr(opt.embedarr, []);
     finopt.globalarr = castas.arr(opt.globalarr, []);
+
+    // prepend a tree's sources with specific file contents
+    // for example, loading three.js files before any 'app.js' tree file
+    //
+    // prependarr: [{
+    //   treename: 'app.js',
+    //   sourcearr: [
+    //     './node_modules/three/build/three.js',
+    //     './node_modules/three/examples/js/effects/VREffect.js'
+    //   ]
+    // }]
+    //
     finopt.prependarr = castas.arr(opt.prependarr, []);
+
+    // 'alias' a different name or path to an existing name
+    // for example, some files might require 'inferno', but specifically
+    // 'inferno/dist/inferno' is wanted instead
+    //
+    // aliasarr: [
+    //   [ 'inferno', 'inferno/dist/inferno' ]
+    // ]
+    //
     finopt.aliasarr = castas.arr(opt.aliasarr, []);
     finopt.babelpluginarr = castas.arr(opt.babelpluginarr, []);
 

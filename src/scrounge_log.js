@@ -1,13 +1,14 @@
 // Filename: scrounge_log.js
-// Timestamp: 2018.04.04-00:22:34 (last modified)
+// Timestamp: 2018.04.09-21:30:09 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
       archy = require('archy');
 
 module.exports = (o => {
+  // also returns msg string
   o = (opts, msg) =>
-    (opts.issilent || console.log(msg));
+    (opts.issilent || console.log(msg)) || msg;
 
   o.printroot = (opts, rootname, tree) =>
     o(opts, `[...] root: ${rootname}\n\n${archy(tree)}`);

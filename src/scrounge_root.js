@@ -1,5 +1,5 @@
 // Filename: scrounge_root.js
-// Timestamp: 2018.04.08-13:39:06 (last modified)
+// Timestamp: 2018.04.09-21:49:20 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const path = require('path'),
@@ -33,7 +33,7 @@ module.exports = (o => {
     if (filepath)
       depgraph.node.get_fromfilepath(filepath, fn);
     else
-      console.log(`rootname not found ${filepath}`);
+      scrounge_log.rootfilenotfound(opts, filepath);
   };
 
   o.getrootnameaspath = (opts, rootname) =>
@@ -60,21 +60,25 @@ module.exports = (o => {
 
     let rootpath = o.getrootnameaspath(opts, rootname);
     if (!rootpath) {
-      return scrounge_log.rootfilenotfound(opts, rootname);
+      return fn(scrounge_log.rootfilenotfound(opts, rootname));
     }
 
     o.getasgraph(opts, rootpath, (err, graph) => {
       if (err) return fn(err);
 
-      scrounge_log.printroot(
-        opts, rootname, opts.treetype === 'small'
-          ? depgraph.tree.getfromgraphsmall(graph)
-          : depgraph.tree.getfromgraph(graph));
+      if (opts.treetype !== 'none')
+        scrounge_log.printroot(
+          opts, rootname, opts.treetype === 'small'
+            ? depgraph.tree.getfromgraphsmall(graph)
+            : depgraph.tree.getfromgraph(graph));
 
       fn(null, depgraph.graph.getdeparr(graph).reverse());
     });
   };
 
+  //
+  // returns a map object { treename : dependencyarr }
+  //
   o.getrootarrasdeparr = (opts, rootarr, fn) => {
     let graphnamearr = o.getnamearrastype(opts, rootarr, '.js');
 
@@ -87,9 +91,9 @@ module.exports = (o => {
         scrounge_prepend.getprenodearr(opts, graphnamearr[x], (err, prenodearr) => {
           if (err) return fn(err);
 
-          if (prenodearr) {
-            graphsobj[graphnamearr[x]] = deparr.concat(prenodearr);
-          }
+          graphsobj[graphnamearr[x]] = prenodearr
+            ? deparr.concat(prenodearr)
+            : deparr;
 
           nextgraph(graphnamearr, x, graphsobj);
         });
@@ -97,7 +101,10 @@ module.exports = (o => {
     }(graphnamearr, graphnamearr.length, {}));
   };
 
-  // all root objects are created from a 'js' root equivalent
+  //
+  // obtains the map object created from 'js' roots
+  // constructs non-js root definitions derived from js roots
+  //
   o.getrootarrasobj = (opts, rootarr, fn) => {
     o.getrootarrasdeparr(opts, rootarr, (err, jsdeparrobj) => {
       if (err) return fn(err);

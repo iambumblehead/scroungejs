@@ -1,6 +1,6 @@
 {
   "name": "scroungejs",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "license": "MIT",
   "readmeFilename": "README.md",
   "main": "src/scrounge.js",

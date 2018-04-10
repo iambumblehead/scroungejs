@@ -1,5 +1,5 @@
 // Filename: build.js
-// Timestamp: 2018.04.03-23:59:03 (last modified)
+// Timestamp: 2018.04.09-22:14:04 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const scroungejs = require('../'),
@@ -16,7 +16,7 @@ scroungejs.build({
   basepage : './index.html',
   iscompress : false,
   isconcat : false,
-  roots : 'app.js',
+  treearr : [ 'app.js', 'app.css' ],
   deploytype : 'module'
 }, err => {
   if (err)
