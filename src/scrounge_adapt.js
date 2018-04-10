@@ -54,6 +54,19 @@ module.exports = (o => {
     }
   };
 
+  // found in some sources, such as inferno :( discussion,
+  //
+  //   https://github.com/rollup/rollup/issues/208
+  //
+  o.rmNODE_ENV = (() => {
+    let NODE_ENVre = /process\.env\.NODE_ENV/g,
+        NODE_ENV = `'${process.env.NODE_ENV}'`;
+
+    return str => NODE_ENVre.test(str)
+      ? str.replace(NODE_ENVre, NODE_ENV)
+      : str;
+  })();
+
   o.js = (opts, node, str, fn) => {
     let filepath = node.get('filepath'),
         modname = scrounge_uid.sanitised(node.get('uid')),
@@ -122,6 +135,8 @@ module.exports = (o => {
 
       if (isesm)
         str = replaceimports(str, replace.import);
+
+      str = o.rmNODE_ENV(str);
     }
 
     fn(null, str);
