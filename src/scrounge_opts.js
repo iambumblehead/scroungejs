@@ -142,5 +142,20 @@ module.exports = (o => {
     return supportedextna === supportedextnb;
   };
 
+  o.getfinalextn = (opts, filename, fileextn = path.extname(filename)) => {
+    let extn = null;
+
+    if (o.filenamesupportedjs(opts, filename, fileextn)) {
+      extn = '.js';
+    } else if (o.filenamesupportedcss(opts, filename, fileextn)) {
+      extn = '.css';
+    }
+
+    return extn;
+  };
+
+  o.setfinalextn = (opts, filename) =>
+    scrounge_file.setextn(filename, o.getfinalextn(opts, filename));
+
   return o;
 })();

@@ -110,8 +110,11 @@ module.exports = (o => {
           if (err) return o.throwerror(err, fn);
 
           scrounge_log.updatenode(opts, node.get('uid'));
+          let nodefilepath = scrounge_opts.setfinalextn(
+            opts, node.get('filepath'));
+
           rootsarr = rootsarr.filter(root => (
-            scrounge_opts.issamesupportedtype(opts, node.get('filepath'), root)));
+            scrounge_opts.issamesupportedtype(opts, nodefilepath, root)));
 
           scrounge_cache.recoverrootarrcachemapnode(opts, rootsarr, node, (err, rootnodescached) => {
             if (err) return o.throwerror(err, fn);
