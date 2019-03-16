@@ -46,12 +46,14 @@ describe('scrounge_adapt(opts, node, str, fn)', () => {
     });
   });
 
-  it('should throw an error for a malformed file', () => {
+  it('should throw an error for a malformed file', done => {
     expect(() => (
       scrounge_adapt.js(scrounge_opts({
         iscompress : true
-      }), malnode, test_malformed, () => {}))
-    ).toThrow(new Error('[!!!] parse error ./malformed.js'));
+      }), malnode, test_malformed, () => {}, () => {})
+    ).toThrow(new Error('[!!!] parse error ./malformed.js')));
+
+    setTimeout(() => { done(); }, 200);
   });
 
   it('should compress content when `iscompress: true`', done => {

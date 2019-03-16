@@ -77,70 +77,77 @@ module.exports = (o => {
     if (skip)
       return fn(null, str);
 
-    str = o.try(filepath, () => (
-      babel.transform(str, {
-        compact : opts.iscompress && !skip,
-        plugins : opts.babelpluginarr || [],
-        sourceMaps : opts.issourcemap,
-        presets : [
-          //
-          // rather than try to manage many presets and plugins,
-          // this single preset trys to deliver working output for the
-          // given module definition
-          //
-          // do not convert umd or module-deployed esm
-          //
-          [ babelpresetenv, {
-            modules : (
-              node.get('module') === 'umd' || (
-                node.get('module') === 'esm' && opts.deploytype === 'module'))
-              ? false
-              : 'commonjs'
-          } ]
-        ]
-      })).code);
+    // str = o.try(filepath, () => (
+    babel.transform(str, {
+      compact : opts.iscompress && !skip,
+      plugins : opts.babelpluginarr || [],
+      sourceMaps : opts.issourcemap,
+      presets : [
+        //
+        // rather than try to manage many presets and plugins,
+        // this single preset trys to deliver working output for the
+        // given module definition
+        //
+        // do not convert umd or module-deployed esm
+        //
+        [ babelpresetenv, {
+          modules : (
+            node.get('module') === 'umd' || (
+              node.get('module') === 'esm' && opts.deploytype === 'module'))
+            ? false
+            : 'commonjs'
+        } ]
+      ]
+    }, (err, res) => {
+      if (err) {
+        console.error(err);
+        throw new Error(`[!!!] parse error ${filepath}`);
+      }
 
-    iscjs = moduletype.cjs(str);
-    isesm = moduletype.esm(str);
+      str = res.code;
 
-    if (moduletype.umd(str)) {
-      str = umdname(str, modname);
-    } else if (iscjs || isesm) {
-      if (iscjs && !isesm)
-        str = umd(modname, str, { commonJS : true });
+      iscjs = moduletype.cjs(str);
+      isesm = moduletype.esm(str);
 
-      // build import and require replacement mappings
-      let replace = node.get('outarr').reduce((prev, cur) => {
-        let refname = cur.get('refname'),
-            depname = scrounge_uid.sanitised(cur.get('uid'));
+      if (moduletype.umd(str)) {
+        str = umdname(str, modname);
+      } else if (iscjs || isesm) {
+        if (iscjs && !isesm)
+          str = umd(modname, str, { commonJS : true });
 
-        // alias allows build to map customm paths values
-        // to the require/import value
-        // aliasarr scenario needs tests
-        opts.aliasarr.map(([ matchname, newname ]) => (
-          newname === refname && (
-            prev.require[matchname] = depname,
-            prev.import[matchname] = `/${depname}.js`)));
+        // build import and require replacement mappings
+        let replace = node.get('outarr').reduce((prev, cur) => {
+          let refname = cur.get('refname'),
+              depname = scrounge_uid.sanitised(cur.get('uid'));
 
-        prev.require[refname] = depname;
-        prev.import[refname] = `./${depname}.js`;
+          // alias allows build to map customm paths values
+          // to the require/import value
+          // aliasarr scenario needs tests
+          opts.aliasarr.map(([ matchname, newname ]) => (
+            newname === refname && (
+              prev.require[matchname] = depname,
+              prev.import[matchname] = `/${depname}.js`)));
 
-        return prev;
-      }, {
-        require : {},
-        import : {}
-      });
+          prev.require[refname] = depname;
+          prev.import[refname] = `./${depname}.js`;
 
-      if (iscjs)
-        str = replacerequires(str, replace.require);
+          return prev;
+        }, {
+          require : {},
+          import : {}
+        });
 
-      if (isesm)
-        str = replaceimports(str, replace.import);
+        if (iscjs)
+          str = replacerequires(str, replace.require);
 
-      str = o.rmNODE_ENV(str);
-    }
+        if (isesm)
+          str = replaceimports(str, replace.import);
 
-    fn(null, str);
+        str = o.rmNODE_ENV(str);
+      }
+
+      fn(null, str);
+    });
   };
 
   // perform o.js on mjs files
