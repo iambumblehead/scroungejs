@@ -92,9 +92,17 @@ module.exports = (o => {
     finopt.babelpluginarr = castas.arr(opt.babelpluginarr, []);
 
     finopt.iswatch = castas.bool(opt.iswatch, true);
+
+    // keep processed copies of files in a cached directory to speed
+    // subsequent rebuilds
+    //
     finopt.iscachemap = castas.bool(opt.iscachemap, true);
     finopt.iscompress = castas.bool(opt.iscompress, false);
     finopt.isconcat = castas.bool(opt.isconcat, true);
+
+    // sourcemap by default if iscompress is used
+    //
+    finopt.issourcemap = castas.bool(opt.issourcemap, opt.iscompress);
     finopt.issilent = castas.bool(opt.issilent, false);
     finopt.ises2015 = castas.bool(opt.ises2015, false);
     finopt.istpl = castas.bool(opt.istpl, false);

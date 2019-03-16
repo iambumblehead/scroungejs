@@ -5,8 +5,8 @@
 const umd = require('umd'),
       path = require('path'),
       less = require('less'),
-      babel = require('babel-core'),
-      babelpresetenv = require('babel-preset-env'),
+      babel = require('@babel/core'),
+      babelpresetenv = require('@babel/preset-env'),
       umdname = require('umdname'),
       Cleancss = require('clean-css'),
       moduletype = require('moduletype'),
@@ -81,6 +81,7 @@ module.exports = (o => {
       babel.transform(str, {
         compact : opts.iscompress && !skip,
         plugins : opts.babelpluginarr || [],
+        sourceMaps : opts.issourcemap,
         presets : [
           //
           // rather than try to manage many presets and plugins,

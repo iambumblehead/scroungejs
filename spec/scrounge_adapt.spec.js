@@ -6,8 +6,8 @@ const fs = require('fs'),
       umd = require('umd'),
       depgraph = require('depgraph'),
 
-      babel = require('babel-core'),
-      babelpresetenv = require('babel-preset-env'),
+      babel = require('@babel/core'),
+      babelpresetenv = require('@babel/preset-env'),
 
       scrounge_adapt = require('../src/scrounge_adapt'),
       scrounge_opts = require('../src/scrounge_opts'),
@@ -179,7 +179,7 @@ describe('scrounge_adapt(opts, node, str, fn)', () => {
     let rootmjsnode = depgraph.node.setedgeout(
           mjsnode, 'testedge', './test_mjs_root_depa'),
         originalimp = /import depa from '.\/test_mjs_root_depa';/g,
-        replacedimp = /var _test_mjs_root_depa = testedge;/g;
+        replacedimp = /var _test_mjs_root_depa = _interopRequireDefault\(testedge\);/g;
 
     expect(originalimp.test(test_mjs_root)).toBe(true);
 
