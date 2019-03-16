@@ -44,16 +44,6 @@ module.exports = (o => {
     }
   };
 
-  o.try = (path, fn) => {
-    try {
-      return fn();
-    } catch (e) {
-      console.error(e);
-
-      throw new Error(`[!!!] parse error ${path}`);
-    }
-  };
-
   // found in some sources, such as inferno :( discussion,
   //
   //   https://github.com/rollup/rollup/issues/208
@@ -77,7 +67,6 @@ module.exports = (o => {
     if (skip)
       return fn(null, str);
 
-    // str = o.try(filepath, () => (
     babel.transform(str, {
       compact : opts.iscompress && !skip,
       plugins : opts.babelpluginarr || [],
