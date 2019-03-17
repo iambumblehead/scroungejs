@@ -83,8 +83,8 @@ module.exports = (o => {
       fs.writeFile(path.resolve(filepath), content, fn);
     });
 
-  o.write = (opts, filepath, content, fn) => {
-    scrounge_log.write(opts, filepath);
+  o.write = (opts, filepath, content, fn, isfilesize = false) => {
+    scrounge_log.write(opts, filepath, isfilesize && Buffer.byteLength(content));
 
     o.writesilent(opts, filepath, content, fn);
   };

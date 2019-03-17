@@ -54,11 +54,12 @@ module.exports = (o => {
     o(opts, '[...] root file not found: :rootname'
       .replace(/:rootname/, rootname));
 
-  o.write = (opts, filename) =>
-    o(opts, '[...] write: :filename'
+  o.write = (opts, filename, bytesize) =>
+    o(opts, '[...] write: :filename :size'
       .replace(/:filename/, path.resolve(filename)
         .replace(process.cwd(), '.')
-        .replace(process.env.HOME, '~')));
+        .replace(process.env.HOME, '~'))
+      .replace(/:size/, bytesize ? `~${bytesize / 1000}kb` : ''));
 
   return o;
 })({});

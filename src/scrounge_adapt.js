@@ -70,7 +70,8 @@ module.exports = (o => {
     babel.transform(str, {
       compact : opts.iscompress && !skip,
       plugins : opts.babelpluginarr || [],
-      sourceMaps : opts.issourcemap,
+      sourceMaps : opts.sourcemap,
+      sourceFileName : opts.sourceFileName,
       presets : [
         //
         // rather than try to manage many presets and plugins,
@@ -135,7 +136,7 @@ module.exports = (o => {
         str = o.rmNODE_ENV(str);
       }
 
-      fn(null, str);
+      fn(null, str, res.map);
     });
   };
 

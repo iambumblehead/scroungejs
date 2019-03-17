@@ -148,18 +148,40 @@ module.exports = (o => {
                 rootextn;
 
           filepath = scrounge_file.setextn(filepath, fileextn);
-          scrounge_file.write(opts, filepath, content, fn);
+
+          if (fileextn === '.js' && opts.issourcemap) {
+            scrounge_adapt.js({
+              ...opts,
+              sourcemap : true,
+              sourceFileName : path.basename(filepath),
+              iscompress : true,
+              test : true
+            }, node, content, (err, contenta, map) => {
+              scrounge_file.write(opts, `${filepath}.map`, map, () => {
+                content = `//# sourceMappingURL=${path.basename(filepath)}.map\n${content}`;
+                scrounge_file.write(opts, filepath, content, fn, true);
+              });
+            });
+          } else {
+            scrounge_file.write(opts, filepath, content, fn, true);
+          }
         };
 
     if (opts.isconcat) {
       (function nextdep (dep, x, contentarr) {
         if (!x--) return nodewrite(opts, dep[0], rootname, contentarr.join('\n'), fn);
 
-        scrounge_adapt(opts, dep[x], (err, res) => {
+        let adaptopts = {
+          ...opts,
+          issourcemap : false,
+          iscompress : opts.issourcemap === false && opts.iscompress
+        };
+
+        scrounge_adapt(adaptopts, dep[x], (err, res) => {
           if (err) return fn(err);
 
           scrounge_log.rootjoinfile(
-            opts, graphname, rootextn, dep[x].get('filepath'), x, deparr.length
+            adaptopts, graphname, rootextn, dep[x].get('filepath'), x, deparr.length
           );
 
           contentarr.push(res);
