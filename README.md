@@ -68,11 +68,11 @@ scroungejs-1.3.6:~/test/src/app.js
 . │   │ └── scroungejs-1.3.6:~/test/src/models/modela.js
 . │   └─┬ scroungejs-1.3.6:~/test/src/controls/ctrlb.js
 . │     └── scroungejs-1.3.6:~/test/src/models/modelb.js
-. └── scroungejs-1.3.6:~/test/src/views/viewa.js
+. └── scroungejs-1.3.6:~/test/src/views/viewa
 
 [...] ugly: (app.js, .css, 1/2) ./src/views/viewa.less
 [...] ugly: (app.js, .css, 2/2) ./src/views/viewb.less
-[...] write: ./out/app.css
+[...] write: ./out/app.css ~25.93kb
 [...] ugly: (app.js, .js, 1/9) ./src/models/modela.js
 [...] ugly: (app.js, .js, 2/9) ./src/controls/ctrla.js
 [...] ugly: (app.js, .js, 3/9) ./src/models/modelb.js
@@ -82,7 +82,8 @@ scroungejs-1.3.6:~/test/src/app.js
 [...] ugly: (app.js, .js, 7/9) ./src/views/viewa.js
 [...] ugly: (app.js, .js, 8/9) ./src/views/viewsall.js
 [...] ugly: (app.js, .js, 9/9) ./src/app.js
-[...] write: ./out/app.js
+[...] write: ./out/app.js ~2016.23kb
+[...] write: ./out/app.js.map
 [...] write: ./index.html
 [...] finish: 00:00:167 (mm:ss:ms)
 ```

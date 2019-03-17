@@ -127,7 +127,7 @@ module.exports = (o => {
           import : {}
         });
 
-        if (iscjs)
+        if (iscjs && !/export default/g.test(str))
           str = replacerequires(str, replace.require);
 
         if (isesm)

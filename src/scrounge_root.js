@@ -192,7 +192,6 @@ module.exports = (o => {
       (function nextdep (dep, x) {
         if (!x--) return fn(null, 'success');
 
-        // scrounge_node.getcontentadapted(opts, dep[x], (err, res) => {
         scrounge_adapt(opts, dep[x], (err, res) => {
           if (err) return fn(err);
 
