@@ -157,7 +157,7 @@ module.exports = (o => {
               iscompress : true,
               test : true
             }, node, content, (err, contenta, map) => {
-              scrounge_file.write(opts, `${filepath}.map`, map, () => {
+              scrounge_file.write(opts, `${filepath}.map`, JSON.stringify(map, null, '  '), () => {
                 content = `//# sourceMappingURL=${path.basename(filepath)}.map\n${content}`;
                 scrounge_file.write(opts, filepath, content, fn, true);
               });
