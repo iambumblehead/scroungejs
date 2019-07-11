@@ -1,5 +1,5 @@
 // Filename: scrounge_adapt.js
-// Timestamp: 2018.04.08-06:15:21 (last modified)
+// Timestamp: 2019.07.11-10:15:48 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
 const umd = require('umd'),
@@ -100,7 +100,12 @@ module.exports = (o => {
       isesm = moduletype.esm(str);
 
       if (moduletype.umd(str)) {
-        str = umdname(str, modname);
+        try {
+          str = umdname(str, modname);
+        } catch (e) {
+          console.log(`[www] cannot identify umdname: ${modname}`);
+          throw new Error(e);
+        }
       } else if (iscjs || isesm) {
         if (iscjs && !isesm)
           str = umd(modname, str, { commonJS : true });
