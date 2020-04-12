@@ -91,7 +91,7 @@ module.exports = (o => {
     finopt.aliasarr = castas.arr(opt.aliasarr, []);
     finopt.babelpluginarr = castas.arr(opt.babelpluginarr, []);
 
-    finopt.iswatch = castas.bool(opt.iswatch, true);
+    finopt.iswatch = castas.bool(opt.iswatch, false);
 
     // keep processed copies of files in a cached directory to speed
     // subsequent rebuilds
