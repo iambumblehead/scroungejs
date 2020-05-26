@@ -51,7 +51,7 @@
   "devDependencies": {
     "express": "^4.16.3",
     "pre-commit": "^1.2.2",
-    "babel-eslint": "^7.2.3",
+    "babel-eslint": "^10.1.0",
     "eslint": "^7.1.0",
     "eslint-plugin-import": "^2.20.0",
     "jasmine": "2.5.3",
