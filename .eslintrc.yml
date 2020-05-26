@@ -1,7 +1,5 @@
 # eslint config
 
-extends:
-  - airbnb-base
 plugins:
   - import
 env:
