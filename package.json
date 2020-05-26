@@ -32,7 +32,7 @@
     "@babel/preset-env": "^7.3.4",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "typescript": "latest",
-    "chokidar": "^2.0.3",
+    "chokidar": "^3.4.0",
     "clean-css": "^4.1.11",
     "castas": "^0.0.3",
     "archy": "^1.0.0",
