@@ -43,7 +43,7 @@
     "moduletype": "^0.0.8",
     "simpletime": "^0.1.28",
     "pathpublic": "^0.0.8",
-    "depgraph": "^0.3.6",
+    "depgraph": "^0.3.8",
     "umdname": "^0.0.9",
     "mkdirp": "^0.5.1",
     "umd": "^3.0.3"
