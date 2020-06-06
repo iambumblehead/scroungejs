@@ -88,7 +88,7 @@ module.exports = (o => {
 
   // for each node in the array build ordered listing of elements
   o.arrgetincludetagarr = (opts, nodearr, rootname) => (
-    opts.isconcat
+    (opts.isconcat || opts.deploytype === 'module')
       ? [ scrounge_elem.getincludetag(
         opts, o.getoutputpathpublic(opts, nodearr[0], rootname),
         nodearr[0].get('module')) ]
