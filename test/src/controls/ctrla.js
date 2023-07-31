@@ -2,10 +2,10 @@
 // Timestamp: 2015.12.07-20:17:50 (last modified)
 // Author(s): Bumblehead (www.bumblehead.com)  
 
-var modela = require('../models/modela');
+import modela from '../models/modela.js'
 
-module.exports = {
+export default {
   start : function () {
-    modela.start();
+    modela.start()
   }
-};
+}

@@ -2,10 +2,10 @@
 // Timestamp: 2018.04.08-03:04:24 (last modified)
 // Author(s): Bumblehead (www.bumblehead.com)
 
-var modelb = require('../models/modelb');
+import modelb from '../models/modelb.js'
 
-module.exports = {
+export default {
   start : function () {
-    modelb.start();
+    modelb.start()
   }
-};
+}

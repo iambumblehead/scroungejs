@@ -2,8 +2,10 @@
 // Timestamp: 2018.03.31-14:12:45 (last modified)
 // Author(s): Bumblehead (www.bumblehead.com)
 
+import ctrlsall from '../controls/ctrlsall.js'
+
 let viewb = {
-  ctrlsall : require('../controls/ctrlsall')
+  ctrlsall
 };
 
 export default {

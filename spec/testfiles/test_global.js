@@ -4,4 +4,4 @@
 
 window.threejs = {
   'global' : 'node'
-};
+}

@@ -2,12 +2,14 @@
 // Timestamp: 2018.03.29-00:40:34 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-var viewa = {
-  ctrlsall : require('../controls/ctrlsall')
-};
+import ctrlsall from '../controls/ctrlsall.js'
 
-module.exports = {
+var viewa = {
+  ctrlsall
+}
+
+export default {
   start : function () {
-    viewa.ctrlsall.start();
+    viewa.ctrlsall.start()
   }
-};
+}
