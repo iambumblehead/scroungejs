@@ -19,7 +19,6 @@ scroungejs.build({
   outputpath : './test/out',
   publicpath : './test/out/',
   basepagein : './test/index.tpl.html',
-  // basepagein : __dirname + '/index.tpl.html',
   basepage : './test/index.html',
   iscompress : false,
   isconcat : false,
@@ -27,12 +26,12 @@ scroungejs.build({
   deploytype : 'module'
 }, err => {
   if (err)
-    console.log(err);
+    console.log(err)
   else {
-    app.use('/', express.static(path.join(__dirname, '')));
+    app.use('/', express.static(path.join(__dirname, '')))
 
-    http.createServer(app).listen(port);
+    // http.createServer(app).listen(port)
 
-    console.log(`[...] localhost:${port}/`);
+    console.log(`[...] localhost:${port}/`)
   }
-});
+})

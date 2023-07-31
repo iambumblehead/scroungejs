@@ -6,10 +6,10 @@ import ctrlsall from '../controls/ctrlsall.js'
 
 var viewa = {
   ctrlsall
-};
+}
 
 export default {
   start : function () {
-    viewa.ctrlsall.start();
+    viewa.ctrlsall.start()
   }
-};
+}

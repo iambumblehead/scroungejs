@@ -17,8 +17,8 @@ test('should return rootnames', () => {
           <!-- <scrounge root="app.js"> -->
           <!-- </scrounge> -->
         </head>
-      `).join(','), 'app.css,app.js');
-});
+      `).join(','), 'app.css,app.js')
+})
 
 test('should return comma-separated rootnames', () => {
   assert.strictEqual(
@@ -29,8 +29,8 @@ test('should return comma-separated rootnames', () => {
           <!-- <scrounge root="crypto.js,app.js"> -->
           <!-- </scrounge> -->
         </head>
-      `).join(','), 'app.css,app.js,crypto.js');
-});
+      `).join(','), 'app.css,app.js,crypto.js')
+})
 
 test('should be robust and handle/strip whitespace', () => {
   assert.strictEqual(
@@ -41,11 +41,11 @@ test('should be robust and handle/strip whitespace', () => {
           <!-- <scrounge root="crypto.js , app.js "> -->
           <!-- </scrounge> -->
         </head>
-      `).join(','), 'app.css,app.js,crypto.js');
-});
+      `).join(','), 'app.css,app.js,crypto.js')
+})
 
 test('should return new content, with updated node-corresponding element', () => {
-  let cjsnode = depgraph.node.get('./cjs_root.js', 'console.log("hi")', 'cjsnode');
+  let cjsnode = depgraph.node.get('./cjs_root.js', 'console.log("hi")', 'cjsnode')
 
   assert.strictEqual(scrounge_basepage.writecontentelemone({
     isconcat : false,
@@ -74,5 +74,5 @@ test('should return new content, with updated node-corresponding element', () =>
           <script src="./public/dir/ejsnode.js?ts=12345" type="text/javascript"></script>
           <!-- </scrounge> -->
         </head>`
-  ));
-});
+  ))
+})

@@ -4,8 +4,8 @@
 
 export default {
   start : function () {
-    console.log('modela start');
+    console.log('modela start')
   }
-};
+}
 
 

@@ -4,6 +4,6 @@
 
 export default {
   start : function () {
-    console.log('modelb start');
+    console.log('modelb start')
   }
-};
+}

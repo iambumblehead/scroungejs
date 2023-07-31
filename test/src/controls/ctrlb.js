@@ -6,6 +6,6 @@ import modelb from '../models/modelb.js'
 
 export default {
   start : function () {
-    modelb.start();
+    modelb.start()
   }
-};
+}

@@ -6,18 +6,18 @@
   // eslint-disable-next-line no-undef
   if (typeof exports === "object" && exports) {
     // eslint-disable-next-line no-undef
-    factory(exports); // CommonJS
+    factory(exports) // CommonJS
   } else {
-    var mustache = {};
-    factory(mustache);
+    var mustache = {}
+    factory(mustache)
     // eslint-disable-next-line no-undef
     if (typeof define === "function" && define.amd) {
       // eslint-disable-next-line no-undef
-      define(mustache); // AMD
+      define(mustache) // AMD
     } else {
-      root.Mustache = mustache; // <script>
+      root.Mustache = mustache // <script>
     }
   }
 }(this, (/*mustache*/) => {
   /* ... mustache.js ... */
-}));
+}))

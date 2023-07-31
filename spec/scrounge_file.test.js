@@ -13,58 +13,58 @@ test('should return `{ outputpath: "./hey" }`, "/path/to/file.js" as "./hey/file
     scrounge_file.setoutputpath({
       outputpath : './hey'
     }, '/path/to/file.js')
-    , './hey/file.js');
-});
+    , './hey/file.js')
+})
 
 test('should return smart public paths', () => {
   assert.strictEqual(
     scrounge_file.setpublicpath({
       publicpath : './public'
     }, '/path/to/public/type/file.js')
-    , './public/type/file.js');
+    , './public/type/file.js')
 
   assert.strictEqual(
     scrounge_file.setpublicpath({
       publicpath : '/public/'
     }, '/path/to/public/type/file.js')
-    , '/public/type/file.js');
+    , '/public/type/file.js')
 
   assert.strictEqual(
     scrounge_file.setpublicpath({
       publicpath : 'public/'
     }, '/path/to/public/type/file.js')
-    , 'public/type/file.js');
+    , 'public/type/file.js')
 
   assert.strictEqual(
     scrounge_file.setpublicpath({
       publicpath : '/'
     }, '/path/to/public/type/file.js')
-    , '/file.js');
+    , '/file.js')
 
   assert.strictEqual(
     scrounge_file.setpublicpath({
       publicpath : '/blic/'
     }, '/path/to/public/type/file.js')
-    , '/blic/file.js');
+    , '/blic/file.js')
 
   assert.strictEqual(
     scrounge_file.setpublicpath({
       publicpath : 'blic/'
     }, '/path/to/public/type/file.js')
-    , 'blic/file.js');
+    , 'blic/file.js')
 
   assert.strictEqual(
     scrounge_file.setpublicpath({
       publicpath : ''
     }, '/path/to/public/type/file.js')
-    , 'file.js');
+    , 'file.js')
 
   assert.strictEqual(
     scrounge_file.setpublicpath({
       publicpath : 'glob'
     }, '/path/to/public/type/file.js')
-    , 'glob/file.js');
-});
+    , 'glob/file.js')
+})
 
 test('should return unconcatenated paths, with uid', () => {
   assert.strictEqual(
@@ -73,8 +73,8 @@ test('should return unconcatenated paths, with uid', () => {
       publicpath : './public',
       outputpath : 'to/public/dir'
     }, '/path/to/file.js', 'uid')
-    , './public/dir/uid.js');
-});
+    , './public/dir/uid.js')
+})
 
 test('should return concatenated paths, without uid', () => {
   assert.strictEqual(
@@ -83,8 +83,8 @@ test('should return concatenated paths, without uid', () => {
       publicpath : './public',
       outputpath : 'to/public/dir'
     }, '/path/to/file.js', 'uid')
-    , './public/dir/file.js');
-});
+    , './public/dir/file.js')
+})
 
 test('should return smart public paths', () => {
   assert.strictEqual(
@@ -93,7 +93,7 @@ test('should return smart public paths', () => {
       publicpath : './public',
       outputpath : 'to/public/dir'
     }, '/path/to/public/type/file.js', 'uid')
-    , './public/dir/file.js');
+    , './public/dir/file.js')
 
   assert.strictEqual(
     scrounge_file.setpublicoutputpath({
@@ -101,7 +101,7 @@ test('should return smart public paths', () => {
       publicpath : '/public/',
       outputpath : 'to/public/dir'
     }, '/path/to/public/type/file.js', 'uid')
-    , '/public/dir/file.js');
+    , '/public/dir/file.js')
 
   assert.strictEqual(
     scrounge_file.setpublicoutputpath({
@@ -109,7 +109,7 @@ test('should return smart public paths', () => {
       publicpath : 'public/',
       outputpath : 'to/public/dir'
     }, '/path/to/public/type/file.js', 'uid')
-    , 'public/dir/file.js');
+    , 'public/dir/file.js')
 
   assert.strictEqual(
     scrounge_file.setpublicoutputpath({
@@ -117,7 +117,7 @@ test('should return smart public paths', () => {
       publicpath : '/',
       outputpath : 'to/public/dir'
     }, '/path/to/public/type/file.js', 'uid')
-    , '/file.js');
+    , '/file.js')
 
   assert.strictEqual(
     scrounge_file.setpublicoutputpath({
@@ -125,7 +125,7 @@ test('should return smart public paths', () => {
       publicpath : '/blic/',
       outputpath : 'to/public/dir'
     }, '/path/to/public/type/file.js', 'uid')
-    , '/blic/file.js');
+    , '/blic/file.js')
 
   assert.strictEqual(
     scrounge_file.setpublicoutputpath({
@@ -133,7 +133,7 @@ test('should return smart public paths', () => {
       publicpath : 'blic/',
       outputpath : 'to/public/dir'
     }, '/path/to/public/type/file.js', 'uid')
-    , 'blic/file.js');
+    , 'blic/file.js')
 
   assert.strictEqual(
     scrounge_file.setpublicoutputpath({
@@ -141,7 +141,7 @@ test('should return smart public paths', () => {
       publicpath : '',
       outputpath : 'to/public/dir'
     }, '/path/to/public/type/file.js', 'uid')
-    , 'file.js');
+    , 'file.js')
 
   assert.strictEqual(
     scrounge_file.setpublicoutputpath({
@@ -149,19 +149,19 @@ test('should return smart public paths', () => {
       publicpath : 'glob',
       outputpath : 'to/public/dir'
     }, '/path/to/public/type/file.js', 'uid')
-    , 'glob/file.js');
-});
+    , 'glob/file.js')
+})
 
 test('should return inputpath-removed path', () => {
   assert.strictEqual(
     scrounge_file.rminputpath({
       inputpath : './path'
     }, path.resolve('./path/to/file.js'))
-    , 'to/file.js');
+    , 'to/file.js')
 
   assert.strictEqual(
     scrounge_file.rminputpath({
       inputpath : './path/'
     }, path.resolve('./path/to/file.js'))
-    , 'to/file.js');
-});
+    , 'to/file.js')
+})

@@ -13,11 +13,11 @@ export default (o => {
     scrounge_elem.getelemarr(content).reduce((prev, cur) => (
       prev.concat(scrounge_elem.getrootarr(cur))
     ), []).sort().filter((val, i, arr) => (
-      arr.slice(i + 1).indexOf(val) === -1));
+      arr.slice(i + 1).indexOf(val) === -1))
 
   o.getrootnamearr = (opts, filepath, fn) =>
     scrounge_file.read(opts, filepath, (err, content) => (
-      fn(err, err || o.getcontentrootnamearr(content))));
+      fn(err, err || o.getcontentrootnamearr(content))))
 
   // updates a single element in the content, usually a timestamp.
   // used when a file is updated, scrounge will process the file
@@ -33,29 +33,29 @@ export default (o => {
     let scriptpath = scrounge_file
           .setpublicoutputpath(opts, node.get('filepath'), node.get('uid')),
         scriptsre = new RegExp(
-          `${scriptpath.replace(/\.[^.]*$/, '')}.*(ts=[0-9]*)`, 'g');
+          `${scriptpath.replace(/\.[^.]*$/, '')}.*(ts=[0-9]*)`, 'g')
 
     return content.replace(scriptsre, (a, b) => (
-      a.replace(b, `ts=${opts.buildts}`)));
-  };
+      a.replace(b, `ts=${opts.buildts}`)))
+  }
 
   // read basepage and udpdate single elem timestampe only
   o.writeelemone = (opts, filepath, node, fn) => {
     scrounge_file.read(opts, filepath, (err, content) => {
-      if (err) return fn(err);
+      if (err) return fn(err)
 
-      content = o.writecontentelemone(opts, content, node);
+      content = o.writecontentelemone(opts, content, node)
 
-      scrounge_file.write(opts, filepath, content, fn);
-    });
-  };
+      scrounge_file.write(opts, filepath, content, fn)
+    })
+  }
 
   o.writeelemarr = (opts, filepath, elemarr, nodearrobj, fn) => {
     scrounge_file.read(opts, filepath, (err, content) => {
-      if (err) return fn(err);
+      if (err) return fn(err)
 
       let newcontent = scrounge_elem.getelemarr(content).reduce((content, elem) => {
-        let indent = scrounge_elem.getindentation(elem);
+        let indent = scrounge_elem.getindentation(elem)
 
         return content.replace(elem, scrounge_elem.getpopulated(
           elem, scrounge_elem.getrootarr(elem).filter(root => (
@@ -66,16 +66,16 @@ export default (o => {
             scrounge_node.arrgetincludetagarr(opts, nodearrobj[root], root)
               .map(elem => indent + elem).join('\n')
           )).join('\n')
-        ));
-      }, content);
+        ))
+      }, content)
 
       // if :scrounge.version appears in the template anywhere,
       // replace w/ optional 'version' definition
-      newcontent = newcontent.replace(/:scrounge.version/gi, opts.version);
+      newcontent = newcontent.replace(/:scrounge.version/gi, opts.version)
 
-      scrounge_file.write(opts, filepath, newcontent, fn);
-    });
-  };
+      scrounge_file.write(opts, filepath, newcontent, fn)
+    })
+  }
 
-  return o;
-})({});
+  return o
+})({})

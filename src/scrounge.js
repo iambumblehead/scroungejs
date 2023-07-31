@@ -14,17 +14,17 @@ import scrounge_log from './scrounge_log.js'
 
 export default (o => {
   o = (opts, fn) =>
-    scrounge_build(opts, fn);
+    scrounge_build(opts, fn)
 
-  o.basepage = scrounge_basepage;
-  o.watch = scrounge_watch;
-  o.build = scrounge_build;
-  o.cache = scrounge_cache;
-  o.node = scrounge_node;
-  o.root = scrounge_root;
-  o.file = scrounge_file;
-  o.opts = scrounge_opts;
-  o.log = scrounge_log;
+  o.basepage = scrounge_basepage
+  o.watch = scrounge_watch
+  o.build = scrounge_build
+  o.cache = scrounge_cache
+  o.node = scrounge_node
+  o.root = scrounge_root
+  o.file = scrounge_file
+  o.opts = scrounge_opts
+  o.log = scrounge_log
 
-  return o;
-})({});
+  return o
+})({})

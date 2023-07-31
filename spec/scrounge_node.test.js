@@ -18,7 +18,7 @@ test('should return public output path', () => {
     '/path/to/the/nodefile.js',
     'console.log("hi")',
     'package-1.0.0:~/the/nodefile.js'
-  ), 'rootname.js'), 'package_100_the_nodefile.js');
+  ), 'rootname.js'), 'package_100_the_nodefile.js')
 
   assert.strictEqual(scrounge_node.getoutputpathpublic(scrounge_opts({
     outputpath : '',
@@ -28,7 +28,7 @@ test('should return public output path', () => {
     '/path/to/the/nodefile.less',
     'console.log("hi")',
     'package-1.0.0:~/the/nodefile.mjs'
-  ), 'rootname.css'), 'package_100_the_nodefile.css');
+  ), 'rootname.css'), 'package_100_the_nodefile.css')
 
   assert.strictEqual(scrounge_node.getoutputpathpublic(scrounge_opts({
     outputpath : '',
@@ -38,8 +38,8 @@ test('should return public output path', () => {
     '/path/to/the/nodefile.less',
     'console.log("hi")',
     'package-1.0.0:~/the/nodefile.js'
-  ), 'rootname.css'), 'package_100_the_nodefile.css');
-});
+  ), 'rootname.css'), 'package_100_the_nodefile.css')
+})
 
 test('should return root-uid-generated public output path, when isconcat', () => {
   assert.strictEqual(scrounge_node.getoutputpathpublic(scrounge_opts({
@@ -50,8 +50,8 @@ test('should return root-uid-generated public output path, when isconcat', () =>
     '/path/to/the/nodefile.less',
     'console.log("hi")',
     'package-1.0.0:~/the/nodefile.mjs'
-  ), 'rootname.css'), 'rootname.css');
-});
+  ), 'rootname.css'), 'rootname.css')
+})
 
 test('should return coorect public output path, given different path options', () => {
   assert.strictEqual(scrounge_node.getoutputpathpublic(scrounge_opts({
@@ -62,7 +62,7 @@ test('should return coorect public output path, given different path options', (
     '/path/to/the/nodefile.less',
     'console.log("hi")',
     'package-1.0.0:~/the/nodefile.mjs'
-  ), 'rootname.css'), 'output/path/package_100_the_nodefile.css');
+  ), 'rootname.css'), 'output/path/package_100_the_nodefile.css')
 
   assert.strictEqual(scrounge_node.getoutputpathpublic(scrounge_opts({
     outputpath : './output/path',
@@ -72,7 +72,7 @@ test('should return coorect public output path, given different path options', (
     '/path/to/the/nodefile.less',
     'console.log("hi")',
     'package-1.0.0:~/the/nodefile.mjs'
-  ), 'rootname.css'), 'output/path/package_100_the_nodefile.css');
+  ), 'rootname.css'), 'output/path/package_100_the_nodefile.css')
 
   assert.strictEqual(scrounge_node.getoutputpathpublic(scrounge_opts({
     outputpath : './output/path',
@@ -82,7 +82,7 @@ test('should return coorect public output path, given different path options', (
     '/path/to/the/nodefile.less',
     'console.log("hi")',
     'package-1.0.0:~/the/nodefile.mjs'
-  ), 'rootname.css'), '/path/package_100_the_nodefile.css');
+  ), 'rootname.css'), '/path/package_100_the_nodefile.css')
 
   assert.strictEqual(scrounge_node.getoutputpathpublic(scrounge_opts({
     outputpath : './output/path',
@@ -92,8 +92,8 @@ test('should return coorect public output path, given different path options', (
     '/path/to/the/nodefile.less',
     'console.log("hi")',
     'package-1.0.0:~/the/nodefile.mjs'
-  ), 'rootname.css'), '/path/rootname.css');
-});
+  ), 'rootname.css'), '/path/rootname.css')
+})
 
 test('should return public output path', () => {
   assert.strictEqual(scrounge_node.getoutputpathreal(scrounge_opts({
@@ -104,7 +104,7 @@ test('should return public output path', () => {
     '/path/to/the/nodefile.js',
     'console.log("hi")',
     'package-1.0.0:~/the/nodefile.js'
-  ), 'rootname.js'), 'package_100_the_nodefile.js');
+  ), 'rootname.js'), 'package_100_the_nodefile.js')
 
   assert.strictEqual(scrounge_node.getoutputpathreal(scrounge_opts({
     outputpath : '',
@@ -114,7 +114,7 @@ test('should return public output path', () => {
     '/path/to/the/nodefile.less',
     'console.log("hi")',
     'package-1.0.0:~/the/nodefile.mjs'
-  ), 'rootname.css'), 'package_100_the_nodefile.css');
+  ), 'rootname.css'), 'package_100_the_nodefile.css')
 
   assert.strictEqual(scrounge_node.getoutputpathreal(scrounge_opts({
     outputpath : '',
@@ -124,8 +124,8 @@ test('should return public output path', () => {
     '/path/to/the/nodefile.less',
     'console.log("hi")',
     'package-1.0.0:~/the/nodefile.js'
-  ), 'rootname.css'), 'package_100_the_nodefile.css');
-});
+  ), 'rootname.css'), 'package_100_the_nodefile.css')
+})
 
 test('should return root-uid-generated public output path, when isconcat', () => {
   assert.strictEqual(scrounge_node.getoutputpathreal(scrounge_opts({
@@ -136,8 +136,8 @@ test('should return root-uid-generated public output path, when isconcat', () =>
     '/path/to/the/nodefile.less',
     'console.log("hi")',
     'package-1.0.0:~/the/nodefile.mjs'
-  ), 'rootname.css'), 'rootname.css');
-});
+  ), 'rootname.css'), 'rootname.css')
+})
 
 test('should return coorect public output path, given different path options', () => {
   assert.strictEqual(scrounge_node.getoutputpathreal(scrounge_opts({
@@ -148,7 +148,7 @@ test('should return coorect public output path, given different path options', (
     '/path/to/the/nodefile.less',
     'console.log("hi")',
     'package-1.0.0:~/the/nodefile.mjs'
-  ), 'rootname.css'), '/final/output/path/package_100_the_nodefile.css');
+  ), 'rootname.css'), '/final/output/path/package_100_the_nodefile.css')
 
   assert.strictEqual(scrounge_node.getoutputpathreal(scrounge_opts({
     outputpath : './output/path',
@@ -158,7 +158,7 @@ test('should return coorect public output path, given different path options', (
     '/path/to/the/nodefile.less',
     'console.log("hi")',
     'package-1.0.0:~/the/nodefile.mjs'
-  ), 'rootname.css'), 'output/path/package_100_the_nodefile.css');
+  ), 'rootname.css'), 'output/path/package_100_the_nodefile.css')
 
   assert.strictEqual(scrounge_node.getoutputpathreal(scrounge_opts({
     outputpath : './output/path',
@@ -168,7 +168,7 @@ test('should return coorect public output path, given different path options', (
     '/path/to/the/nodefile.less',
     'console.log("hi")',
     'package-1.0.0:~/the/nodefile.mjs'
-  ), 'rootname.css'), 'output/path/package_100_the_nodefile.css');
+  ), 'rootname.css'), 'output/path/package_100_the_nodefile.css')
 
   assert.strictEqual(scrounge_node.getoutputpathreal(scrounge_opts({
     outputpath : './output/path',
@@ -178,5 +178,5 @@ test('should return coorect public output path, given different path options', (
     '/path/to/the/nodefile.less',
     'console.log("hi")',
     'package-1.0.0:~/the/nodefile.mjs'
-  ), 'rootname.css'), 'output/path/rootname.css');
-});
+  ), 'rootname.css'), 'output/path/rootname.css')
+})

@@ -7,12 +7,12 @@ import depgraph from 'depgraph'
 export default (o => {
   o.getprenodearr = (opts, rootname, fn) => {
     let prependobj = opts.prependarr.find(prepend => (
-      prepend.treename === rootname));
+      prepend.treename === rootname))
 
     return prependobj
       ? depgraph.node.get_arrfromfilepathrel(prependobj.sourcearr, opts, fn)
-      : fn(null, null);
-  };
+      : fn(null, null)
+  }
 
-  return o;
-})({});
+  return o
+})({})

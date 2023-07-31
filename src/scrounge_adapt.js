@@ -20,29 +20,29 @@ export default (o => {
   o = (opts, node, fn) => {
     let filepath = node.get('filepath'),
         extname = path.extname(filepath).slice(1),
-        str = node.get('content');
+        str = node.get('content')
 
     opts.embedarr.map(embed => {
       if (~filepath.indexOf(embed.filepath)) {
-        str = embed.content + str;
+        str = embed.content + str
       }
-    });
+    })
 
     opts.globalarr.map(global => {
       // module namespace defined on user-given name
       if (~filepath.indexOf(global.filepath)) {
         str += '\nif (typeof window === "object") window.:NAME = :UID;'
           .replace(/:NAME/g, global.name)
-          .replace(/:UID/g, scrounge_uid.sanitised(node.get('uid')));
+          .replace(/:UID/g, scrounge_uid.sanitised(node.get('uid')))
       }
-    });
+    })
 
     if (extname && typeof o[extname] === 'function') {
-      o[extname](opts, node, str, fn);
+      o[extname](opts, node, str, fn)
     } else {
-      fn(null, str);
+      fn(null, str)
     }
-  };
+  }
 
   // found in some sources, such as inferno :( discussion,
   //
@@ -50,22 +50,22 @@ export default (o => {
   //
   o.rmNODE_ENV = (() => {
     let NODE_ENVre = /process\.env\.NODE_ENV/g,
-        NODE_ENV = `'${process.env.NODE_ENV}'`;
+        NODE_ENV = `'${process.env.NODE_ENV}'`
 
     return str => NODE_ENVre.test(str)
       ? str.replace(NODE_ENVre, NODE_ENV)
-      : str;
-  })();
+      : str
+  })()
 
   o.js = (opts, node, str, fn) => {
     let filepath = node.get('filepath'),
         modname = scrounge_uid.sanitised(node.get('uid')),
         skip = opts.skippatharr.some(path => ~filepath.indexOf(path)),
         iscjs,
-        isesm;
+        isesm
 
     if (skip)
-      return fn(null, str);
+      return fn(null, str)
 
     babel.transform(str, {
       compact : opts.iscompress && !skip,
@@ -93,26 +93,26 @@ export default (o => {
         fn(new Error(`[!!!] parse error ${filepath}`))
       }
 
-      str = res.code;
+      str = res.code
 
-      iscjs = moduletype.cjs(str);
-      isesm = moduletype.esm(str);
+      iscjs = moduletype.cjs(str)
+      isesm = moduletype.esm(str)
 
       if (moduletype.umd(str)) {
         try {
-          str = umdname(str, modname);
+          str = umdname(str, modname)
         } catch (e) {
-          console.log(`[www] cannot identify umdname: ${modname}`);
-          throw new Error(e);
+          console.log(`[www] cannot identify umdname: ${modname}`)
+          throw new Error(e)
         }
       } else if (iscjs || isesm) {
         if (iscjs && !isesm)
-          str = umd(modname, str, { commonJS : true });
+          str = umd(modname, str, { commonJS : true })
 
         // build import and require replacement mappings
         let replace = node.get('outarr').reduce((prev, cur) => {
           let refname = cur.get('refname'),
-              depname = scrounge_uid.sanitised(cur.get('uid'));
+              depname = scrounge_uid.sanitised(cur.get('uid'))
 
           // alias allows build to map customm paths values
           // to the require/import value
@@ -120,57 +120,57 @@ export default (o => {
           opts.aliasarr.map(([ matchname, newname ]) => (
             newname === refname && (
               prev.require[matchname] = depname,
-              prev.import[matchname] = `/${depname}.js`)));
+              prev.import[matchname] = `/${depname}.js`)))
 
-          prev.require[refname] = depname;
-          prev.import[refname] = `./${depname}.js`;
+          prev.require[refname] = depname
+          prev.import[refname] = `./${depname}.js`
 
-          return prev;
+          return prev
         }, {
           require : {},
           import : {}
-        });
+        })
 
         if (iscjs && !/export default/g.test(str))
-          str = replacerequires(str, replace.require);
+          str = replacerequires(str, replace.require)
 
         if (isesm)
-          str = replaceimports(str, replace.import);
+          str = replaceimports(str, replace.import)
 
-        str = o.rmNODE_ENV(str);
+        str = o.rmNODE_ENV(str)
       }
 
-      fn(null, str, res.map);
-    });
-  };
+      fn(null, str, res.map)
+    })
+  }
 
   // perform o.js on mjs files
-  o.mjs = o.js;
+  o.mjs = o.js
 
   o.ts = (opts, node, str, fn) => {
     let tsconfig = opts.tsconfig || {},
-        jsstr = typescript.transpileModule(str, tsconfig).outputText;
+        jsstr = typescript.transpileModule(str, tsconfig).outputText
 
-    o.js(opts, node, jsstr, fn);
-  };
+    o.js(opts, node, jsstr, fn)
+  }
 
   // perform o.ts on tsx files
-  o.tsx = o.ts;
+  o.tsx = o.ts
 
   o.css = (opts, node, str, fn) => {
     fn(null, opts.iscompress ?
-      new Cleancss().minify(str).styles : str);
-  };
+      new Cleancss().minify(str).styles : str)
+  }
 
   o.less = (opts, node, str, fn) => {
     less.render(str, {
       filename : path.resolve(node.get('filepath'))
     }, (err, output) => {
-      if (err) console.error(err);
+      if (err) console.error(err)
 
-      return err ? fn(err) : o.css(opts, node, output.css, fn);
-    });
-  };
+      return err ? fn(err) : o.css(opts, node, output.css, fn)
+    })
+  }
 
-  return o;
-})({});
+  return o
+})({})

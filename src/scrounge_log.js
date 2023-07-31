@@ -8,21 +8,21 @@ import archy from 'archy'
 export default (o => {
   // also returns msg string
   o = (opts, msg) =>
-    (opts.issilent || console.log(msg)) || msg;
+    (opts.issilent || console.log(msg)) || msg
 
   o.printroot = (opts, rootname, tree) =>
-    o(opts, `[...] root: ${rootname}\n\n${archy(tree)}`);
+    o(opts, `[...] root: ${rootname}\n\n${archy(tree)}`)
 
   o.start = (opts, time) => {
-    o(opts, '');
-    o(opts, `[...] start: ${time}`);
-  };
+    o(opts, '')
+    o(opts, `[...] start: ${time}`)
+  }
 
   o.finish = (opts, time) =>
-    o(opts, `[...] finish: ${time}`);
+    o(opts, `[...] finish: ${time}`)
 
   o.updatenode = (opts, uid) =>
-    o(opts, `[...] update: ${uid}`);
+    o(opts, `[...] update: ${uid}`)
 
   o.rootjoin = (opts, root, type, filename, inum, lnum, j) =>
     o(opts, '[...] :j: (:rootname, :roottype, :progress) :filename'
@@ -32,34 +32,34 @@ export default (o => {
       .replace(':progress', `${lnum - inum}/${lnum}`)
       .replace(':filename', path.resolve(filename)
         .replace(process.cwd(), '.')
-        .replace(process.env.HOME, '~')));
+        .replace(process.env.HOME, '~')))
 
   o.rootjoinplainfile = (opts, root, type, filename, inum, lnum) =>
-    o.rootjoin(opts, root, type, filename, inum, lnum, 'join');
+    o.rootjoin(opts, root, type, filename, inum, lnum, 'join')
 
   o.rootjoinminfile = (opts, root, type, filename, inum, lnum) =>
-    o.rootjoin(opts, root, type, filename, inum, lnum, 'ugly');
+    o.rootjoin(opts, root, type, filename, inum, lnum, 'ugly')
 
   o.rootjoinfile = (opts, root, type, filename, inum, lnum, j) =>
     opts.iscompress
       ? o.rootjoinminfile(opts, root, type, filename, inum, lnum, j)
-      : o.rootjoinplainfile(opts, root, type, filename, inum, lnum, j);
+      : o.rootjoinplainfile(opts, root, type, filename, inum, lnum, j)
 
   o.unsupportedtype = (opts, type, filename) =>
     o(opts, '[...] unsupported type: :type, :filename'
       .replace(/:type/, type)
-      .replace(/:filename/, filename));
+      .replace(/:filename/, filename))
 
   o.rootfilenotfound = (opts, rootname) =>
     o(opts, '[...] root file not found: :rootname'
-      .replace(/:rootname/, rootname));
+      .replace(/:rootname/, rootname))
 
   o.write = (opts, filename, bytesize) =>
     o(opts, '[...] write: :filename :size'
       .replace(/:filename/, path.resolve(filename)
         .replace(process.cwd(), '.')
         .replace(process.env.HOME, '~'))
-      .replace(/:size/, bytesize ? `~${bytesize / 1000}kb` : ''));
+      .replace(/:size/, bytesize ? `~${bytesize / 1000}kb` : ''))
 
-  return o;
-})({});
+  return o
+})({})

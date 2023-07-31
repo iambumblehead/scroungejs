@@ -8,12 +8,12 @@ export default (o => {
   o = (globs, opts = {}, fn) => {
     let watcher = chokidar.watch(globs, opts.watch || {
       cwd : '.'
-    });
+    })
 
     // you may choose to disable watch w/ opts.iswatch = false
     if (typeof fn === 'function')
-      watcher.on('change', fn);
-  };
+      watcher.on('change', fn)
+  }
 
-  return o;
-})({});
+  return o
+})({})

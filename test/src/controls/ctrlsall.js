@@ -8,11 +8,11 @@ import ctrlb from './ctrlb.js'
 var ctrlsall = {
   ctrla : ctrla,
   ctrlb : ctrlb
-};
+}
 
 export default {
   start : function () {
-    ctrlsall.ctrla.start();
-    ctrlsall.ctrlb.start();    
+    ctrlsall.ctrla.start()
+    ctrlsall.ctrlb.start()    
   }
-};
+}

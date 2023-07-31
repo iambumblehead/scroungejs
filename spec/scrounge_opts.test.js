@@ -11,6 +11,6 @@ test('should return `path/to/index.html`, `tpl` as `path/to/index.tpl.html`', ()
   assert.strictEqual(
     scrounge_opts.getassuffixed('path/to/index.html', 'tpl'), 
     'path/to/index.tpl.html'
-  );
-});
+  )
+})
 
