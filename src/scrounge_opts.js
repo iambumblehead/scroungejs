@@ -27,7 +27,7 @@ export default (o => {
     //
     // if 'script' is used, ES6-style modules are converted to UMD and may be
     // 'required' or 'imported' by any dpendant script
-    finopt.deploytype = castas.str(opt.deploytype, 'script') // script|module
+    finopt.deploytype = castas.str(opt.deploytype, 'module') // script|module
     finopt.version = castas.str(opt.version, '')
 
     finopt.tplextnarr = [ '.mustache' ]
