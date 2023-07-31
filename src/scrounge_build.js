@@ -2,7 +2,6 @@
 // Timestamp: 2018.04.08-02:32:04 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-import optfn from 'optfn'
 import simpletime from 'simpletime'
 
 import scrounge_basepage from './scrounge_basepage.js'
@@ -97,7 +96,7 @@ export default (o => {
   }
 
   o.updatedestfile = (opts, srcfilename, fn) => {
-    fn = optfn(fn)
+    fn = typeof fn === 'function' ? fn : () => {}
     opts = scrounge_opts(opts)
 
     if (!opts.isconcat && scrounge_opts.isfilenamesupportedtype(opts, srcfilename)) {
@@ -134,7 +133,7 @@ export default (o => {
   o.buildcachemap = (opts, fn) => {
     let datebgn = new Date()
 
-    fn = optfn(fn)
+    fn = typeof fn === 'function' ? fn : () => {}
     opts = scrounge_opts(opts)
 
     scrounge_log.start(opts, datebgn)
@@ -157,7 +156,7 @@ export default (o => {
   o.build = (opts, fn) => {
     let datebgn = new Date()
 
-    fn = optfn(fn)
+    fn = typeof fn === 'function' ? fn : () => {}
     opts = scrounge_opts(opts)
 
     scrounge_log.start(opts, datebgn)

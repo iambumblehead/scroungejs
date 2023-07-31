@@ -3,7 +3,6 @@
 // Author(s): bumblehead <chris@bumblehead.com>
 
 import path from 'path'
-import optfn from 'optfn'
 import depgraph from 'depgraph'
 
 import scrounge_uid from './scrounge_uid.js'
@@ -70,8 +69,8 @@ export default (o => {
     }(Object.keys(rootobj)))
   }
 
-  o.buildmaps = (opts, rootsarr, rootobj, fn = optfn()) =>
-    o.buildrootobjcachemap(opts, rootobj, fn)
+  o.buildmaps = (opts, rootsarr, rootobj, fn = () => {}) =>
+  o.buildrootobjcachemap(opts, rootobj, fn)
 
   return o
 })({})
