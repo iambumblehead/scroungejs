@@ -2,10 +2,10 @@
 // Timestamp: 2018.04.09-21:30:09 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-const path = require('path'),
-      archy = require('archy');
+import path from 'path'
+import archy from 'archy'
 
-module.exports = (o => {
+export default (o => {
   // also returns msg string
   o = (opts, msg) =>
     (opts.issilent || console.log(msg)) || msg;

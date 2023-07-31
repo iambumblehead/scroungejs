@@ -2,21 +2,21 @@
 // Timestamp: 2019.07.11-10:15:48 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-const umd = require('umd'),
-      path = require('path'),
-      less = require('less'),
-      babel = require('@babel/core'),
-      babelpresetenv = require('@babel/preset-env'),
-      umdname = require('umdname'),
-      Cleancss = require('clean-css'),
-      moduletype = require('moduletype'),
-      typescript = require('typescript'),
-      replacerequires = require('replace-requires'),
-      replaceimports = require('replace-imports'),
+import umd from 'umd'
+import path from 'path'
+import less from 'less'
+import babel from '@babel/core'
+import babelpresetenv from '@babel/preset-env'
+import umdname from 'umdname'
+import Cleancss from 'clean-css'
+import moduletype from 'moduletype'
+import typescript from 'typescript'
+import replacerequires from 'replace-requires'
+import replaceimports from 'replace-imports'
 
-      scrounge_uid = require('./scrounge_uid');
+import scrounge_uid from './scrounge_uid.js'
 
-module.exports = (o => {
+export default (o => {
   o = (opts, node, fn) => {
     let filepath = node.get('filepath'),
         extname = path.extname(filepath).slice(1),
@@ -90,8 +90,7 @@ module.exports = (o => {
       ]
     }, (err, res) => {
       if (err) {
-        console.error(err);
-        throw new Error(`[!!!] parse error ${filepath}`);
+        fn(new Error(`[!!!] parse error ${filepath}`))
       }
 
       str = res.code;

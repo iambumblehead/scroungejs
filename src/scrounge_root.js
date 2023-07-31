@@ -2,17 +2,17 @@
 // Timestamp: 2018.04.09-21:49:20 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-const path = require('path'),
-      depgraph = require('depgraph'),
+import path from 'path'
+import depgraph from 'depgraph'
 
-      scrounge_log = require('./scrounge_log'),
-      scrounge_file = require('./scrounge_file'),
-      scrounge_opts = require('./scrounge_opts'),
-      scrounge_node = require('./scrounge_node'),
-      scrounge_adapt = require('./scrounge_adapt'),
-      scrounge_prepend = require('./scrounge_prepend');
+import scrounge_log from './scrounge_log.js'
+import scrounge_file from './scrounge_file.js'
+import scrounge_opts from './scrounge_opts.js'
+import scrounge_node from './scrounge_node.js'
+import scrounge_adapt from './scrounge_adapt.js'
+import scrounge_prepend from './scrounge_prepend.js'
 
-module.exports = (o => {
+export default (o => {
   // converts rootname array to one of the specified type
   // filters the result so that all values are unique
   //

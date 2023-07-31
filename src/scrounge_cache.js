@@ -2,14 +2,14 @@
 // Timestamp: 2018.04.07-18:52:37 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-const path = require('path'),
-      optfn = require('optfn'),
-      depgraph = require('depgraph'),
+import path from 'path'
+import optfn from 'optfn'
+import depgraph from 'depgraph'
 
-      scrounge_uid = require('./scrounge_uid'),
-      scrounge_file = require('./scrounge_file');
+import scrounge_uid from './scrounge_uid.js'
+import scrounge_file from './scrounge_file.js'
 
-module.exports = (o => {
+export default (o => {
   o.recoverrootcachemapnode = (opts, rootname, node, fn) => {
     const nodeuid = scrounge_uid.sanitised(node.get('uid')),
           cachepath = path.join('./.scrounge', rootname, nodeuid);

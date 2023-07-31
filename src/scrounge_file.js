@@ -2,14 +2,14 @@
 // Timestamp: 2018.04.08-13:12:03 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-const fs = require('fs'),
-      path = require('path'),
-      mkdirp = require('mkdirp'),
-      pathpublic = require('pathpublic'),
-      scrounge_uid = require('./scrounge_uid'),
-      scrounge_log = require('./scrounge_log');
+import fs from 'fs'
+import path from 'path'
+import mkdirp from 'mkdirp'
+import pathpublic from 'pathpublic'
+import scrounge_uid from './scrounge_uid.js'
+import scrounge_log from './scrounge_log.js'
 
-module.exports = (o => {
+export default (o => {
   o.setextn = (filename, extn) => path.join(
     path.dirname(filename),
     path.basename(filename, path.extname(filename)) + extn);

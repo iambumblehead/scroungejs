@@ -4,13 +4,13 @@
 //
 // node : { moduletype, filepath, content }
 
-const fs = require('fs'),
-      path = require('path'),
+import fs from 'fs'
+import path from 'path'
 
-      scrounge_file = require('./scrounge_file'),
-      scrounge_elem = require('./scrounge_elem');
+import scrounge_file from './scrounge_file.js'
+import scrounge_elem from './scrounge_elem.js'
 
-module.exports = (o => {
+export default (o => {
   // for a node with filepath ~/software/node.js
   // return a 'css' type node if type is 'css' and
   // corresponding css file exists (~/software/node.css)

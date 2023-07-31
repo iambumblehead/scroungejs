@@ -2,10 +2,10 @@
 // Timestamp: 2018.04.08-06:10:37 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-const path = require('path'),
-      addquery = require('addquery');
+import path from 'path'
+import addquery from 'addquery'
 
-module.exports = (o => {
+export default (o => {
   // include tags for css and js
   //
   // type="text/javascript"

@@ -2,11 +2,11 @@
 // Timestamp: 2018.04.09-22:12:19 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-const path = require('path'),
-      castas = require('castas'),
-      scrounge_file = require('./scrounge_file');
+import path from 'path'
+import castas from 'castas'
+import scrounge_file from './scrounge_file.js'
 
-module.exports = (o => {
+export default (o => {
   o = opts =>
     o.get(opts);
 

@@ -2,14 +2,23 @@
   "name": "scroungejs",
   "version": "1.6.2",
   "license": "MIT",
+  "type": "module",
   "readmeFilename": "README.md",
-  "main": "src/scrounge.js",
   "description": "An obscure build tool starting as an emacs elisp script in 2009",
+  "author": "chris <chris@bumblehead.com>",
+  "main": "src/scrounge.js",
+  "exports": {
+    "import": "./src/scrounge.js"
+  },
   "scripts": {
     "lint": "eslint 'src/*.js'",
-    "test": "jasmine --verbose",
+    "lint": "eslint .",
+    "test": "node --test",
     "start": "cd test && node build.js"
   },
+  "files": [
+    "src"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/iambumblehead/scroungejs.git"
@@ -43,24 +52,14 @@
     "moduletype": "^0.0.8",
     "simpletime": "^0.1.28",
     "pathpublic": "^0.0.8",
-    "depgraph": "^0.3.8",
+    "depgraph": "^0.4.0",
     "umdname": "^0.0.9",
     "mkdirp": "^0.5.1",
     "umd": "^3.0.3"
   },
   "devDependencies": {
-    "express": "^4.16.3",
-    "pre-commit": "^1.2.2",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^7.1.0",
-    "jasmine": "2.5.3",
-    "jasmine-spec-reporter": "4.2.1"
-  },
-  "pre-commit": {
-    "silent": true,
-    "run": [
-      "lint",
-      "test"
-    ]
+    "eslint": "^8.23.1",
+    "eslint-plugin-markdown": "^3.0.0",
+    "express": "^4.16.3"
   }
 }

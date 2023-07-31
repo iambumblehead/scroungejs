@@ -2,11 +2,11 @@
 // Timestamp: 2018.04.08-02:55:33 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-const scrounge_node = require('./scrounge_node'),
-      scrounge_elem = require('./scrounge_elem'),
-      scrounge_file = require('./scrounge_file');
+import scrounge_node from './scrounge_node.js'
+import scrounge_elem from './scrounge_elem.js'
+import scrounge_file from './scrounge_file.js'
 
-module.exports = (o => {
+export default (o => {
   // each scrounge element may define _array_ of rootname
   // removes duplicates. flattens array. unoptimised.
   o.getcontentrootnamearr = content =>
