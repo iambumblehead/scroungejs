@@ -76,9 +76,9 @@ export default (o => {
     fs.readFile(path.resolve(filepath), 'utf-8', fn)
 
   o.writesilent = async (opts, filepath, content, fn) => {
-    fs.mkdir(path, { recursive:true })
-
-    fs.writeFile(path.resolve(filepath), content, fn)
+    fs.mkdir(filepath, { recursive:true }, () => {
+      fs.writeFile(path.resolve(filepath), content, fn)
+    })
   }
 
   o.write = (opts, filepath, content, fn, isfilesize = false) => {
