@@ -12,7 +12,8 @@
     "allowImportExportEverywhere": true
   },
   "ignorePatterns": [
-    "test_malformed.js"
+    "test_malformed.js",
+    "test/out"
   ],
   "globals": {
     "Set": true,
