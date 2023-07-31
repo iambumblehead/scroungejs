@@ -208,6 +208,7 @@ export default (o => {
   o.writearr = (opts, rootnamearr, graphobj, fn) => {
     if (rootnamearr.length) {
       if (graphobj[rootnamearr[0]] && graphobj[rootnamearr[0]].length) {
+        scrounge_file.mkdirpSync(opts.outputpath)
         o.write(opts, rootnamearr[0], graphobj, err => {
           if (err) return fn(err)
 

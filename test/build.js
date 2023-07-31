@@ -34,5 +34,7 @@ scroungejs.build({
       http.createServer(app).listen(port)
 
     console.log(`[...] localhost:${port}/`)
+
+    
   }
 })
