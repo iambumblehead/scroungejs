@@ -10,9 +10,13 @@
     "sourceType": "module",
     "ecmaVersion": "latest",
     "allowImportExportEverywhere": true
-  },  
+  },
+  "ignorePatterns": [
+    "test_malformed.js"
+  ],
   "globals": {
-    "Set": true
+    "Set": true,
+    "window": true
   },
   "rules": {
     "global-require": 0,
