@@ -3,6 +3,6 @@
 // Author(s): Bumblehead (www.bumblehead.com)
 
 // const viewsall = req-uire('./views/viewsall.js');
-import viewsall from './views/viewsall';
+import viewsall from './views/viewsall.js';
 
 viewsall.start();

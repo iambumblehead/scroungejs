@@ -2,17 +2,19 @@
 // Timestamp: 2018.04.09-22:14:04 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-const scroungejs = require('../'),
-      express = require('express'),
-      http = require('http'),
-      path = require('path'),
-      port = 3456,
-      app = express();
+import scroungejs from '../src/scrounge.js'
+import express from 'express'
+import http from 'http'
+import path from 'path'
+
+const port = 3456
+const app = express()
 
 scroungejs.build({
   inputpath : './src',
   outputpath : './out',
   publicpath : './out/',
+  basepagein : './index.tpl.html',
   basepage : './index.html',
   iscompress : false,
   isconcat : false,
