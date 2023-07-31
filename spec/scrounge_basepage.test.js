@@ -52,7 +52,8 @@ test('should return new content, with updated node-corresponding element', () =>
     publicpath : './public',
     outputpath : 'to/public/dir',
     buildts : 55555
-  }, `<head>
+  }, (
+    `<head>
           <!-- <scrounge root="app.css"> -->
           <link href="./public/dir/ojsnode.css?ts=12345" rel="stylesheet" type="text/css">
           <!-- </scrounge> -->
@@ -61,8 +62,9 @@ test('should return new content, with updated node-corresponding element', () =>
           <script src="./public/dir/cjsnode.js?ts=12345" type="text/javascript"></script>
           <script src="./public/dir/ejsnode.js?ts=12345" type="text/javascript"></script>
           <!-- </scrounge> -->
-        </head>`, cjsnode), 
-                     `<head>
+        </head>`
+  ), cjsnode), (
+    `<head>
           <!-- <scrounge root="app.css"> -->
           <link href="./public/dir/ojsnode.css?ts=12345" rel="stylesheet" type="text/css">
           <!-- </scrounge> -->
@@ -71,5 +73,6 @@ test('should return new content, with updated node-corresponding element', () =>
           <script src="./public/dir/cjsnode.js?ts=55555" type="text/javascript"></script>
           <script src="./public/dir/ejsnode.js?ts=12345" type="text/javascript"></script>
           <!-- </scrounge> -->
-        </head>`);
+        </head>`
+  ));
 });

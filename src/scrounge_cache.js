@@ -11,8 +11,8 @@ import scrounge_file from './scrounge_file.js'
 
 export default (o => {
   o.recoverrootcachemapnode = (opts, rootname, node, fn) => {
-    const nodeuid = scrounge_uid.sanitised(node.get('uid')),
-          cachepath = path.join('./.scrounge', rootname, nodeuid);
+    const nodeuid = scrounge_uid.sanitised(node.get('uid'))
+    const cachepath = path.join('./.scrounge', rootname, nodeuid)
 
     scrounge_file.read(opts, cachepath, (err, res) => {
       if (err) return fn(err);
@@ -39,9 +39,9 @@ export default (o => {
   };
 
   o.persistrootcachemapfile = (opts, rootname, node, fn) => {
-    const nodeuid = scrounge_uid.sanitised(node.get('uid')),
-          nodejson = JSON.stringify(node.delete('content').toJS(), null, '  '),
-          cachepath = path.join('./.scrounge', rootname, nodeuid);
+    const nodeuid = scrounge_uid.sanitised(node.get('uid'))
+    const nodejson = JSON.stringify(node.delete('content').toJS(), null, '  ')
+    const cachepath = path.join('./.scrounge', rootname, nodeuid)
 
     scrounge_file.writesilent(opts, cachepath, nodejson, fn);
   };

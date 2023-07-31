@@ -140,10 +140,10 @@ test('should not convert mjs, when deploytype is "module"', () => {
 });
 
 test('should replace require calls with node out-going edge names', () => {
-  let rootcjsnode = depgraph.node.setedgeout(
-    cjsnode, 'testedge', './test_cjs_root_depa'),
-      originalreq = /depa = require\('.\/test_cjs_root_depa'\);/g,
-      replacedreq = /depa = testedge;/g;
+  const rootcjsnode = depgraph.node.setedgeout(
+    cjsnode, 'testedge', './test_cjs_root_depa')
+  const originalreq = /depa = require\('.\/test_cjs_root_depa'\);/g
+  const replacedreq = /depa = testedge;/g;
 
   assert.ok(originalreq.test(test_cjs_root))
 
@@ -152,15 +152,14 @@ test('should replace require calls with node out-going edge names', () => {
   }), rootcjsnode, test_cjs_root, (err, res) => {
     assert.strictEqual(replacedreq.test(res), true);
     assert.strictEqual(originalreq.test(res), false);
-
   });
 });
 
 test('should replace mjs import paths with node out-going edge name paths IF deploytype is "module"', () => {
-  let rootmjsnode = depgraph.node.setedgeout(
-    mjsnode, 'testedge', './test_mjs_root_depa'),
-      originalimp = /import depa from '.\/test_mjs_root_depa';/g,
-      replacedimp = /import depa from '.\/testedge.js';/g;
+  const rootmjsnode = depgraph.node.setedgeout(
+    mjsnode, 'testedge', './test_mjs_root_depa')
+  const originalimp = /import depa from '.\/test_mjs_root_depa';/g
+  const replacedimp = /import depa from '.\/testedge.js';/g
 
   assert.strictEqual(originalimp.test(test_mjs_root), true);
 
@@ -170,15 +169,14 @@ test('should replace mjs import paths with node out-going edge name paths IF dep
   }), rootmjsnode, test_mjs_root, (err, res) => {
     assert.strictEqual(replacedimp.test(res), true);
     assert.strictEqual(originalimp.test(res), false);
-
   });
 });
 
 test('should replace mjs import paths with node out-going edge name IF deploytype is "script" (default)', () => {
-  let rootmjsnode = depgraph.node.setedgeout(
-    mjsnode, 'testedge', './test_mjs_root_depa'),
-      originalimp = /import depa from '.\/test_mjs_root_depa';/g,
-      replacedimp = /var _test_mjs_root_depa = _interopRequireDefault\(testedge\);/g;
+  const rootmjsnode = depgraph.node.setedgeout(
+    mjsnode, 'testedge', './test_mjs_root_depa')
+  const originalimp = /import depa from '.\/test_mjs_root_depa';/g
+  const replacedimp = /var _test_mjs_root_depa = _interopRequireDefault\(testedge\);/g
 
   assert.strictEqual(originalimp.test(test_mjs_root), true);
 
@@ -188,7 +186,6 @@ test('should replace mjs import paths with node out-going edge name IF deploytyp
   }), rootmjsnode, test_mjs_root, (err, res) => {
     assert.strictEqual(replacedimp.test(res), true);
     assert.strictEqual(originalimp.test(res), false);
-
   });
 });
 

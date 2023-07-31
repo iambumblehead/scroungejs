@@ -28,12 +28,14 @@ test('should return empty indentation', () => {
 });
 
 test('should populate a scrounge elem', () => {
-  let elem = [
+  const elem = [
     ' <!-- <scrounge root="app.css"> -->',
-    ' <!-- </scrounge> -->' ].join('\n'),
-      body = [
-        ' <link href="./out/viewa.css?ts=222" rel="stylesheet" type="text/css">',
-        ' <link href="./out/viewb.css?ts=222" rel="stylesheet" type="text/css">' ].join('\n');
+    ' <!-- </scrounge> -->'
+  ].join('\n')
+  const body = [
+    ' <link href="./out/viewa.css?ts=222" rel="stylesheet" type="text/css">',
+    ' <link href="./out/viewb.css?ts=222" rel="stylesheet" type="text/css">'
+  ].join('\n');
 
   assert.strictEqual(scrounge_elem.getpopulated(elem, body), [
     ' <!-- <scrounge root="app.css"> -->',
@@ -43,14 +45,16 @@ test('should populate a scrounge elem', () => {
 });
 
 test('should REpopulate a scrounge elem', () => {
-  let elem = [
+  const elem = [
     ' <!-- <scrounge root="app.css"> -->',
     ' <link href="./out/viewa.css?ts=123" rel="stylesheet" type="text/css">',
     ' <link href="./out/viewb.css?ts=123" rel="stylesheet" type="text/css">',
-    ' <!-- </scrounge> -->' ].join('\n'),
-      body = [
-        ' <link href="./out/viewa.css?ts=222" rel="stylesheet" type="text/css">',
-        ' <link href="./out/viewb.css?ts=222" rel="stylesheet" type="text/css">' ].join('\n');
+    ' <!-- </scrounge> -->'
+  ].join('\n')
+  const body = [
+    ' <link href="./out/viewa.css?ts=222" rel="stylesheet" type="text/css">',
+    ' <link href="./out/viewb.css?ts=222" rel="stylesheet" type="text/css">'
+  ].join('\n');
 
   assert.strictEqual(scrounge_elem.getpopulated(elem, body), [
     ' <!-- <scrounge root="app.css"> -->',
@@ -63,8 +67,9 @@ test('should return javascript <script> element', () => {
   assert.strictEqual(scrounge_elem.getincludetag(scrounge_opts({
     version : 10,
     buildts : 10
-  }), './out/view.js', 'cjs'), 
-                     '<script src="./out/view.js?v=10&ts=10" type="text/javascript"></script>');
+  }), './out/view.js', 'cjs'), (
+    '<script src="./out/view.js?v=10&ts=10" type="text/javascript"></script>'
+  ));
 });
 
 test('should return javascript <script> element, with module attribute for es6 modules', () => {
@@ -72,24 +77,26 @@ test('should return javascript <script> element, with module attribute for es6 m
     deploytype : 'module',
     version : 10,
     buildts : 10
-  }), './out/view.js', 'esm'), 
-                     '<script src="./out/view.js?v=10&ts=10" type="module"></script>');
+  }), './out/view.js', 'esm'), (
+    '<script src="./out/view.js?v=10&ts=10" type="module"></script>'
+  ));
 });
 
 test('should return stylesheet <link> element', () => {
   assert.strictEqual(scrounge_elem.getincludetag(scrounge_opts({
     version : 10,
     buildts : 10
-  }), './out/view.css', 'css'), 
-                     '<link href="./out/view.css?v=10&ts=10" rel="stylesheet" type="text/css">');
+  }), './out/view.css', 'css'), (
+    '<link href="./out/view.css?v=10&ts=10" rel="stylesheet" type="text/css">'
+  ));
 });
 
 test('should throw an error if file extn unsupported', async () => {
   await assert.rejects(async () => (
     scrounge_elem.getincludetag(
       scrounge_opts({
-       version : 10,
-       buildts : 10
+        version : 10,
+        buildts : 10
       }),'./out/view.zs', 'css')
   ), {
     message: 'Invalid type, .zs'
