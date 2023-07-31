@@ -4,7 +4,6 @@
 
 import fs from 'fs'
 import path from 'path'
-import mkdirp from 'mkdirp'
 import pathpublic from 'pathpublic'
 import scrounge_uid from './scrounge_uid.js'
 import scrounge_log from './scrounge_log.js'
@@ -76,12 +75,11 @@ export default (o => {
   o.read = (opts, filepath, fn) =>
     fs.readFile(path.resolve(filepath), 'utf-8', fn)
 
-  o.writesilent = (opts, filepath, content, fn) =>
-    mkdirp(path.dirname(filepath), err => {
-      if (err) return fn(err)
+  o.writesilent = async (opts, filepath, content, fn) => {
+    fs.mkdir(path, { recursive:true })
 
-      fs.writeFile(path.resolve(filepath), content, fn)
-    })
+    fs.writeFile(path.resolve(filepath), content, fn)
+  }
 
   o.write = (opts, filepath, content, fn, isfilesize = false) => {
     scrounge_log.write(opts, filepath, isfilesize && Buffer.byteLength(content))
