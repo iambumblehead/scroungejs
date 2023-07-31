@@ -69,8 +69,8 @@ export default (o => {
     }(Object.keys(rootobj)))
   }
 
-  o.buildmaps = (opts, rootsarr, rootobj, fn = () => {}) =>
-  o.buildrootobjcachemap(opts, rootobj, fn)
+  o.buildmaps = (opts, rootsarr, rootobj, fn = () => {}) => (
+    o.buildrootobjcachemap(opts, rootobj, fn))
 
   return o
 })({})
