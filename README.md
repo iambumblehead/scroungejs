@@ -2,26 +2,16 @@
 
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand3.png)
 
-[![Build Status](https://travis-ci.org/iambumblehead/scroungejs.svg?branch=master)](https://travis-ci.org/iambumblehead/scroungejs)
-[![NPM Version](https://img.shields.io/npm/v/scroungejs.svg)](https://www.npmjs.com/package/scroungejs)
+[![npm version](https://badge.fury.io/js/scroungejs.svg)](https://badge.fury.io/js/scroungejs) [![Build Status](https://github.com/iambumblehead/scroungejs/workflows/nodejs-ci/badge.svg)][6]
 
-An obscure build tool starting as an emacs elisp script in 2009, scroungejs supports ES6 and CommonJS modules and wraps scripts like [depgraph][1], [replace-requires][2], and [detective][5].
-
-Scroungejs was used by [foxsports.com](https://espn.com) and [ties.com](http://ties.com).
-
-[0]: http://www.bumblehead.com                                     "bumblehead"
-[1]: https://github.com/iambumblehead/depgraph                       "depgraph"
-[2]: https://github.com/bendrucker/replace-requires          "replace-requires"
-[3]: https://github.com/mishoo/UglifyJS2                             "uglifyjs2"
-[4]: https://github.com/ForbesLindesay/umd                                "umd"
-[5]: https://github.com/substack/node-detective                "node-detective"
+An obscure build tool starting as an emacs elisp script in 2009. Scroungejs was used by [foxsports.com](https://espn.com) and [ties.com](http://ties.com).
 
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand10.png)
 
-A test configuration is found in spec/. Below is a config with common options. [All options][6] are optional and if you're unsure about an option, you likely don't need it.
+A test configuration is found in spec/. Below is a config with common options. [All options][7] are optional and if you're unsure about an option, you likely don't need it.
 ```javascript
 scroungejs({
-  version : require('./package.json').version,
+  version : process.env.npm_package_version,
   inputpath : './src/',
   outputpath : './build/',
   iscompress : true,
@@ -125,17 +115,12 @@ If you update a file and concatenate is false, you'll see this,
 ```
 
 
-[6]: https://github.com/iambumblehead/scroungejs/blob/master/src/scrounge_opts.js  "scrounge_opts.js"
+[0]: http://www.bumblehead.com                                     "bumblehead"
+[1]: https://github.com/iambumblehead/depgraph                       "depgraph"
+[3]: https://github.com/mishoo/UglifyJS2                             "uglifyjs2"
+[4]: https://github.com/ForbesLindesay/umd                                "umd"
+[6]: https://github.com/iambumblehead/scroungejs                   "scroungejs"
+[7]: https://github.com/iambumblehead/scroungejs/blob/master/src/scrounge_opts.js  "scrounge_opts.js"
 
 
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand.png) 
-
-(The MIT License)
-
-Copyright (c) [Bumblehead][0] <chris@bumblehead.com>
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
