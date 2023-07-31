@@ -31,7 +31,7 @@ export default (o => {
     finopt.version = castas.str(opt.version, '')
 
     finopt.tplextnarr = [ '.mustache' ]
-    finopt.cssextnarr = [ '.css', '.less' ]
+    finopt.cssextnarr = [ '.css' ]
     finopt.jsextnarr = [ '.js', '.mjs', '.ts', '.tsx' ]
 
     finopt.tsconfig = opt.tsconfig || {}

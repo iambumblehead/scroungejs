@@ -4,7 +4,6 @@
 
 import umd from 'umd'
 import path from 'path'
-import less from 'less'
 import babel from '@babel/core'
 import babelpresetenv from '@babel/preset-env'
 import umdname from 'umdname'
@@ -160,16 +159,6 @@ export default (o => {
   o.css = (opts, node, str, fn) => {
     fn(null, opts.iscompress ?
       new Cleancss().minify(str).styles : str)
-  }
-
-  o.less = (opts, node, str, fn) => {
-    less.render(str, {
-      filename : path.resolve(node.get('filepath'))
-    }, (err, output) => {
-      if (err) console.error(err)
-
-      return err ? fn(err) : o.css(opts, node, output.css, fn)
-    })
   }
 
   return o

@@ -44,7 +44,6 @@
     "clean-css": "^4.1.11",
     "castas": "^0.0.3",
     "archy": "^1.0.0",
-    "less": "^3.11.1",
     "optfn": "^0.0.7",
     "replace-requires": "^1.1.0",
     "replace-imports": "^0.0.3",
