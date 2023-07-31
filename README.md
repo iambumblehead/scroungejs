@@ -2,7 +2,7 @@
 
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand3.png)
 
-[![npm version](https://badge.fury.io/js/scroungejs.svg)](https://badge.fury.io/js/scroungejs) [![Build Status](https://github.com/iambumblehead/scroungejs/workflows/nodejs-ci/badge.svg)][6]
+[![npm version](https://badge.fury.io/js/scroungejs.svg)](https://badge.fury.io/js/scroungejs) [![Build Status](https://github.com/iambumblehead/scroungejs/workflows/test/badge.svg)][6]
 
 An obscure build tool starting as an emacs elisp script in 2009. Scroungejs was used by [foxsports.com](https://espn.com) and [ties.com](http://ties.com).
 
