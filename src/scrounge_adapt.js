@@ -6,7 +6,6 @@ import umd from 'umd'
 import path from 'path'
 import babel from '@babel/core'
 import babelpresetenv from '@babel/preset-env'
-import umdname from 'umdname'
 import Cleancss from 'clean-css'
 import moduletype from 'moduletype'
 import typescript from 'typescript'
@@ -98,12 +97,7 @@ export default (o => {
       isesm = moduletype.esm(str)
 
       if (moduletype.umd(str)) {
-        try {
-          str = umdname(str, modname)
-        } catch (e) {
-          console.log(`[www] cannot identify umdname: ${modname}`)
-          throw new Error(e)
-        }
+        throw new Error('[!!!] umd format no-longer supported')
       } else if (iscjs || isesm) {
         if (iscjs && !isesm)
           str = umd(modname, str, { commonJS : true })
