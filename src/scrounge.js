@@ -12,19 +12,14 @@ import scrounge_file from './scrounge_file.js'
 import scrounge_opts from './scrounge_opts.js'
 import scrounge_log from './scrounge_log.js'
 
-export default (o => {
-  o = (opts, fn) =>
-    scrounge_build(opts, fn)
-
-  o.basepage = scrounge_basepage
-  o.watch = scrounge_watch
-  o.build = scrounge_build
-  o.cache = scrounge_cache
-  o.node = scrounge_node
-  o.root = scrounge_root
-  o.file = scrounge_file
-  o.opts = scrounge_opts
-  o.log = scrounge_log
-
-  return o
-})({})
+export default Object.assign((opts, fn) => scrounge_build(opts, fn), {
+  basepage: scrounge_basepage,
+  watch: scrounge_watch,
+  build: scrounge_build,
+  cache: scrounge_cache,
+  node: scrounge_node,
+  root: scrounge_root,
+  file: scrounge_file,
+  opts: scrounge_opts,
+  log: scrounge_log,
+})
