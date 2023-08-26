@@ -15,11 +15,11 @@ const port = 3456
 const app = express()
 
 scroungejs.build({
-  inputpath : './test/src',
-  outputpath : './test/out',
-  publicpath : './test/out/',
-  basepagein : './test/index.tpl.html',
-  basepage : './test/index.html',
+  inputpath : './src',
+  outputpath : './out',
+  publicpath : './out/',
+  basepagein : './index.tpl.html',
+  basepage : './index.html',
   iscompress : false,
   isconcat : false,
   treearr : [ 'app.js', 'app.css' ],
