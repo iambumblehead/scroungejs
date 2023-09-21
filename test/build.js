@@ -12,29 +12,25 @@ const __filename = new url.URL('', import.meta.url).pathname
 const __dirname = __filename.replace(/[/\\][^/\\]*?$/, '')
 
 const port = 3456
-const app = express()
+const app = express();
 
-scroungejs.build({
-  inputpath : './src',
-  outputpath : './out',
-  publicpath : './out/',
-  basepagein : './index.tpl.html',
-  basepage : './index.html',
-  iscompress : false,
-  isconcat : false,
-  treearr : [ 'app.js', 'app.css' ],
-  deploytype : 'module'
-}, err => {
-  if (err)
-    console.log(err)
-  else {
-    app.use('/', express.static(path.join(__dirname, '')))
+(async () => {
+  await scroungejs.build({
+    inputpath: './src',
+    outputpath: './out',
+    publicpath: './out/',
+    basepagein: './index.tpl.html',
+    basepage: './index.html',
+    iscompress: false,
+    isconcat: false,
+    treearr: [ 'app.js', 'app.css' ],
+    deploytype: 'module'
+  })
 
-    if (process.env.service)
-      http.createServer(app).listen(port)
+  app.use('/', express.static(path.join(__dirname, '')))
 
-    console.log(`[...] localhost:${port}/`)
+  if (process.env.service)
+    http.createServer(app).listen(port)
 
-    
-  }
-})
+  console.log(`[...] localhost:${port}/`)
+})()

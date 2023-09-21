@@ -24,16 +24,20 @@ export default (o => {
     )
 
   // return rootname as a graph
-  o.getasgraph = (opts, rootpath, fn) =>
-    depgraph.graph.getfromseedfile(rootpath, opts, fn)
+  o.getasgraph = async (opts, rootpath, fn) => {
+    const graph = await depgraph.graph.getfromseedfile(rootpath, opts)
 
-  o.getfilenameasnode = (opts, rootname, fn) => {
+    fn(null, graph)
+  }
+
+  o.getfilenameasnode = async (opts, rootname, fn) => {
     const filepath = o.getrootnameaspathextn(opts, rootname)
+    const node = filepath && await depgraph.node.get_fromfilepath(filepath)
 
-    if (filepath)
-      depgraph.node.get_fromfilepath(filepath, fn)
-    else
+    if (!filepath)
       scrounge_log.rootfilenotfound(opts, filepath)
+
+    fn(null, node)
   }
 
   o.getrootnameaspath = (opts, rootname) =>

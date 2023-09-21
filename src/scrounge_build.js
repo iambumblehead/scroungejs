@@ -150,6 +150,7 @@ const buildcachemap = (opts, fn) => {
 }
 
 const build = (opts, fn) => {
+  return new Promise((resolve, error) => {
   let datebgn = new Date()
 
   fn = typeof fn === 'function' ? fn : () => {}
@@ -182,16 +183,17 @@ const build = (opts, fn) => {
               scrounge_watch(opts.inputpath, {}, path => (
                 updatedestfile(opts, path)))
 
-
-            fn(err, res)
+            if (err) error(err)
+            else resolve(res)
           })
         })
       })
     })
   })
+  })
 }
 
-export default Object.assign((opts, fn) => build(opts, fn), {
+export default Object.assign(build, {
   writeroots,
   copyroottpl,
   buildrootobj,
