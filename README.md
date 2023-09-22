@@ -1,5 +1,8 @@
 # scroungejs
 
+> [!WARNING]  
+> This application is not suitable for production, if you plan on using it, you are on you own.
+
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand3.png)
 
 [![npm version](https://badge.fury.io/js/scroungejs.svg)](https://badge.fury.io/js/scroungejs) [![Build Status](https://github.com/iambumblehead/scroungejs/workflows/test/badge.svg)][6]
