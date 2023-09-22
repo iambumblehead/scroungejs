@@ -4,7 +4,7 @@
 //
 // node : { moduletype, filepath, content }
 
-import fs from 'fs'
+import fs from 'node:fs/promises'
 import path from 'path'
 
 import scrounge_file from './scrounge_file.js'
@@ -14,51 +14,39 @@ export default (o => {
   // for a node with filepath ~/software/node.js
   // return a 'css' type node if type is 'css' and
   // corresponding css file exists (~/software/node.css)
-  o.getastype = (node, type, fn) => {
-    let filepath = scrounge_file.setextn(node.get('filepath'), type)
+  o.getastype = async (node, type) => {
+    const filepath = scrounge_file.setextn(node.get('filepath'), type)
+    const filepathfull = path.resolve(filepath)
+    const content = await fs
+      .readFile(filepathfull,  { encoding: 'utf8' })
+      .catch(() => null)
 
-    fs.readFile(path.resolve(filepath), 'utf-8', (err, content) => {
-      fn(err, err || node
-        .set('module', 'css')
-        .set('filepath', filepath)
-        .set('content', content))
-    })
+    return content && node
+      .set('module', 'css')
+      .set('filepath', filepath)
+      .set('content', content)
   }
 
-  o.getastypearr = (node, typearr, fn) =>
-    (function next (typearr, x) {
-      if (!x--) return fn(`type not found ${typearr}`)
+  o.getastypearr = async (node, typearr, x = typearr.length) => {
+    if (!x--) throw new Error(`type not found ${typearr}`)
 
-      o.getastype(node, typearr[x], (err, node) => {
-        if (err) return next(typearr, x)
-
-        fn(null, node)
-      })
-    }(typearr, typearr.length))
-
-  o.getarrastype = (deparr, type, fn) =>
-    (function next (deparr, x, finarr) {
+    return await o.getastype(node, typearr[x])
+      || o.getastypearr(node, typearr, x)
+  }
+  //  return new Promise((resolve, error) => {
+  o.getarrastypearr = (deparr, typearr, fn) => {
+    (async function next (deparr, x, finarr) {
       if (!x--) return fn(null, finarr)
 
-      o.getastype(deparr[x], type, (err, node) => {
-        if (err) return next(deparr, x, finarr)
+      const node = await o.getastypearr(deparr[x], typearr)
+        .catch(() => null)
 
+      if (node)
         finarr.push(node)
-        next(deparr, x, finarr)
-      })
+
+      return next(deparr, x, finarr)
     }(deparr, deparr.length, []))
-
-  o.getarrastypearr = (deparr, typearr, fn) =>
-    (function next (deparr, x, finarr) {
-      if (!x--) return fn(null, finarr)
-
-      o.getastypearr(deparr[x], typearr, (err, node) => {
-        if (err) return next(deparr, x, finarr)
-
-        finarr.push(node)
-        next(deparr, x, finarr)
-      })
-    }(deparr, deparr.length, []))
+  }
 
   // if basename has extension '.less',
   // extension returned would be '.css'

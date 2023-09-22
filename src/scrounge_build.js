@@ -50,20 +50,15 @@ const buildrootobj = (opts, rootarr, fn) => (
   scrounge_root.getrootarrasobj(opts, rootarr, fn))
 
 // if baseage does not exist, skip read/write with no failure
-const writebasepage = (opts, rootarr, rootobj, fn) => {
+const writebasepage = async (opts, rootarr, rootobj) => {
   const { basepage, basepagein } = opts
 
-  if (basepage && !scrounge_file.isexist(basepage)) {
-    scrounge_file.copy(opts, basepagein, basepage, err => {
-      if (err) return fn(err)
+  if (basepage && !scrounge_file.isexist(basepage))
+    await scrounge_file.copy(opts, basepagein, basepage)
 
-      scrounge_basepage.writeelemarr(opts, basepage, rootarr, rootobj, fn)
-    })
-  } else if (basepage && scrounge_file.isexist(basepage)) {
-    scrounge_basepage.writeelemarr(opts, basepage, rootarr, rootobj, fn)
-  } else {
-    fn(null)
-  }
+  return basepage
+    ? scrounge_basepage.writeelemarr(opts, basepage, rootarr, rootobj)
+    : null
 }
 
 const readbasepage = (opts, fn) => {
@@ -171,21 +166,19 @@ const build = (opts, fn) => {
       writeroots(opts, rootsarr, rootobj, err => {
         if (err) return throwerror(err, fn)
 
-        copyroottpl(opts, rootobj, err => {
+        copyroottpl(opts, rootobj, async err => {
           if (err) return throwerror(err, fn)
 
-          writebasepage(opts, rootsarr, rootobj, (err, res) => {
-            if (err) return throwerror(err, fn)
+          const res = await writebasepage(opts, rootsarr, rootobj)
 
-            scrounge_log.finish(opts, simpletime.getElapsedTimeFormatted(datebgn, new Date()))
+          scrounge_log.finish(opts, simpletime.getElapsedTimeFormatted(datebgn, new Date()))
 
-            if (opts.iswatch)
-              scrounge_watch(opts.inputpath, {}, path => (
-                updatedestfile(opts, path)))
+          if (opts.iswatch)
+            scrounge_watch(opts.inputpath, {}, path => (
+              updatedestfile(opts, path)))
 
-            if (err) error(err)
-            else resolve(res)
-          })
+          if (err) error(err)
+          else resolve(res)
         })
       })
     })

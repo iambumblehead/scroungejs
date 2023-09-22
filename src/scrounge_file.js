@@ -86,12 +86,19 @@ const write = (opts, filepath, content, fn, isfilesize = false) => {
   writesilent(opts, filepath, content, fn)
 }
 
-const copy = (opts, filepathin, filepathout, fn) => (
+const copy = async (opts, filepathin, filepathout) => {
+  return new Promise((resolve, error) => {
   read(opts, filepathin, (err, res) => {
-    if (err) return fn(err)
+    if (err) return error(err)
 
-    write(opts, filepathout, res, fn)
-  }))
+    write(opts, filepathout, res, (err, res) => {
+      if (err) return error(err)
+
+      resolve(res)
+    })
+  })
+  })
+}
 
 export default {
   setextn,

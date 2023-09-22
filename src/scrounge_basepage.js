@@ -49,9 +49,10 @@ const writeelemone = (opts, filepath, node, fn) => {
   })
 }
 
-const writeelemarr = (opts, filepath, elemarr, nodearrobj, fn) => {
+const writeelemarr = async (opts, filepath, elemarr, nodearrobj) => {
+  return new Promise((resolve, error) => {
   scrounge_file.read(opts, filepath, (err, content) => {
-    if (err) return fn(err)
+    if (err) return error(err)
 
     let newcontent = scrounge_elem.getelemarr(content).reduce((content, elem) => {
       let indent = scrounge_elem.getindentation(elem)
@@ -72,7 +73,12 @@ const writeelemarr = (opts, filepath, elemarr, nodearrobj, fn) => {
     // replace w/ optional 'version' definition
     newcontent = newcontent.replace(/:scrounge.version/gi, opts.version)
 
-    scrounge_file.write(opts, filepath, newcontent, fn)
+    scrounge_file.write(opts, filepath, newcontent, (err, res) => {
+      if (err) return error(err)
+
+      resolve(res)
+    })
+  })
   })
 }
 
