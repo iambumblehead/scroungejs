@@ -142,7 +142,7 @@ export default (o => {
         graphname = scrounge_file.setextn(rootname, '.js'),
         deparr = graphobj[rootname],
 
-        nodewrite = (opts, node, rootname, content, fn) => {
+        nodewrite = async (opts, node, rootname, content, fn) => {
           let filepath = scrounge_node.getoutputpathreal(opts, node, rootname),
               rootextn = path.extname(rootname),
               fileextn =
@@ -155,18 +155,21 @@ export default (o => {
           if (fileextn === '.js' && opts.issourcemap) {
             scrounge_adapt.js({
               ...opts,
-              sourcemap : true,
-              sourceFileName : path.basename(filepath),
-              iscompress : true,
-              test : true
-            }, node, content, (err, contenta, map) => {
-              scrounge_file.write(opts, `${filepath}.map`, JSON.stringify(map, null, '  '), () => {
-                content = `//# sourceMappingURL=${path.basename(filepath)}.map\n${content}`
-                scrounge_file.write(opts, filepath, content, fn, true)
-              })
+              sourcemap: true,
+              sourceFileName: path.basename(filepath),
+              iscompress: true,
+              test: true
+            }, node, content, async (err, contenta, map) => {
+              await scrounge_file.write(opts, `${filepath}.map`, JSON.stringify(map, null, '  '))
+              content = `//# sourceMappingURL=${path.basename(filepath)}.map\n${content}`
+              const res = await scrounge_file.write(opts, filepath, content, true)
+
+              fn(null, res)
             })
           } else {
-            scrounge_file.write(opts, filepath, content, fn, true)
+            const res = await scrounge_file.write(opts, filepath, content, true)
+
+            fn(null, res)
           }
         }
 

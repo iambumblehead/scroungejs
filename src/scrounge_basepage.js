@@ -40,18 +40,20 @@ const writecontentelemone = (opts, content, node) => {
 
 // read basepage and udpdate single elem timestampe only
 const writeelemone = (opts, filepath, node, fn) => {
-  scrounge_file.read(opts, filepath, (err, content) => {
+  scrounge_file.read(opts, filepath, async (err, content) => {
     if (err) return fn(err)
 
     content = writecontentelemone(opts, content, node)
 
-    scrounge_file.write(opts, filepath, content, fn)
+    const res = await scrounge_file.write(opts, filepath, content)
+
+    fn(null, res)
   })
 }
 
 const writeelemarr = async (opts, filepath, elemarr, nodearrobj) => {
   return new Promise((resolve, error) => {
-  scrounge_file.read(opts, filepath, (err, content) => {
+  scrounge_file.read(opts, filepath, async (err, content) => {
     if (err) return error(err)
 
     let newcontent = scrounge_elem.getelemarr(content).reduce((content, elem) => {
@@ -73,11 +75,9 @@ const writeelemarr = async (opts, filepath, elemarr, nodearrobj) => {
     // replace w/ optional 'version' definition
     newcontent = newcontent.replace(/:scrounge.version/gi, opts.version)
 
-    scrounge_file.write(opts, filepath, newcontent, (err, res) => {
-      if (err) return error(err)
+    const res = await scrounge_file.write(opts, filepath, newcontent)
 
-      resolve(res)
-    })
+    resolve(res)
   })
   })
 }

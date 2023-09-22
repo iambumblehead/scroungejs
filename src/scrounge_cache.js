@@ -36,13 +36,15 @@ const recoverrootarrcachemapnode = (opts, rootnamearr, node, fn) => {
   }(rootnamearr))
 }
 
-const persistrootcachemapfile = (opts, rootname, node, fn) => {
+const persistrootcachemapfile = async (opts, rootname, node, fn) => {
   const nodeuid = scrounge_uid.sanitised(node.get('uid'))
   const nodejson = JSON.stringify(node.delete('content').toJS(), null, '  ')
   const cachepath = path.join('./.scrounge', nodeuid, rootname)
 
   scrounge_file.mkdirpSync(path.join('./.scrounge', nodeuid))
-  scrounge_file.writesilent(opts, cachepath, nodejson, fn)
+  const res = await scrounge_file.writesilent(opts, cachepath, nodejson)
+
+  fn(null, res)
 }
 
 const buildrootcachemap = (opts, rootname, rootarr, fn) => {

@@ -2,6 +2,7 @@
 // Timestamp: 2018.04.08-13:12:03 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
+import fsp from 'node:fs/promises'
 import fs from 'fs'
 import path from 'path'
 import pathpublic from 'pathpublic'
@@ -76,26 +77,29 @@ const read = (opts, filepath, fn) => (
 
 const mkdirpSync = dir => fs.mkdirSync(dir, { recursive: true })
 
-const writesilent = async (opts, filepath, content, fn) => {
-  fs.writeFile(path.resolve(filepath), content, fn)
-}
+const writesilent = async (opts, filepath, content) => (
+  fsp.writeFile(path.resolve(filepath), content))
 
-const write = (opts, filepath, content, fn, isfilesize = false) => {
+// const write = (opts, filepath, content, fn, isfilesize = false) => {
+const write = async (opts, filepath, content, isfilesize = false) => {
   scrounge_log.write(opts, filepath, isfilesize && Buffer.byteLength(content))
 
-  writesilent(opts, filepath, content, fn)
+  return writesilent(opts, filepath, content)
 }
 
 const copy = async (opts, filepathin, filepathout) => {
-  return new Promise((resolve, error) => {
-  read(opts, filepathin, (err, res) => {
+  return new Promise(async (resolve, error) => {
+  read(opts, filepathin, async (err, res) => {
     if (err) return error(err)
 
-    write(opts, filepathout, res, (err, res) => {
-      if (err) return error(err)
+    const wr = await write(opts, filepathout, res)
 
-      resolve(res)
-    })
+    resolve(wr)
+//    write(opts, filepathout, res, (err, res) => {
+//      if (err) return error(err)
+
+//      resolve(res)
+//    })
   })
   })
 }
