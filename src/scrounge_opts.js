@@ -15,25 +15,28 @@ const getassuffixed = pathval => {
   return path.join(dir, `${base}.tpl${extn}`)
 }
 
-const filenamesupportedcss = (opts, filename, fileextn = path.extname(filename)) => (
+const filenamesupportedcss = (opts, filename, fileextn) => (
+  fileextn = path.extname(filename),  
   opts.cssextnarr.find(extn => extn === fileextn))
 
-const filenamesupportedjs = (opts, filename, fileextn = path.extname(filename)) => (
+const filenamesupportedjs = (opts, filename, fileextn) => (
+  fileextn = path.extname(filename),
   opts.jsextnarr.find(extn => extn === fileextn))
 
-const isfilenamesupportedtype = (opts, filename, fileextn = path.extname(filename)) => (
+const isfilenamesupportedtype = (opts, filename, fileextn) => (
+  fileextn = path.extname(filename),
   filenamesupportedjs(opts, filename, fileextn) ||
     filenamesupportedcss(opts, filename, fileextn))
 
 const issamesupportedtype = (opts, filenamea, filenameb) => {
-  let supportedextna = isfilenamesupportedtype(opts, filenamea),
-      supportedextnb = isfilenamesupportedtype(opts, filenameb)
+  const supportedextna = isfilenamesupportedtype(opts, filenamea)
+  const supportedextnb = isfilenamesupportedtype(opts, filenameb)
 
   return supportedextna === supportedextnb
 }
 
-const getfinalextn = (opts, filename, fileextn = path.extname(filename)) => {
-  let extn = null
+const getfinalextn = (opts, filename, fileextn, extn = null) => {
+  fileextn = path.extname(filename)  
 
   if (filenamesupportedjs(opts, filename, fileextn)) {
     extn = '.js'
@@ -183,4 +186,7 @@ const scrounge_opts = opt => {
   return finopt
 }
 
-export default scrounge_opts
+export default Object.assign(scrounge_opts, {
+  setfinalextn,
+  issamesupportedtype
+})

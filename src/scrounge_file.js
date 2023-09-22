@@ -80,28 +80,12 @@ const mkdirp = async dir => fs.mkdir(dir, { recursive: true })
 const writesilent = async (opts, filepath, content) => (
   fs.writeFile(path.resolve(filepath), content))
 
-const write = async (opts, filepath, content, isfilesize = false) => {
-  scrounge_log.write(opts, filepath, isfilesize && Buffer.byteLength(content))
+const write = async (opts, filepath, content, isfilesize = false) => (
+  scrounge_log.write(opts, filepath, isfilesize && Buffer.byteLength(content)),
+  writesilent(opts, filepath, content))
 
-  return writesilent(opts, filepath, content)
-}
-
-const copy = async (opts, filepathin, filepathout) => {
-  return new Promise(async (resolve, error) => {
-  read(opts, filepathin, async (err, res) => {
-    if (err) return error(err)
-
-    const wr = await write(opts, filepathout, res)
-
-    resolve(wr)
-//    write(opts, filepathout, res, (err, res) => {
-//      if (err) return error(err)
-
-//      resolve(res)
-//    })
-  })
-  })
-}
+const copy = async (opts, filepathin, filepathout) => (
+  write(opts, filepathout, await read(opts, filepathin)))
 
 export default {
   setextn,

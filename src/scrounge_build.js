@@ -19,27 +19,29 @@ const writeroots = async (opts, rootarr, rootobj) => (
 // tpl files aren't processed in the way scripts and stylesheets are
 // tpl deparr, adjacent to js deparr, is created any nodes are simply copied
 // to outputpath
-const copyroottpl = async (opts, rootobj, fn) => {
+const copyroottpl = async (opts, rootobj) => {
   //
   // by default, this feature switch off
   //
-  if (opts.istpl) {
-    let jsrootarr = scrounge_root.getnamearrastype(opts, Object.keys(rootobj), '.js'),
-        custopts = Object.create(opts)
+  if (!opts.istpl)
+    return null
 
-    custopts.isconcat = false
-    custopts.iscompress = false
+  const custopts = Object.create(opts)
+  const jsrootarr = scrounge_root
+    .getnamearrastype(opts, Object.keys(rootobj), '.js')
 
-    const deparr = await scrounge_node
-      .getarrastypearr(rootobj[jsrootarr[0]], opts.tplextnarr)
+  custopts.isconcat = false
+  custopts.iscompress = false
 
-      let rootname = scrounge_file.setextn(jsrootarr[0], opts.tplextnarr[0])
-      rootobj[rootname] = deparr
+  const deparr = await scrounge_node
+    .getarrastypearr(rootobj[jsrootarr[0]], opts.tplextnarr)
 
-      scrounge_root.write(custopts, rootname, rootobj, fn)
-  } else {
-    fn(null)
-  }
+  let rootname = scrounge_file.setextn(jsrootarr[0], opts.tplextnarr[0])
+  rootobj[rootname] = deparr
+
+  await scrounge_root.write(custopts, rootname, rootobj)
+
+  return true
 }
 
 // returned object uses rootnames as named-properties defined w/ rootarr
@@ -66,11 +68,11 @@ const readbasepage = async (opts, fn) => {
   if (basepage && scrounge_file.isexist(basepagein)) {
     const res = await scrounge_basepage.getrootnamearr(opts, basepagein)
 
-      fn(null, res.reduce((roots, curval) => {
-        if (roots.indexOf(curval) === -1) roots.push(curval)
+    fn(null, res.reduce((roots, curval) => {
+      if (roots.indexOf(curval) === -1) roots.push(curval)
 
-        return roots
-      }, opts.treearr))
+      return roots
+    }, opts.treearr))
   } else {
     fn(null, opts.treearr)
   }
@@ -102,16 +104,15 @@ const updatedestfile = (opts, srcfilename, fn) => {
       rootsarr = rootsarr.filter(root => (
         scrounge_opts.issamesupportedtype(opts, nodefilepath, root)))
 
-      scrounge_cache.recoverrootarrcachemapnode(opts, rootsarr, node, async (err, rootnodescached) => {
-        if (err) return throwerror(err, fn)
+      const rootnodescached = await scrounge_cache
+        .recoverrootarrcachemapnode(opts, rootsarr, node)
 
-        await writeroots(opts, rootsarr, rootnodescached, fn)
+      await writeroots(opts, rootsarr, rootnodescached, fn)
 
-        if (opts.basepage &&
-            opts.istimestamp) {
-          scrounge_basepage.writeelemone(opts, opts.basepage, node, fn)
-        }
-      })
+      if (opts.basepage &&
+          opts.istimestamp) {
+        scrounge_basepage.writeelemone(opts, opts.basepage, node, fn)
+      }
     })
   }
 }
@@ -158,23 +159,21 @@ const build = (opts, fn) => {
         scrounge_cache.buildmaps(opts, rootsarr, rootobj)
       }
 
-      writeroots(opts, rootsarr, rootobj, err => {
+      writeroots(opts, rootsarr, rootobj, async err => {
         if (err) return throwerror(err, fn)
 
-        copyroottpl(opts, rootobj, async err => {
-          if (err) return throwerror(err, fn)
+        await copyroottpl(opts, rootobj)
 
-          const res = await writebasepage(opts, rootsarr, rootobj)
+        const res = await writebasepage(opts, rootsarr, rootobj)
 
-          scrounge_log.finish(opts, simpletime.getElapsedTimeFormatted(datebgn, new Date()))
+        scrounge_log.finish(opts, simpletime.getElapsedTimeFormatted(datebgn, new Date()))
 
-          if (opts.iswatch)
-            scrounge_watch(opts.inputpath, {}, path => (
-              updatedestfile(opts, path)))
+        if (opts.iswatch)
+          scrounge_watch(opts.inputpath, {}, path => (
+            updatedestfile(opts, path)))
 
-          if (err) error(err)
-          else resolve(res)
-        })
+        if (err) error(err)
+        else resolve(res)
       })
     })
   })

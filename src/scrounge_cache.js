@@ -8,7 +8,7 @@ import depgraph from 'depgraph'
 import scrounge_uid from './scrounge_uid.js'
 import scrounge_file from './scrounge_file.js'
 
-const recoverrootcachemapnode = async (opts, rootname, node, fn) => {
+const recoverrootcachemapnode = async (opts, rootname, node) => {
   const nodeuid = scrounge_uid.sanitised(node.get('uid'))
   const cachepath = path.join('./.scrounge', rootname, nodeuid)
   const cachenode = await scrounge_file.read(opts, cachepath)
@@ -17,11 +17,11 @@ const recoverrootcachemapnode = async (opts, rootname, node, fn) => {
     JSON.parse(cachenode)).set('content', node.get('content'))
 }
 
-const recoverrootarrcachemapnode = (opts, rootnamearr, node, fn) => {
+const recoverrootarrcachemapnode = async (opts, rootnamearr, node) => {
   let rootobjarr = {};
 
   (async function next (rootarr, x = rootarr.length) {
-    if (!x--) return fn(null, rootobjarr)
+    if (!x--) return rootobjarr
 
     const cachenode = await recoverrootcachemapnode(opts, rootarr[x], node)
       .catch(() => null)
