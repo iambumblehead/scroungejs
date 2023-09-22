@@ -14,9 +14,11 @@ const getcontentrootnamearr = content => (
   ), []).sort().filter((val, i, arr) => (
     arr.slice(i + 1).indexOf(val) === -1)))
 
-const getrootnamearr = (opts, filepath, fn) => (
-  scrounge_file.read(opts, filepath, (err, content) => (
-    fn(err, err || getcontentrootnamearr(content)))))
+const getrootnamearr = async (opts, filepath) => {
+  const content = await scrounge_file.read(opts, filepath)
+
+  return getcontentrootnamearr(content)
+}
 
 // updates a single element in the content, usually a timestamp.
 // used when a file is updated, scrounge will process the file
@@ -39,47 +41,37 @@ const writecontentelemone = (opts, content, node) => {
 }
 
 // read basepage and udpdate single elem timestampe only
-const writeelemone = (opts, filepath, node, fn) => {
-  scrounge_file.read(opts, filepath, async (err, content) => {
-    if (err) return fn(err)
+const writeelemone = async (opts, filepath, node, fn) => {
+  const contentstr = await scrounge_file.read(opts, filepath)
+  const content = writecontentelemone(opts, contentstr, node)
+  const res = await scrounge_file.write(opts, filepath, content)
 
-    content = writecontentelemone(opts, content, node)
-
-    const res = await scrounge_file.write(opts, filepath, content)
-
-    fn(null, res)
-  })
+  fn(null, res)
 }
 
 const writeelemarr = async (opts, filepath, elemarr, nodearrobj) => {
-  return new Promise((resolve, error) => {
-  scrounge_file.read(opts, filepath, async (err, content) => {
-    if (err) return error(err)
+  const contentsrc = await scrounge_file.read(opts, filepath)
 
-    let newcontent = scrounge_elem.getelemarr(content).reduce((content, elem) => {
-      let indent = scrounge_elem.getindentation(elem)
+  const content = scrounge_elem.getelemarr(contentsrc).reduce((accum, elem) => {
+    let indent = scrounge_elem.getindentation(elem)
 
-      return content.replace(elem, scrounge_elem.getpopulated(
-        elem, scrounge_elem.getrootarr(elem).filter(root => (
-          // only operate on rootnames with an associated nodearr
-          nodearrobj[root] && nodearrobj[root].length
-        )).map(root => (
-          // each node in the array returns ordered listing of elements
-          scrounge_node.arrgetincludetagarr(opts, nodearrobj[root], root)
-            .map(elem => indent + elem).join('\n')
-        )).join('\n')
-      ))
-    }, content)
+    return accum.replace(elem, scrounge_elem.getpopulated(
+      elem, scrounge_elem.getrootarr(elem).filter(root => (
+        // only operate on rootnames with an associated nodearr
+        nodearrobj[root] && nodearrobj[root].length
+      )).map(root => (
+        // each node in the array returns ordered listing of elements
+        scrounge_node.arrgetincludetagarr(opts, nodearrobj[root], root)
+          .map(elem => indent + elem).join('\n')
+      )).join('\n')
+    ))
+  }, contentsrc)
 
-    // if :scrounge.version appears in the template anywhere,
-    // replace w/ optional 'version' definition
-    newcontent = newcontent.replace(/:scrounge.version/gi, opts.version)
+  // if :scrounge.version appears in the template anywhere,
+  // replace w/ optional 'version' definition
+  const contentfin = content.replace(/:scrounge.version/gi, opts.version)
 
-    const res = await scrounge_file.write(opts, filepath, newcontent)
-
-    resolve(res)
-  })
-  })
+  return scrounge_file.write(opts, filepath, contentfin)
 }
 
 export default {

@@ -2,8 +2,8 @@
 // Timestamp: 2018.04.08-13:12:03 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-import fsp from 'node:fs/promises'
-import fs from 'fs'
+import fs from 'node:fs/promises'
+import { statSync } from 'fs'
 import path from 'path'
 import pathpublic from 'pathpublic'
 import scrounge_uid from './scrounge_uid.js'
@@ -66,21 +66,20 @@ const rminputpath = ({ inputpath }, filepath) => (
 
 const isexist = filepath => {
   try {
-    return fs.statSync(filepath).isFile()
-  } catch (err) { /* */ }
+    return statSync(filepath).isFile()
+  } catch { /* */ }
 
   return false
 }
 
-const read = (opts, filepath, fn) => (
-  fs.readFile(path.resolve(filepath), 'utf-8', fn))
+const read = (opts, filepath) => (
+  fs.readFile(path.resolve(filepath), { encoding: 'utf8' }))
 
-const mkdirpSync = dir => fs.mkdirSync(dir, { recursive: true })
+const mkdirp = async dir => fs.mkdir(dir, { recursive: true })
 
 const writesilent = async (opts, filepath, content) => (
-  fsp.writeFile(path.resolve(filepath), content))
+  fs.writeFile(path.resolve(filepath), content))
 
-// const write = (opts, filepath, content, fn, isfilesize = false) => {
 const write = async (opts, filepath, content, isfilesize = false) => {
   scrounge_log.write(opts, filepath, isfilesize && Buffer.byteLength(content))
 
@@ -115,7 +114,7 @@ export default {
   rminputpath,
   isexist,
   read,
-  mkdirpSync,
+  mkdirp,
   writesilent,
   write,
   copy

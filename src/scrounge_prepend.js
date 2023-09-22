@@ -4,15 +4,13 @@
 
 import depgraph from 'depgraph'
 
-const getprenodearr = async (opts, rootname, fn) => {
+const getprenodearr = async (opts, rootname) => {
   const prependobj = opts.prependarr
     .find(prepend => prepend.treename === rootname)
 
-  const nodearr = prependobj
-    ? await depgraph.node.get_arrfromfilepathrel(prependobj.sourcearr, opts)
+  return prependobj
+    ? depgraph.node.get_arrfromfilepathrel(prependobj.sourcearr, opts)
     : null
-
-  fn(null, nodearr)
 }
 
 export default {

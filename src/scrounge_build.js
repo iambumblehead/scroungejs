@@ -13,8 +13,8 @@ import scrounge_file from './scrounge_file.js'
 import scrounge_opts from './scrounge_opts.js'
 import scrounge_log from './scrounge_log.js'
 
-const writeroots = (opts, rootarr, rootobj, fn) => (
-  scrounge_root.writearr(opts, rootarr, rootobj, fn))
+const writeroots = async (opts, rootarr, rootobj) => (
+  scrounge_root.writearr(opts, rootarr, rootobj))
 
 // tpl files aren't processed in the way scripts and stylesheets are
 // tpl deparr, adjacent to js deparr, is created any nodes are simply copied
@@ -60,19 +60,17 @@ const writebasepage = async (opts, rootarr, rootobj) => {
     : null
 }
 
-const readbasepage = (opts, fn) => {
+const readbasepage = async (opts, fn) => {
   const { basepage, basepagein } = opts
 
   if (basepage && scrounge_file.isexist(basepagein)) {
-    scrounge_basepage.getrootnamearr(opts, basepagein, (err, res) => {
-      if (err) return fn(err)
+    const res = await scrounge_basepage.getrootnamearr(opts, basepagein)
 
       fn(null, res.reduce((roots, curval) => {
         if (roots.indexOf(curval) === -1) roots.push(curval)
 
         return roots
       }, opts.treearr))
-    })
   } else {
     fn(null, opts.treearr)
   }
@@ -90,31 +88,29 @@ const updatedestfile = (opts, srcfilename, fn) => {
   opts = scrounge_opts(opts)
 
   if (!opts.isconcat && scrounge_opts.isfilenamesupportedtype(opts, srcfilename)) {
-    readbasepage(opts, (err, rootsarr) => {
+    readbasepage(opts, async (err, rootsarr) => {
       if (err) return throwerror(err, fn)
 
       srcfilename = scrounge_file.rminputpath(opts, srcfilename)
 
-      scrounge_root.getfilenameasnode(opts, srcfilename, (err, node) => {
+      const node = await scrounge_root.getfilenameasnode(opts, srcfilename)
+
+      scrounge_log.updatenode(opts, node.get('uid'))
+      let nodefilepath = scrounge_opts.setfinalextn(
+        opts, node.get('filepath'))
+
+      rootsarr = rootsarr.filter(root => (
+        scrounge_opts.issamesupportedtype(opts, nodefilepath, root)))
+
+      scrounge_cache.recoverrootarrcachemapnode(opts, rootsarr, node, async (err, rootnodescached) => {
         if (err) return throwerror(err, fn)
 
-        scrounge_log.updatenode(opts, node.get('uid'))
-        let nodefilepath = scrounge_opts.setfinalextn(
-          opts, node.get('filepath'))
+        await writeroots(opts, rootsarr, rootnodescached, fn)
 
-        rootsarr = rootsarr.filter(root => (
-          scrounge_opts.issamesupportedtype(opts, nodefilepath, root)))
-
-        scrounge_cache.recoverrootarrcachemapnode(opts, rootsarr, node, (err, rootnodescached) => {
-          if (err) return throwerror(err, fn)
-
-          writeroots(opts, rootsarr, rootnodescached, fn)
-
-          if (opts.basepage &&
-              opts.istimestamp) {
-            scrounge_basepage.writeelemone(opts, opts.basepage, node, fn)
-          }
-        })
+        if (opts.basepage &&
+            opts.istimestamp) {
+          scrounge_basepage.writeelemone(opts, opts.basepage, node, fn)
+        }
       })
     })
   }
