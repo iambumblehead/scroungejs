@@ -47,8 +47,8 @@ const copyroottpl = async (opts, rootobj) => {
 // returned object uses rootnames as named-properties defined w/ rootarr
 //
 // existance of template and stylesheet files is checked here
-const buildrootobj = (opts, rootarr, fn) => (
-  scrounge_root.getrootarrasobj(opts, rootarr, fn))
+const buildrootobj = async (opts, rootarr) => (
+  scrounge_root.getrootarrasobj(opts, rootarr))
 
 // if baseage does not exist, skip read/write with no failure
 const writebasepage = async (opts, rootarr, rootobj) => {
@@ -62,122 +62,74 @@ const writebasepage = async (opts, rootarr, rootobj) => {
     : null
 }
 
-const readbasepage = async (opts, fn) => {
+const readbasepage = async opts => {
   const { basepage, basepagein } = opts
+  const pageroots = basepage && scrounge_file.isexist(basepagein)
+     && await scrounge_basepage.getrootnamearr(opts, basepagein)
+  const pagetreearr = pageroots && pageroots.reduce((roots, curval) => {
+    if (roots.indexOf(curval) === -1) roots.push(curval)
 
-  if (basepage && scrounge_file.isexist(basepagein)) {
-    const res = await scrounge_basepage.getrootnamearr(opts, basepagein)
+    return roots
+  }, opts.treearr)
 
-    fn(null, res.reduce((roots, curval) => {
-      if (roots.indexOf(curval) === -1) roots.push(curval)
 
-      return roots
-    }, opts.treearr))
-  } else {
-    fn(null, opts.treearr)
-  }
+  return pagetreearr || opts.treearr
 }
 
-const throwerror = (err, fn) => {
-  err = new Error(err)
-  setTimeout(() => { throw err })
-
-  return fn(err)
-}
-
-const updatedestfile = (opts, srcfilename, fn) => {
-  fn = typeof fn === 'function' ? fn : () => {}
+const updatedestfile = async (opts, srcfilename) => {
   opts = scrounge_opts(opts)
 
-  if (!opts.isconcat && scrounge_opts.isfilenamesupportedtype(opts, srcfilename)) {
-    readbasepage(opts, async (err, rootsarr) => {
-      if (err) return throwerror(err, fn)
+  if (opts.isconcat
+      || !scrounge_opts.isfilenamesupportedtype(opts, srcfilename))
+    return null
+  
+  const rootsarr = await readbasepage(opts)
 
-      srcfilename = scrounge_file.rminputpath(opts, srcfilename)
+  srcfilename = scrounge_file.rminputpath(opts, srcfilename)
 
-      const node = await scrounge_root.getfilenameasnode(opts, srcfilename)
+  const node = await scrounge_root.getfilenameasnode(opts, srcfilename)
 
-      scrounge_log.updatenode(opts, node.get('uid'))
-      let nodefilepath = scrounge_opts.setfinalextn(
-        opts, node.get('filepath'))
+  scrounge_log.updatenode(opts, node.get('uid'))
+  const nodefilepath = scrounge_opts.setfinalextn(opts, node.get('filepath'))
+  const rootsarrfiltered = rootsarr.filter(root => (
+    scrounge_opts.issamesupportedtype(opts, nodefilepath, root)))
+  const rootnodescached = await scrounge_cache
+    .recoverrootarrcachemapnode(opts, rootsarrfiltered, node)
 
-      rootsarr = rootsarr.filter(root => (
-        scrounge_opts.issamesupportedtype(opts, nodefilepath, root)))
+  await writeroots(opts, rootsarrfiltered, rootnodescached)
 
-      const rootnodescached = await scrounge_cache
-        .recoverrootarrcachemapnode(opts, rootsarr, node)
-
-      await writeroots(opts, rootsarr, rootnodescached, fn)
-
-      if (opts.basepage &&
-          opts.istimestamp) {
-        scrounge_basepage.writeelemone(opts, opts.basepage, node, fn)
-      }
-    })
+  if (opts.basepage &&
+      opts.istimestamp) {
+    await scrounge_basepage.writeelemone(opts, opts.basepage, node)
   }
+
+  return true
 }
 
-const buildcachemap = (opts, fn) => {
+const build = async (opts = {}) => {
   let datebgn = new Date()
 
-  fn = typeof fn === 'function' ? fn : () => {}
   opts = scrounge_opts(opts)
 
   scrounge_log.start(opts, datebgn)
 
-  readbasepage(opts, (err, rootsarr) => {
-    if (err) return throwerror(err, fn)
+  const rootsarr = await readbasepage(opts)
+  const rootobj = await buildrootobj(opts, rootsarr)
 
-    buildrootobj(opts, rootsarr, (err, rootobj) => {
-      if (err) return throwerror(err, fn)
+  if (opts.iscachemap)
+    await scrounge_cache.buildmaps(opts, rootsarr, rootobj)
 
-      scrounge_cache.buildmaps(opts, rootsarr, rootobj, err => {
-        if (err) return throwerror(err, fn)
+  await writeroots(opts, rootsarr, rootobj)
+  await copyroottpl(opts, rootobj)
+  const res = await writebasepage(opts, rootsarr, rootobj)
 
-        scrounge_log.finish(opts, simpletime.getElapsedTimeFormatted(datebgn, new Date()))
-      })
-    })
-  })
-}
+  scrounge_log
+    .finish(opts, simpletime.getElapsedTimeFormatted(datebgn, new Date()))
 
-const build = (opts, fn) => {
-  return new Promise((resolve, error) => {
-  let datebgn = new Date()
+  if (opts.iswatch)
+    scrounge_watch(opts.inputpath, {}, async path => updatedestfile(opts, path))
 
-  fn = typeof fn === 'function' ? fn : () => {}
-  opts = scrounge_opts(opts)
-
-  scrounge_log.start(opts, datebgn)
-
-  readbasepage(opts, (err, rootsarr) => {
-    if (err) return throwerror(err, fn)
-
-    buildrootobj(opts, rootsarr, (err, rootobj) => {
-      if (err) return throwerror(err, fn)
-
-      if (opts.iscachemap) {
-        scrounge_cache.buildmaps(opts, rootsarr, rootobj)
-      }
-
-      writeroots(opts, rootsarr, rootobj, async err => {
-        if (err) return throwerror(err, fn)
-
-        await copyroottpl(opts, rootobj)
-
-        const res = await writebasepage(opts, rootsarr, rootobj)
-
-        scrounge_log.finish(opts, simpletime.getElapsedTimeFormatted(datebgn, new Date()))
-
-        if (opts.iswatch)
-          scrounge_watch(opts.inputpath, {}, path => (
-            updatedestfile(opts, path)))
-
-        if (err) error(err)
-        else resolve(res)
-      })
-    })
-  })
-  })
+  return res
 }
 
 export default Object.assign(build, {
@@ -186,8 +138,6 @@ export default Object.assign(build, {
   buildrootobj,
   writebasepage,
   readbasepage,
-  throwerror,
   updatedestfile,
-  buildcachemap,
   build
 })

@@ -3,7 +3,7 @@
 // Author(s): bumblehead <chris@bumblehead.com>
 
 export default {
-  sanitised : uid => uid
+  sanitised: uid => uid
     .replace(/\.[^.]*$/, '') // remove extension from uid
     .replace(/-|\/|\\/gi, '_') // remove slash and dash
     .replace(/[^a-z0-9_]+/gi, '')

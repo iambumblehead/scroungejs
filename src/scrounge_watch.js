@@ -4,16 +4,10 @@
 
 import chokidar from 'chokidar'
 
-export default (o => {
-  o = (globs, opts = {}, fn) => {
-    let watcher = chokidar.watch(globs, opts.watch || {
-      cwd : '.'
-    })
+export default (globs, opts = {}, fn) => {
+  const watcher = chokidar.watch(globs, opts.watch || { cwd: '.' })
 
-    // you may choose to disable watch w/ opts.iswatch = false
-    if (typeof fn === 'function')
-      watcher.on('change', fn)
-  }
-
-  return o
-})({})
+  // you may choose to disable watch w/ opts.iswatch = false
+  if (typeof fn === 'function')
+    watcher.on('change', fn)
+}

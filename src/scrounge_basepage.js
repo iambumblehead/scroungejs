@@ -41,12 +41,11 @@ const writecontentelemone = (opts, content, node) => {
 }
 
 // read basepage and udpdate single elem timestampe only
-const writeelemone = async (opts, filepath, node, fn) => {
+const writeelemone = async (opts, filepath, node) => {
   const contentstr = await scrounge_file.read(opts, filepath)
   const content = writecontentelemone(opts, contentstr, node)
-  const res = await scrounge_file.write(opts, filepath, content)
 
-  fn(null, res)
+  return scrounge_file.write(opts, filepath, content)
 }
 
 const writeelemarr = async (opts, filepath, elemarr, nodearrobj) => {

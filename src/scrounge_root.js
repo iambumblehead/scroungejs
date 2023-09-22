@@ -74,11 +74,11 @@ const getasdeparr = async (opts, rootname) => {
 //
 // returns a map object { treename : dependencyarr }
 //
-const getrootarrasdeparr = (opts, rootarr, fn) => {
-  let graphnamearr = getnamearrastype(opts, rootarr, '.js');
+const getrootarrasdeparr = async (opts, rootarr) => {
+  let graphnamearr = getnamearrastype(opts, rootarr, '.js')
 
-  (async function nextgraph (graphnamearr, x, graphsobj) {
-    if (!x--) return fn(null, graphsobj)
+  return (async function nextgraph (graphnamearr, x, graphsobj) {
+    if (!x--) return graphsobj
 
     const deparr = await getasdeparr(opts, graphnamearr[x])
     const prenodearr = await scrounge_prepend
@@ -96,30 +96,28 @@ const getrootarrasdeparr = (opts, rootarr, fn) => {
 // obtains the map object created from 'js' roots
 // constructs non-js root definitions derived from js roots
 //
-const getrootarrasobj = (opts, rootarr, fn) => {
-  getrootarrasdeparr(opts, rootarr, (err, jsdeparrobj) => {
-    if (err) return fn(err);
+const getrootarrasobj = async (opts, rootarr) => {
+  const jsdeparrobj = await getrootarrasdeparr(opts, rootarr)
 
-    (async function next (rootarr, x, len, jsdeparrobj, deparrobj) {
-      if (x >= len) return fn(null, deparrobj)
+  return (async function next (rootarr, x, len, jsdeparrobj, deparrobj) {
+    if (x >= len) return deparrobj
 
-      let rootname = rootarr[x],
-          rootextn = path.extname(rootname),
-          jsdeparr = jsdeparrobj[scrounge_file.setextn(rootname, '.js')]
+    let rootname = rootarr[x],
+        rootextn = path.extname(rootname),
+        jsdeparr = jsdeparrobj[scrounge_file.setextn(rootname, '.js')]
 
-      if (rootextn === '.js') {
-        deparrobj[rootname] = jsdeparrobj[rootname]
+    if (rootextn === '.js')
+      deparrobj[rootname] = jsdeparrobj[rootname]
 
-        next(rootarr, ++x, len, jsdeparrobj, deparrobj)
-      } else if (rootextn === '.css') {
-        const deparr = await scrounge_node
-          .getarrastypearr(jsdeparr, opts.cssextnarr)
+    if (rootextn === '.css') {
+      const deparr = await scrounge_node
+        .getarrastypearr(jsdeparr, opts.cssextnarr)
 
-        deparrobj[rootname] = deparr
-        next(rootarr, ++x, len, jsdeparrobj, deparrobj)
-      }
-    }(rootarr, 0, rootarr.length, jsdeparrobj, {}))
-  })
+      deparrobj[rootname] = deparr
+    }
+
+    return next(rootarr, ++x, len, jsdeparrobj, deparrobj)
+  }(rootarr, 0, rootarr.length, jsdeparrobj, {}))
 }
 
 // matches should be build and constructed ahead of this point,

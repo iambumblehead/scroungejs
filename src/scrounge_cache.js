@@ -29,47 +29,42 @@ const recoverrootarrcachemapnode = async (opts, rootnamearr, node) => {
     if (cachenode)
       rootobjarr[rootarr[x]] = [ cachenode ]
 
-    next(rootarr, x)
+    return next(rootarr, x)
   }(rootnamearr))
 }
 
-const persistrootcachemapfile = async (opts, rootname, node, fn) => {
+const persistrootcachemapfile = async (opts, rootname, node) => {
   const nodeuid = scrounge_uid.sanitised(node.get('uid'))
   const nodejson = JSON.stringify(node.delete('content').toJS(), null, '  ')
   const cachepath = path.join('./.scrounge', nodeuid, rootname)
 
   await scrounge_file.mkdirp(path.join('./.scrounge', nodeuid))
-  const res = await scrounge_file.writesilent(opts, cachepath, nodejson)
-
-  fn(null, res)
+  
+  return scrounge_file.writesilent(opts, cachepath, nodejson)
 }
 
-const buildrootcachemap = (opts, rootname, rootarr, fn) => {
-  (function next (rootarr, x = rootarr.length) {
-    if (!x--) return fn(null, 'done')
+const buildrootcachemap = async (opts, rootname, rootarr) => {
+  return (async function next (rootarr, x = rootarr.length) {
+    if (!x--) return true
 
-    persistrootcachemapfile(opts, rootname, rootarr[x], err => {
-      if (err) return fn(err)
+    await persistrootcachemapfile(opts, rootname, rootarr[x])
 
-      next(rootarr, x)
-    })
+    return next(rootarr, x)
   }(rootarr))
 }
 
-const buildrootobjcachemap = (opts, rootobj, fn) => {
-  (function next (rootnamearr, x = rootnamearr.length) {
-    if (!x--) return fn(null, 'done')
+const buildrootobjcachemap = async (opts, rootobj) => {
+  return (async function next (rootnamearr, x = rootnamearr.length) {
+    if (!x--) return true
 
-    buildrootcachemap(opts, rootnamearr[x], rootobj[rootnamearr[x]], err => {
-      if (err) return fn(err)
+    await buildrootcachemap(opts, rootnamearr[x], rootobj[rootnamearr[x]])
 
-      next(rootnamearr, x)
-    })
+    return next(rootnamearr, x)
   }(Object.keys(rootobj)))
 }
 
-const buildmaps = (opts, rootsarr, rootobj, fn = () => {}) => (
-  buildrootobjcachemap(opts, rootobj, fn))
+const buildmaps = async (opts, rootsarr, rootobj) => (
+  buildrootobjcachemap(opts, rootobj))
 
 export default {
   recoverrootcachemapnode,

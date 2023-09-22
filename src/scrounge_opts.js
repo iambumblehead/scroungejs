@@ -59,11 +59,10 @@ const relPathAsFileUrlFn = metaurl => p => (
   relPathAsFileUrl(metaurl, p))
 
 const scrounge_opts = opt => {
-  let finopt = {}
-
+  const finopt = {}
   const stackpathre = /^.*(\(|at )(.*):[\d]*:[\d]*.*$/
   const metaurl = opt.metaurl || (path.dirname(
-    (new Error).stack.split('\n')[5].replace(stackpathre, '$2')) + '/')
+    (new Error).stack.split('\n')[3].replace(stackpathre, '$2')) + '/')
 
   const asFileUrl = relPathAsFileUrlFn(metaurl)
 
