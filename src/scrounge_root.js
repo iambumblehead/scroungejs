@@ -113,7 +113,7 @@ export default (o => {
     o.getrootarrasdeparr(opts, rootarr, (err, jsdeparrobj) => {
       if (err) return fn(err);
 
-      (function next (rootarr, x, len, jsdeparrobj, deparrobj) {
+      (async function next (rootarr, x, len, jsdeparrobj, deparrobj) {
         if (x >= len) return fn(null, deparrobj)
 
         let rootname = rootarr[x],
@@ -125,12 +125,11 @@ export default (o => {
 
           next(rootarr, ++x, len, jsdeparrobj, deparrobj)
         } else if (rootextn === '.css') {
-          scrounge_node.getarrastypearr(jsdeparr, opts.cssextnarr, (err, deparr) => {
-            if (err) return fn(err)
+          const deparr = await scrounge_node
+            .getarrastypearr(jsdeparr, opts.cssextnarr)
 
-            deparrobj[rootname] = deparr
-            next(rootarr, ++x, len, jsdeparrobj, deparrobj)
-          })
+          deparrobj[rootname] = deparr
+          next(rootarr, ++x, len, jsdeparrobj, deparrobj)
         }
       }(rootarr, 0, rootarr.length, jsdeparrobj, {}))
     })

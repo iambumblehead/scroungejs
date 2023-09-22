@@ -19,7 +19,7 @@ const writeroots = (opts, rootarr, rootobj, fn) => (
 // tpl files aren't processed in the way scripts and stylesheets are
 // tpl deparr, adjacent to js deparr, is created any nodes are simply copied
 // to outputpath
-const copyroottpl = (opts, rootobj, fn) => {
+const copyroottpl = async (opts, rootobj, fn) => {
   //
   // by default, this feature switch off
   //
@@ -30,14 +30,13 @@ const copyroottpl = (opts, rootobj, fn) => {
     custopts.isconcat = false
     custopts.iscompress = false
 
-    scrounge_node.getarrastypearr(rootobj[jsrootarr[0]], opts.tplextnarr, (err, deparr) => {
-      if (err) return fn(err)
+    const deparr = await scrounge_node
+      .getarrastypearr(rootobj[jsrootarr[0]], opts.tplextnarr)
 
       let rootname = scrounge_file.setextn(jsrootarr[0], opts.tplextnarr[0])
       rootobj[rootname] = deparr
 
       scrounge_root.write(custopts, rootname, rootobj, fn)
-    })
   } else {
     fn(null)
   }
