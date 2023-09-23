@@ -144,13 +144,18 @@ const write = async (opts, rootname, graphobj) => new Promise((resolve, error) =
           const [ , map ] = await scr_adapt.js({
             ...opts,
             sourcemap: true,
-            sourceFileName: path.basename(filepath),
             iscompress: true,
-            test: true
+            sourceFileName: path.basename(filepath)
           }, node, content)
 
-          await scr_file.write(opts, `${filepath}.map`, JSON.stringify(map, null, '  '))
-          content = `//# sourceMappingURL=${path.basename(filepath)}.map\n${content}`
+          const mapsource = JSON.stringify(map, null, '  ')
+          const mapfilepath = `${filepath}.map`
+          const mapfilename = path.basename(mapfilepath)
+          const mapinclude = `//# sourceMappingURL=${mapfilename}`
+
+          await scr_file.write(opts, mapfilepath, mapsource)
+
+          content = [ mapinclude, content ].join('\n')
         }
 
         return scr_file.write(opts, filepath, content, true)
