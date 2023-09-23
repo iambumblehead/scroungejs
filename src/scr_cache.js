@@ -1,17 +1,16 @@
-// Filename: scrounge_cache.js
-// Timestamp: 2018.04.07-18:52:37 (last modified)
-// Author(s): bumblehead <chris@bumblehead.com>
-
 import path from 'path'
 import depgraph from 'depgraph'
 
-import scrounge_uid from './scrounge_uid.js'
-import scrounge_file from './scrounge_file.js'
+import scr_file from './scr_file.js'
+
+import {
+  scr_util_uidflat
+} from './scr_util.js'
 
 const recoverrootcachemapnode = async (opts, rootname, node) => {
-  const nodeuid = scrounge_uid.sanitised(node.get('uid'))
+  const nodeuid = scr_util_uidflat(node.get('uid'))
   const cachepath = path.join('./.scrounge', rootname, nodeuid)
-  const cachenode = await scrounge_file.read(opts, cachepath)
+  const cachenode = await scr_file.read(opts, cachepath)
 
   return depgraph.node.get_fromjs(
     JSON.parse(cachenode)).set('content', node.get('content'))
@@ -34,13 +33,13 @@ const recoverrootarrcachemapnode = async (opts, rootnamearr, node) => {
 }
 
 const persistrootcachemapfile = async (opts, rootname, node) => {
-  const nodeuid = scrounge_uid.sanitised(node.get('uid'))
+  const nodeuid = scr_util_uidflat(node.get('uid'))
   const nodejson = JSON.stringify(node.delete('content').toJS(), null, '  ')
   const cachepath = path.join('./.scrounge', nodeuid, rootname)
 
-  await scrounge_file.mkdirp(path.join('./.scrounge', nodeuid))
+  await scr_file.mkdirp(path.join('./.scrounge', nodeuid))
   
-  return scrounge_file.writesilent(opts, cachepath, nodejson)
+  return scr_file.writesilent(opts, cachepath, nodejson)
 }
 
 const buildrootcachemap = async (opts, rootname, rootarr) => {

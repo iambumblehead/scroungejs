@@ -1,7 +1,3 @@
-// Filename: scrounge_elem.js
-// Timestamp: 2018.04.08-06:10:37 (last modified)
-// Author(s): bumblehead <chris@bumblehead.com>
-
 import path from 'path'
 import addquery from 'addquery'
 
@@ -12,6 +8,7 @@ import addquery from 'addquery'
 const includejstpl = '<script src="$" type=":type"></script>'
 const includecsstpl = '<link href="$" rel="stylesheet" type="text/css">'
 
+// eslint-disable-next-line max-len
 const elemre = / *<!-- <scrounge([\s\S]*?)> -->([\s\S]*?)<!-- <\/scrounge> -->/gmi
 const elemrootre = /root="([\s\S]*?)"/
 const elemtypere = /type="(\.[cj]ss?)?"/

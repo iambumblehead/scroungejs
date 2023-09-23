@@ -2,19 +2,25 @@
 // Timestamp: 2018.04.09-22:14:04 (last modified)
 // Author(s): bumblehead <chris@bumblehead.com>
 
-import scroungejs from '../src/scrounge.js'
+
+import babel from '@babel/core'
+import babelpresetenv from '@babel/preset-env'
+import Cleancss from 'clean-css'
+
 import express from 'express'
 import http from 'http'
 import url from 'url'
 import path from 'path'
 
+import scroungejs from '../src/scr.js'
+
 const __filename = new url.URL('', import.meta.url).pathname
 const __dirname = __filename.replace(/[/\\][^/\\]*?$/, '')
 
 const port = 3456
-const app = express();
+const app = express()
 
-(async () => {
+;(async () => {
   await scroungejs.build({
     inputpath: './src',
     outputpath: './out',
@@ -24,7 +30,50 @@ const app = express();
     iscompress: false,
     isconcat: false,
     treearr: [ 'app.js', 'app.css' ],
-    deploytype: 'module'
+    deploytype: 'module',
+    
+    hooktransform: async (srcstr, node, srctype, srcpath, opts) => {
+      // for ts...
+      // let tsconfig = opts.tsconfig || {},
+      // jsstr = typescript.transpileModule(str, tsconfig).outputText      
+      
+      if (/m?js/.test(srctype)) {
+        const res = await babel.transformAsync(srcstr, {
+          compact: opts.iscompress,
+          plugins: opts.babelpluginarr || [],
+          sourceMaps: opts.sourcemap,
+          sourceFileName: opts.sourceFileName,
+          presets: [
+            // rather than try to manage many presets and plugins,
+            // single preset trys to deliver working output for the
+            // given module definition
+            //
+            // do not convert umd or module-deployed esm
+            [ babelpresetenv, {
+              modules: (
+                node.get('module') === 'umd' || (
+                  node.get('module') === 'esm' && opts.deploytype === 'module'))
+                ? false
+                : 'commonjs'
+            } ]
+          ]
+        }).catch(() => {
+          new Error(`[!!!] parse error ${srcpath}`)
+        })
+
+        return [ res.code, res.map ]
+      }
+
+      if (srctype === '.css') {
+        return [
+          opts.iscompress
+            ? new Cleancss().minify(srcstr).styles
+            : srcstr
+        ]
+      }
+
+      return []
+    }
   })
 
   app.use('/', express.static(path.join(__dirname, '')))

@@ -1,13 +1,15 @@
-// Filename: scrounge_file.js
-// Timestamp: 2018.04.08-13:12:03 (last modified)
-// Author(s): bumblehead <chris@bumblehead.com>
-
 import fs from 'node:fs/promises'
 import { statSync } from 'fs'
 import path from 'path'
 import pathpublic from 'pathpublic'
-import scrounge_uid from './scrounge_uid.js'
-import scrounge_log from './scrounge_log.js'
+
+import {
+  scr_logwrite
+} from './scr_log.js'
+
+import {
+  scr_util_uidflat
+} from './scr_util.js'
 
 const setextn = (filename, extn) => path.join(
   path.dirname(filename),
@@ -15,7 +17,7 @@ const setextn = (filename, extn) => path.join(
 
 const setbasename = (filepath, uid) => path.join(
   path.dirname(filepath),
-  scrounge_uid.sanitised(uid) + path.extname(filepath))
+  scr_util_uidflat(uid) + path.extname(filepath))
 
 const setpublicpath = (opts, filepath) => {
   // if publicpath not found in filepath, returns null
@@ -81,7 +83,7 @@ const writesilent = async (opts, filepath, content) => (
   fs.writeFile(path.resolve(filepath), content))
 
 const write = async (opts, filepath, content, isfilesize = false) => (
-  scrounge_log.write(opts, filepath, isfilesize && Buffer.byteLength(content)),
+  scr_logwrite(opts, filepath, isfilesize && Buffer.byteLength(content)),
   writesilent(opts, filepath, content))
 
 const copy = async (opts, filepathin, filepathout) => (

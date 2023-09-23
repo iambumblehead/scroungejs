@@ -1,7 +1,3 @@
-// Filename: scrounge_watch.js
-// Timestamp: 2018.04.04-00:07:24 (last modified)
-// Author(s): bumblehead <chris@bumblehead.com>
-
 import chokidar from 'chokidar'
 
 export default (globs, opts = {}, fn) => {

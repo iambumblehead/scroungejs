@@ -1,11 +1,11 @@
-// Filename: scrounge_opts.js
-// Timestamp: 2018.04.09-22:12:19 (last modified)
-// Author(s): bumblehead <chris@bumblehead.com>
-
 import url from 'url'
 import path from 'path'
 import castas from 'castas'
-import scrounge_file from './scrounge_file.js'
+import scr_file from './scr_file.js'
+
+import {
+  scr_err_basepageinnotfound
+} from './scr_err.js'
 
 const getassuffixed = pathval => {
   let extn = path.extname(pathval),
@@ -48,7 +48,7 @@ const getfinalextn = (opts, filename, fileextn, extn = null) => {
 }
 
 const setfinalextn = (opts, filename) => (
-  scrounge_file.setextn(filename, getfinalextn(opts, filename)))
+  scr_file.setextn(filename, getfinalextn(opts, filename)))
 
 const relPathAsFileUrl = (metaurl, p) => (
   (!p || /^(file:\/\/|\/)/.test(p))
@@ -58,7 +58,7 @@ const relPathAsFileUrl = (metaurl, p) => (
 const relPathAsFileUrlFn = metaurl => p => (
   relPathAsFileUrl(metaurl, p))
 
-const scrounge_opts = opt => {
+const scr_opts = opt => {
   const finopt = {}
   const stackpathre = /^.*(\(|at )(.*):[\d]*:[\d]*.*$/
   const metaurl = opt.metaurl || (path.dirname(
@@ -73,6 +73,10 @@ const scrounge_opts = opt => {
   finopt.outputpath = asFileUrl(castas.str(opt.outputpath, './www'))
   finopt.publicpath = asFileUrl(castas.str(opt.publicpath, './'))
 
+  // hooktransform(src, node, type, path, opts)
+  finopt.hooktransform = opt.hooktransform || (src => src)
+  
+
   // deploytype is 'script' or 'module'.
   //
   // If 'module' is used, ES6-style modules are deployed in 'module' format
@@ -86,6 +90,7 @@ const scrounge_opts = opt => {
   finopt.tplextnarr = [ '.mustache' ]
   finopt.cssextnarr = [ '.css' ]
   finopt.jsextnarr = [ '.js', '.mjs', '.ts', '.tsx' ]
+  finopt.jsextnre = /(js|mjs|ts|tsx)$/
 
   finopt.tsconfig = opt.tsconfig || {}
   finopt.typearr = castas.arr(opt.typearr, [])
@@ -100,14 +105,6 @@ const scrounge_opts = opt => {
   // ]
   //
   finopt.skipdeparr = castas.arr(opt.skipdeparr, []) // depgraph
-
-  // disable scroungejs' adaptation of files w/ matching filename.
-  //
-  // skipdeparr: [
-  //   '/three.js'
-  // ]
-  //
-  finopt.skippatharr = castas.arr(opt.skippatharr, []) // scrounge
 
   // change the appearance of the tree
   //
@@ -175,17 +172,17 @@ const scrounge_opts = opt => {
   if (finopt.basepagein) {
     finopt.basepagein = asFileUrl(finopt.basepagein)
 
-    if (scrounge_file.isexist(getassuffixed(finopt.basepage, 'tpl')))
+    if (scr_file.isexist(getassuffixed(finopt.basepage, 'tpl')))
       finopt.basepagein = getassuffixed(finopt.basepage, 'tpl')
 
-    if (!scrounge_file.isexist(finopt.basepagein))
-      throw new Error(`basepagein, file not found ${finopt.basepagein}`)
+    if (!scr_file.isexist(finopt.basepagein))
+      throw scr_err_basepageinnotfound(finopt.basepagein)
   }
 
   return finopt
 }
 
-export default Object.assign(scrounge_opts, {
+export default Object.assign(scr_opts, {
   setfinalextn,
   issamesupportedtype
 })
