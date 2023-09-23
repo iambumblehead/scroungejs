@@ -4,16 +4,16 @@ import scr_file from './scr_file.js'
 
 // each scrounge element may define _array_ of rootname
 // removes duplicates. flattens array. unoptimised.
-const getcontentrootnamearr = content => (
+const scr_basepage_getcontentrootnamearr = content => (
   scr_elem.getelemarr(content)
     .reduce((prev, cur) => prev.concat(scr_elem.getrootarr(cur)), [])
     .sort()
     .filter((val, i, arr) => arr.slice(i + 1).indexOf(val) === -1))
 
-const getrootnamearr = async (opts, filepath) => {
+const scr_basepage_getrootnamearr = async (opts, filepath) => {
   const content = await scr_file.read(opts, filepath)
 
-  return getcontentrootnamearr(content)
+  return scr_basepage_getcontentrootnamearr(content)
 }
 
 // updates a single element in the content, usually a timestamp.
@@ -26,7 +26,7 @@ const getrootnamearr = async (opts, filepath) => {
 // becomes this
 //     <script src="./cjsnode.js?ts=45678" type="text/javascript"></script>
 //
-const writecontentelemone = (opts, content, node) => {
+const scr_basepage_writecontentelemone = (opts, content, node) => {
   const scriptpath = scr_file
     .setpublicoutputpath(opts, node.get('filepath'), node.get('uid'))
   const scriptsre = new RegExp(
@@ -37,14 +37,14 @@ const writecontentelemone = (opts, content, node) => {
 }
 
 // read basepage and udpdate single elem timestampe only
-const writeelemone = async (opts, filepath, node) => {
+const scr_basepage_writeelemone = async (opts, filepath, node) => {
   const contentstr = await scr_file.read(opts, filepath)
-  const content = writecontentelemone(opts, contentstr, node)
+  const content = scr_basepage_writecontentelemone(opts, contentstr, node)
 
   return scr_file.write(opts, filepath, content)
 }
 
-const writeelemarr = async (opts, filepath, elemarr, nodearrobj) => {
+const scr_basepage_writeelemarr = async (opts, filepath, elemarr, nodearr) => {
   const contentsrc = await scr_file.read(opts, filepath)
 
   const content = scr_elem.getelemarr(contentsrc).reduce((accum, elem) => {
@@ -53,10 +53,10 @@ const writeelemarr = async (opts, filepath, elemarr, nodearrobj) => {
     return accum.replace(elem, scr_elem.getpopulated(
       elem, scr_elem.getrootarr(elem).filter(root => (
         // only operate on rootnames with an associated nodearr
-        nodearrobj[root] && nodearrobj[root].length
+        nodearr[root] && nodearr[root].length
       )).map(root => (
         // each node in the array returns ordered listing of elements
-        scr_node.arrgetincludetagarr(opts, nodearrobj[root], root)
+        scr_node.arrgetincludetagarr(opts, nodearr[root], root)
           .map(elem => indent + elem).join('\n')
       )).join('\n')
     ))
@@ -69,10 +69,10 @@ const writeelemarr = async (opts, filepath, elemarr, nodearrobj) => {
   return scr_file.write(opts, filepath, contentfin)
 }
 
-export default {
-  getcontentrootnamearr,
-  getrootnamearr,
-  writecontentelemone,
-  writeelemone,
-  writeelemarr
+export {
+  scr_basepage_getcontentrootnamearr,
+  scr_basepage_getrootnamearr,
+  scr_basepage_writecontentelemone,
+  scr_basepage_writeelemone,
+  scr_basepage_writeelemarr
 }

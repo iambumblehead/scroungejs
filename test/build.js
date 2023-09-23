@@ -21,7 +21,7 @@ const port = 3456
 const app = express()
 
 ;(async () => {
-  await scroungejs.build({
+  await scroungejs({
     inputpath: './src',
     outputpath: './out',
     publicpath: './out/',

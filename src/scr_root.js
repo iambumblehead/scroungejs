@@ -5,7 +5,6 @@ import scr_file from './scr_file.js'
 import scr_opts from './scr_opts.js'
 import scr_node from './scr_node.js'
 import scr_adapt from './scr_adapt.js'
-import scr_prepend from './scr_prepend.js'
 
 import {
   scr_logrootfilenotfound,
@@ -76,14 +75,17 @@ const getasdeparr = async (opts, rootname) => {
 // returns a map object { treename : dependencyarr }
 //
 const getrootarrasdeparr = async (opts, rootarr) => {
-  let graphnamearr = getnamearrastype(opts, rootarr, '.js')
+  const graphnamearr = getnamearrastype(opts, rootarr, '.js')
+  const prependspecarr = opts.prependarr
 
   return (async function nextgraph (graphnamearr, x, graphsobj) {
     if (!x--) return graphsobj
 
     const deparr = await getasdeparr(opts, graphnamearr[x])
-    const prenodearr = await scr_prepend
-      .getprenodearr(opts, graphnamearr[x])
+    const prependspec = prependspecarr.find(o => o.treename === graphnamearr[x])
+    const prenodearr = prependspec
+      ? await depgraph.node.get_arrfromfilepathrel(prependspec.sourcearr, opts)
+      : null
 
     graphsobj[graphnamearr[x]] = prenodearr
       ? deparr.concat(prenodearr)

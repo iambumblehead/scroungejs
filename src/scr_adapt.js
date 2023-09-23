@@ -36,7 +36,7 @@ const scr_adaptjs = async (opts, node, srcstr) => {
     : outstr
 
   // build import and require replacement mappings
-  let replace = node.get('outarr').reduce((prev, cur) => {
+  const replace = node.get('outarr').reduce((prev, cur) => {
     const refname = cur.get('refname')
     const depname = scr_util_uidflat(cur.get('uid'))
 
@@ -45,23 +45,20 @@ const scr_adaptjs = async (opts, node, srcstr) => {
     // aliasarr scenario needs tests
     opts.aliasarr.map(([ matchname, newname ]) => (
       newname === refname && (
-        prev.require[matchname] = depname,
-        prev.import[matchname] = `/${depname}.js`)))
+        prev[1][matchname] = depname,
+        prev[0][matchname] = `/${depname}.js`)))
 
-    prev.require[refname] = depname
-    prev.import[refname] = `./${depname}.js`
+    prev[1][refname] = depname
+    prev[0][refname] = `./${depname}.js`
 
     return prev
-  }, {
-    require: {},
-    import: {}
-  })
+  }, [ {}, {} ])
 
   if (iscjs && !/export default/g.test(str))
-    str = replacerequires(str, replace.require)
+    str = replacerequires(str, replace[1])
 
   if (isesm)
-    str = replaceimports(str, replace.import)
+    str = replaceimports(str, replace[0])
 
   // found in some sources, such as inferno. discussion,
   //   https://github.com/rollup/rollup/issues/208
