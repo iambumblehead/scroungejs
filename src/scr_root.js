@@ -134,14 +134,13 @@ const write = async (opts, rootname, graphobj) => new Promise((resolve, error) =
         let filepath = scr_node.getoutputpathreal(opts, node, rootname),
             rootextn = path.extname(rootname),
             fileextn =
-            opts.jsextnarr.find(extn => extn === rootextn) ||
-            opts.cssextnarr.find(extn => extn === rootextn) ||
-            rootextn
+              opts.jsextnarr.find(extn => extn === rootextn) ||
+              opts.cssextnarr.find(extn => extn === rootextn) ||
+              rootextn
 
         filepath = scr_file.setextn(filepath, fileextn)
 
         if (fileextn === '.js' && opts.issourcemap) {
-
           const [ , map ] = await scr_adapt.js({
             ...opts,
             sourcemap: true,
@@ -152,22 +151,15 @@ const write = async (opts, rootname, graphobj) => new Promise((resolve, error) =
 
           await scr_file.write(opts, `${filepath}.map`, JSON.stringify(map, null, '  '))
           content = `//# sourceMappingURL=${path.basename(filepath)}.map\n${content}`
-          const res = await scr_file.write(opts, filepath, content, true)
-
-          return res
-        } else {
-          const res = await scr_file.write(opts, filepath, content, true)
-
-          return res
         }
+
+        return scr_file.write(opts, filepath, content, true)
       }
 
   if (opts.isconcat) {
     (async function nextdep (dep, x, contentarr) {
       if (!x--) {
-        const res = await nodewrite(opts, dep[0], rootname, contentarr.join('\n'))
-
-        resolve(res)
+        resolve(await nodewrite(opts, dep[0], rootname, contentarr.join('\n')))
       }
 
       let adaptopts = {
