@@ -13,7 +13,7 @@ An obscure build tool starting as an emacs elisp script in 2009. Scroungejs was 
 
 A test configuration is found in spec/. Below is a config with common options. [All options][7] are optional and if you're unsure about an option, you likely don't need it.
 ```javascript
-scroungejs({
+await scroungejs({
   version : process.env.npm_package_version,
   inputpath : './src/',
   outputpath : './build/',
@@ -42,8 +42,6 @@ scroungejs({
     'app.js',
     'app.css'
   ]
-}, (err, res) => {
-  console.log(err || 'finished');
 });
 ```
 
@@ -111,7 +109,7 @@ It creates and updates a resulting index.html,
 </html>
 ```
 
-If you update a file and concatenate is false, you'll see this,
+When `iswatch` is true and concatenate is `false`, updating a file shows this,
 ```bash
 [...] update: scroungejs-1.3.6:~/test/src/lib/library.js
 [...] write: ./index.html

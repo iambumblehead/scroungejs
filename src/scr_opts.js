@@ -4,51 +4,18 @@ import castas from 'castas'
 import scr_file from './scr_file.js'
 
 import {
+  scr_enum_treetypeNONE,
+  scr_enum_treetypeSMALL,
+  scr_enum_treetypeFULL
+} from './scr_enum.js'
+
+import {
   scr_err_basepageinnotfound
 } from './scr_err.js'
 
-const getassuffixed = pathval => {
-  let extn = path.extname(pathval),
-      base = path.basename(pathval, extn),
-      dir = path.dirname(pathval) + path.sep
-
-  return path.join(dir, `${base}.tpl${extn}`)
-}
-
-const filenamesupportedcss = (opts, filename, fileextn) => (
-  fileextn = path.extname(filename),  
-  opts.cssextnarr.find(extn => extn === fileextn))
-
-const filenamesupportedjs = (opts, filename, fileextn) => (
-  fileextn = path.extname(filename),
-  opts.jsextnarr.find(extn => extn === fileextn))
-
-const isfilenamesupportedtype = (opts, filename, fileextn) => (
-  fileextn = path.extname(filename),
-  filenamesupportedjs(opts, filename, fileextn) ||
-    filenamesupportedcss(opts, filename, fileextn))
-
-const issamesupportedtype = (opts, filenamea, filenameb) => {
-  const supportedextna = isfilenamesupportedtype(opts, filenamea)
-  const supportedextnb = isfilenamesupportedtype(opts, filenameb)
-
-  return supportedextna === supportedextnb
-}
-
-const getfinalextn = (opts, filename, fileextn, extn = null) => {
-  fileextn = path.extname(filename)  
-
-  if (filenamesupportedjs(opts, filename, fileextn)) {
-    extn = '.js'
-  } else if (filenamesupportedcss(opts, filename, fileextn)) {
-    extn = '.css'
-  }
-
-  return extn
-}
-
-const setfinalextn = (opts, filename) => (
-  scr_file.setextn(filename, getfinalextn(opts, filename)))
+import {
+  scr_name_with_suffix_extn
+} from './scr_name.js'
 
 const relPathAsFileUrl = (metaurl, p) => (
   (!p || /^(file:\/\/|\/)/.test(p))
@@ -58,7 +25,7 @@ const relPathAsFileUrl = (metaurl, p) => (
 const relPathAsFileUrlFn = metaurl => p => (
   relPathAsFileUrl(metaurl, p))
 
-const scr_opts = opt => {
+export default opt => {
   const finopt = {}
   const stackpathre = /^.*(\(|at )(.*):[\d]*:[\d]*.*$/
   const metaurl = opt.metaurl || (path.dirname(
@@ -109,10 +76,11 @@ const scr_opts = opt => {
   // change the appearance of the tree
   //
   finopt.treetype = [
-    'full', // list each leaf one time only
-    'small', // list full tree, same leaf may appear multipl times
-    'none' //  do not render tree (use for unit-testing)
-  ].find(t => t === String(opt.treetype).toLowerCase()) || 'small'
+    scr_enum_treetypeNONE,
+    scr_enum_treetypeSMALL,
+    scr_enum_treetypeFULL
+  ].find(t => t === String(opt.treetype).toLowerCase())
+    || scr_enum_treetypeSMALL
 
   finopt.embedarr = castas.arr(opt.embedarr, [])
   finopt.globalarr = castas.arr(opt.globalarr, [])
@@ -172,8 +140,8 @@ const scr_opts = opt => {
   if (finopt.basepagein) {
     finopt.basepagein = asFileUrl(finopt.basepagein)
 
-    if (scr_file.isexist(getassuffixed(finopt.basepage, 'tpl')))
-      finopt.basepagein = getassuffixed(finopt.basepage, 'tpl')
+    if (scr_file.isexist(scr_name_with_suffix_extn(finopt.basepage, 'tpl')))
+      finopt.basepagein = scr_name_with_suffix_extn(finopt.basepage, 'tpl')
 
     if (!scr_file.isexist(finopt.basepagein))
       throw scr_err_basepageinnotfound(finopt.basepagein)
@@ -181,8 +149,3 @@ const scr_opts = opt => {
 
   return finopt
 }
-
-export default Object.assign(scr_opts, {
-  setfinalextn,
-  issamesupportedtype
-})

@@ -35,10 +35,14 @@ const scr_logrootjoinplainfile = (opts, root, type, filename, inum, lnum) => (
 const scr_logrootjoinminfile = (opts, root, type, filename, inum, lnum) => (
   scr_logrootjoin(opts, root, type, filename, inum, lnum, 'ugly'))
 
-const scr_logrootjoinfile = (opts, root, type, filename, inum, lnum, j) => (
+const scr_logrootjoinfile = (opts, rootname, filename, inum, lnum, j) => {
+  const type = path.extname(rootname)
+  const root = rootname.slice(0, -type.length) + type
+
   opts.iscompress
     ? scr_logrootjoinminfile(opts, root, type, filename, inum, lnum, j)
-    : scr_logrootjoinplainfile(opts, root, type, filename, inum, lnum, j))
+    : scr_logrootjoinplainfile(opts, root, type, filename, inum, lnum, j)
+}
 
 const scr_logunsupportedtype = (opts, type, filename) => (
   scr_log(opts, '[...] unsupported type: :type, :filename'

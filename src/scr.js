@@ -1,12 +1,27 @@
 import simpletime from 'simpletime'
 
-
 import scr_watch from './scr_watch.js'
 import scr_cache from './scr_cache.js'
-import scr_root from './scr_root.js'
 import scr_node from './scr_node.js'
 import scr_file from './scr_file.js'
 import scr_opts from './scr_opts.js'
+
+import {
+  scr_enum_extn_grouptypeJS,
+  scr_enum_extn_grouptypeCSS
+} from './scr_enum.js'
+
+import {
+  scr_name_is_extn,
+  scr_name_with_extn
+} from './scr_name.js'
+
+import {
+  scr_root_write,
+  scr_root_writearr,
+  scr_root_rootsobj,
+  scr_root_node_create
+} from './scr_root.js'
 
 import {
   scr_basepage_writeelemarr,
@@ -21,7 +36,7 @@ import {
 } from './scr_log.js'
 
 const writeroots = async (opts, rootarr, rootobj) => (
-  scr_root.writearr(opts, rootarr, rootobj))
+  scr_root_writearr(opts, rootarr, rootobj))
 
 // tpl files aren't processed in the way scripts and stylesheets are
 // tpl deparr, adjacent to js deparr, is created any nodes are simply copied
@@ -46,7 +61,7 @@ const copyroottpl = async (opts, rootobj) => {
   let rootname = scr_file.setextn(jsrootarr[0], opts.tplextnarr[0])
   rootobj[rootname] = deparr
 
-  await scr_root.write(custopts, rootname, rootobj)
+  await scr_root_write(custopts, rootname, rootobj)
 
   return true
 }
@@ -55,7 +70,7 @@ const copyroottpl = async (opts, rootobj) => {
 //
 // existance of template and stylesheet files is checked here
 const buildrootobj = async (opts, rootarr) => (
-  scr_root.getrootarrasobj(opts, rootarr))
+  scr_root_rootsobj(opts, rootarr))
 
 // if baseage does not exist, skip read/write with no failure
 const writebasepage = async (opts, rootarr, rootobj) => {
@@ -83,23 +98,35 @@ const readbasepage = async opts => {
   return pagetreearr || opts.treearr
 }
 
-const updatedestfile = async (opts, srcfilename) => {
-  opts = scr_opts(opts)
+const scr_filepath_get_grouptype = (opts, filepath) => (
+  [].concat(
+    [ opts.jsextnarr, scr_enum_extn_grouptypeJS ],
+    [ opts.cssextnarr, scr_enum_extn_grouptypeCSS ]
+  ).find(([ extns ]) => (
+    extns.some(extn => scr_name_is_extn(filepath, extn)))) || [])[1]
 
-  if (opts.isconcat
-      || !scr_opts.isfilenamesupportedtype(opts, srcfilename))
-    return null
+const updatedestfile = async (optsuser, srcfilename) => {
+  const opts = scr_opts(optsuser)
+  const supportedextnsfound = []
+    .concat(opts.cssextnarr, opts.jsextnarr)
+    .filter(extn => scr_name_is_extn(srcfilename, extn))
   
+  if (opts.isconcat || supportedextnsfound.length === 0)
+    return null
+
   const rootsarr = await readbasepage(opts)
 
   srcfilename = scr_file.rminputpath(opts, srcfilename)
 
-  const node = await scr_root.getfilenameasnode(opts, srcfilename)
+  const node = await scr_root_node_create(opts, srcfilename)
 
   scr_logupdatenode(opts, node.get('uid'))
-  const nodefilepath = scr_opts.setfinalextn(opts, node.get('filepath'))
+
+  const nodefilepath = node.get('filepath')
+  const groupTypeExtn = scr_filepath_get_grouptype(opts, nodefilepath)
+  const nodegrouppath = scr_name_with_extn(nodefilepath, groupTypeExtn)
   const rootsarrfiltered = rootsarr.filter(root => (
-    scr_opts.issamesupportedtype(opts, nodefilepath, root)))
+    nodegrouppath === scr_filepath_get_grouptype(opts, root)))
   const rootnodescached = await scr_cache
     .recoverrootarrcachemapnode(opts, rootsarrfiltered, node)
 
