@@ -5,13 +5,13 @@
 import ctrla from './ctrla.js'
 import ctrlb from './ctrlb.js'
 
-var ctrlsall = {
-  ctrla : ctrla,
-  ctrlb : ctrlb
+const ctrlsall = {
+  ctrla: ctrla,
+  ctrlb: ctrlb
 }
 
 export default {
-  start : function () {
+  start: function () {
     ctrlsall.ctrla.start()
     ctrlsall.ctrlb.start()    
   }

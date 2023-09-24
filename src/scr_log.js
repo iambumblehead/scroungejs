@@ -72,5 +72,5 @@ export {
   scr_logrootjoinfile,
   scr_logunsupportedtype,
   scr_logrootfilenotfound,
-  scr_logwrite,
+  scr_logwrite
 }

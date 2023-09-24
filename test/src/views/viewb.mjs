@@ -4,12 +4,12 @@
 
 import ctrlsall from '../controls/ctrlsall.js'
 
-let viewb = {
+const viewb = {
   ctrlsall
-};
+}
 
 export default {
-  start : () => {
-    viewb.ctrlsall.start();
+  start: () => {
+    viewb.ctrlsall.start()
   }
-};
+}

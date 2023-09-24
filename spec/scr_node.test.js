@@ -40,7 +40,7 @@ test('should return public output path', () => {
   ), 'rootname.css'), 'package_100_the_nodefile.css')
 })
 
-test('should return root-uid-generated public output path, when isconcat', () => {
+test('return root-uid-generated public output path, when isconcat', () => {
   assert.strictEqual(scr_node.getoutputpathpublic(scr_opts({
     metaurl: import.meta.url,
     outputpath: '',

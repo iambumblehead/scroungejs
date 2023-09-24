@@ -13,7 +13,8 @@ import {
 
 import {
   scr_name_is_extn,
-  scr_name_with_extn
+  scr_name_with_extn,
+  scr_name_list_unique
 } from './scr_name.js'
 
 import {
@@ -42,15 +43,13 @@ const writeroots = async (opts, rootarr, rootobj) => (
 // tpl deparr, adjacent to js deparr, is created any nodes are simply copied
 // to outputpath
 const copyroottpl = async (opts, rootobj) => {
-  //
-  // by default, this feature switch off
-  //
   if (!opts.istpl)
     return null
 
   const custopts = Object.create(opts)
-  const jsrootarr = scr_root
-    .getnamearrastype(opts, Object.keys(rootobj), '.js')
+  const jsrootarr = scr_name_list_unique(
+    Object.keys(rootobj)
+      .map(name => scr_name_with_extn(name, scr_enum_extn_grouptypeJS)))
 
   custopts.isconcat = false
   custopts.iscompress = false
