@@ -171,7 +171,7 @@ test('should return smart public paths', () => {
 test('should return inputpath-removed path', () => {
   assert.strictEqual(
     scr_file.rminputpath(({
-//      metaurl: import.meta.url,
+      // metaurl: import.meta.url,
       inputpath: './path'
     }), path.resolve('./path/to/file.js'))
     , 'to/file.js')
