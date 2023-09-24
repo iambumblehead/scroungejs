@@ -4,8 +4,8 @@
 
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import scrounge from '../src/scrounge.js'
+import scrounge from '../src/scr.js'
 
-test("should do nothing when called with no parameters", () => {
-  assert.strictEqual(scrounge.build(), undefined)
+test("should do nothing when called with no parameters", async () => {
+  assert.strictEqual(await scrounge(), null)
 })

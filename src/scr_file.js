@@ -21,8 +21,8 @@ const setbasename = (filepath, uid) => path.join(
 
 const setpublicpath = (opts, filepath) => {
   // if publicpath not found in filepath, returns null
-  let publicpath = pathpublic.get(filepath, opts.publicpath)
-
+  const publicpath = pathpublic.get(filepath, opts.publicpath)
+  
   return publicpath && publicpath.startsWith(opts.publicpath)
     ? publicpath
     : setpath(opts.publicpath, path.basename(filepath))

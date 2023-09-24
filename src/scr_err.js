@@ -10,9 +10,13 @@ const scr_err_basepageinnotfound = basepagein => new Error(
 const scr_err_rootnamemusthavejsextn = rootname => new Error(
   `.js file required for deparr root name, ${rootname}`)
 
+const scr_err_rootpathnotfound = rootname => new Error(
+  `root path not found: ${rootname}`)
+
 export {
   scr_err_umdformatnotsupported,
   scr_err_nodetypenotfound,
   scr_err_basepageinnotfound,
-  scr_err_rootnamemusthavejsextn
+  scr_err_rootnamemusthavejsextn,
+  scr_err_rootpathnotfound
 }

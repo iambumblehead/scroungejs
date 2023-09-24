@@ -1,8 +1,3 @@
-// Filename: build.js
-// Timestamp: 2018.04.09-22:14:04 (last modified)
-// Author(s): bumblehead <chris@bumblehead.com>
-
-
 import babel from '@babel/core'
 import babelpresetenv from '@babel/preset-env'
 import Cleancss from 'clean-css'

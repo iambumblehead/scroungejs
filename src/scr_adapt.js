@@ -30,8 +30,8 @@ const scr_adaptjs = async (opts, node, srcstr) => {
 
   if (!iscjs && !isesm)
     return [ outstr, map ]
-  
-  let str = (iscjs && !isesm)
+
+  let str = (iscjs && !isesm && opts.isbrowser)
     ? umd(modname, outstr, { commonJS: true })
     : outstr
 

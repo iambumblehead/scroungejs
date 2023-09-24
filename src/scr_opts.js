@@ -38,10 +38,11 @@ export default opt => {
   finopt.metaurl = metaurl
   finopt.inputpath = asFileUrl(castas.str(opt.inputpath, './'))
   finopt.outputpath = asFileUrl(castas.str(opt.outputpath, './www'))
-  finopt.publicpath = asFileUrl(castas.str(opt.publicpath, './'))
-
+  finopt.publicpath = castas.str(opt.publicpath, './')
+  // console.log('optspublicpath here' + finopt.publicpath)
+  
   // hooktransform(src, node, type, path, opts)
-  finopt.hooktransform = opt.hooktransform || (src => src)
+  finopt.hooktransform = opt.hooktransform || (src => [ src, null ])
   
 
   // deploytype is 'script' or 'module'.
@@ -125,7 +126,7 @@ export default opt => {
   finopt.ises2015 = castas.bool(opt.ises2015, false)
   finopt.istpl = castas.bool(opt.istpl, false)
 
-  finopt.browser = castas.bool(opt.isbrowser, true)
+  finopt.isbrowser = castas.bool(opt.isbrowser, true)
   finopt.iscircular = castas.bool(opt.iscircular, false)
   finopt.istimestamp = castas.bool(opt.istimestamp, true)
 

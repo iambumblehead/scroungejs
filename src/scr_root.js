@@ -18,7 +18,8 @@ import {
 } from './scr_log.js'
 
 import {
-  scr_err_rootnamemusthavejsextn
+  scr_err_rootnamemusthavejsextn,
+  scr_err_rootpathnotfound
 } from './scr_err.js'
 
 import {
@@ -56,10 +57,8 @@ const scr_root_deps_create = async (opts, rootname) => {
     .map(extn => scr_name_with_extn(path.join(opts.inputpath, rootname), extn))
     .find(scr_file.isexist)
 
-  if (!rootpath) {
-    scr_logrootfilenotfound(opts, rootname)
-    return null
-  }
+  if (!rootpath)
+    throw scr_err_rootpathnotfound(rootname)
 
   const graph = await scr_root_graph_create(opts, rootpath)
 
@@ -99,11 +98,9 @@ const scr_roots_deps_create = async (opts, rootarr) => {
   }(graphnamearr, graphnamearr.length, {}))
 }
 
-//
 // obtains the map object created from 'js' roots
 // constructs non-js root definitions derived from js roots
 //
-// const getrootarrasobj = async (opts, rootarr) => {
 const scr_root_rootsobj = async (opts, rootarr) => {
   const jsdeparrobj = await scr_roots_deps_create(opts, rootarr)
 
