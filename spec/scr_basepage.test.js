@@ -11,6 +11,8 @@ import {
   scr_basepage_writecontentelemone
 } from '../src/scr_basepage.js'
 
+import scr_opts from '../src/scr_opts.js'
+
 test('should return rootnames', () => {
   assert.strictEqual(
     scr_basepage_getcontentrootnamearr(`
@@ -51,12 +53,14 @@ test('return new content, with updated node-corresponding element', () => {
   const cjsnode = depgraph
     .node.get('./cjs_root.js', 'console.log("hi")', 'cjsnode')
 
-  assert.strictEqual(scr_basepage_writecontentelemone({
+  assert.strictEqual(scr_basepage_writecontentelemone(scr_opts({
+    metaurl: import.meta.url,
     isconcat: false,
+    isuidfilenames: true,
     publicpath: './public',
     outputpath: 'to/public/dir',
     buildts: 55555
-  }, (/* eslint-disable max-len */
+  }), (/* eslint-disable max-len */
     `<head>
           <!-- <scrounge root="app.css"> -->
           <link href="./public/dir/ojsnode.css?ts=12345" rel="stylesheet" type="text/css">

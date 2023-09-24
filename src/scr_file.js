@@ -50,7 +50,7 @@ const setoutputpathreal = (opts, filepath, uid) => {
 // path.join, but don't lose relative './' if present
 //
 const setpath = (newpath, filepath) => (/^\.\//.test(newpath) ? './' : '') +
-      path.join(newpath, path.basename(filepath))
+  path.join(newpath, path.basename(filepath))
 
 // ({ outputpath: './hey' }, '/path/to/file.js')
 //

@@ -22,7 +22,7 @@ const app = express()
     publicpath: './out/',
     basepagein: './index.tpl.html',
     basepage: './index.html',
-    isuidfilenames: false,
+    isuidfilenames: true,
     iscompress: false,
     isconcat: false,
     treearr: [ 'app.js', 'app.css' ],
