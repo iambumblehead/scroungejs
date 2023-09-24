@@ -39,18 +39,18 @@ const setpublicoutputpath = (opts, filepath, uid) => setpublicpath(
 // 'real' outputpath, because this is the systempath
 // to which the file is saved
 //
-const setoutputpathreal = ({ outputpath, isconcat }, filepath, uid) => {
-  if (!isconcat)
+const setoutputpathreal = (opts, filepath, uid) => {
+  if (!opts.isconcat && opts.isuidfilenames)
     filepath = setbasename(filepath, uid)
 
-  return path.join(outputpath, path.basename(filepath))
+  return path.join(opts.outputpath, path.basename(filepath))
 }
 
 //
 // path.join, but don't lose relative './' if present
 //
 const setpath = (newpath, filepath) => (/^\.\//.test(newpath) ? './' : '') +
-      path.join(newpath, path.basename(filepath))
+  path.join(newpath, path.basename(filepath))
 
 // ({ outputpath: './hey' }, '/path/to/file.js')
 //

@@ -22,6 +22,7 @@ const app = express()
     publicpath: './out/',
     basepagein: './index.tpl.html',
     basepage: './index.html',
+    isuidfilenames: true,
     iscompress: false,
     isconcat: false,
     treearr: [ 'app.js', 'app.css' ],
@@ -31,8 +32,7 @@ const app = express()
       // for ts...
       // let tsconfig = opts.tsconfig || {},
       // jsstr = typescript.transpileModule(str, tsconfig).outputText      
-      
-      if (/m?js/.test(srctype)) {
+      if (/m?js/.test(srctype) && opts.iscompress) {
         const res = await babel.transformAsync(srcstr, {
           compact: opts.iscompress,
           plugins: opts.babelpluginarr || [],
@@ -67,7 +67,7 @@ const app = express()
         ]
       }
 
-      return []
+      return [ srcstr ]
     }
   })
 

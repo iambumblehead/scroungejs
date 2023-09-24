@@ -38,7 +38,9 @@ const scr_adaptjs = async (opts, node, srcstr) => {
   // build import and require replacement mappings
   const replace = node.get('outarr').reduce((prev, cur) => {
     const refname = cur.get('refname')
-    const depname = scr_util_uidflat(cur.get('uid'))
+    const depname = opts.isuidfilenames
+      ? scr_util_uidflat(cur.get('uid'))
+      : path.parse(cur.get('uid')).name
 
     // alias allows build to map customm paths values
     // to the require/import value
