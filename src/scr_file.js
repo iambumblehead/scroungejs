@@ -39,11 +39,11 @@ const setpublicoutputpath = (opts, filepath, uid) => setpublicpath(
 // 'real' outputpath, because this is the systempath
 // to which the file is saved
 //
-const setoutputpathreal = ({ outputpath, isconcat }, filepath, uid) => {
-  if (!isconcat)
+const setoutputpathreal = (opts, filepath, uid) => {
+  if (!opts.isconcat && opts.isuidfilenames)
     filepath = setbasename(filepath, uid)
 
-  return path.join(outputpath, path.basename(filepath))
+  return path.join(opts.outputpath, path.basename(filepath))
 }
 
 //

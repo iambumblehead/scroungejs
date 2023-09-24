@@ -39,7 +39,13 @@ export default opt => {
   finopt.inputpath = asFileUrl(castas.str(opt.inputpath, './'))
   finopt.outputpath = asFileUrl(castas.str(opt.outputpath, './www'))
   finopt.publicpath = castas.str(opt.publicpath, './')
-  // console.log('optspublicpath here' + finopt.publicpath)
+
+  // WARNING:
+  // Disabling causes problems if any filenames are not unique
+  //
+  // A rare situation to use original filenames is for packaging web-extensions
+  // as mozilla do not allow build tools and output files must look hand-made.
+  finopt.isuidfilenames = castas.bool(opt.isuidfilenames, true)
   
   // hooktransform(src, node, type, path, opts)
   finopt.hooktransform = opt.hooktransform || (src => [ src, null ])
