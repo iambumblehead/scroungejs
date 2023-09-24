@@ -1,6 +1,6 @@
 {
   "name": "scroungejs",
-  "version": "1.7.2",
+  "version": "1.8.0",
   "license": "MIT",
   "type": "module",
   "readmeFilename": "README.md",
@@ -13,7 +13,6 @@
   "scripts": {
     "lint": "eslint .",
     "test": "node --test ./spec",
-    "start": "cd test && node ./test/build.js",
     "start": "node ./test/build.js"
   },
   "files": [
@@ -21,7 +20,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/iambumblehead/scroungejs.git"
+    "url": "git+https://github.com/iambumblehead/scroungejs.git"
   },
   "keywords": [
     "awesome",
