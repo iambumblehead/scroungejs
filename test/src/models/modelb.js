@@ -3,7 +3,7 @@
 // Author(s): Bumblehead (www.bumblehead.com)  
 
 export default {
-  start : function () {
+  start: function () {
     console.log('modelb start')
   }
 }

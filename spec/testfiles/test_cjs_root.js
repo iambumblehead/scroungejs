@@ -5,5 +5,5 @@
 const depa = require('./test_cjs_root_depa')
 
 module.exports = {
-  start : () => depa.start()
+  start: () => depa.start()
 }

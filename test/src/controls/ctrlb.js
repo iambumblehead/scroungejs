@@ -5,7 +5,7 @@
 import modelb from '../models/modelb.js'
 
 export default {
-  start : function () {
+  start: function () {
     modelb.start()
   }
 }

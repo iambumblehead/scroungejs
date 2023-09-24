@@ -11,8 +11,6 @@ let viewsall = {
   //viewb : require('./viewb').default
 }
 
-console.log('viewb', viewsall.viewb)
-
 const hello = () => 'hello'
 const start = () => {
   viewsall.viewa.start()

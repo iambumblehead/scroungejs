@@ -9,7 +9,7 @@ var viewa = {
 }
 
 export default {
-  start : function () {
+  start: function () {
     viewa.ctrlsall.start()
   }
 }

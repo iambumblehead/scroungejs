@@ -5,7 +5,7 @@
 import modela from '../models/modela.js'
 
 export default {
-  start : function () {
+  start: function () {
     modela.start()
   }
 }

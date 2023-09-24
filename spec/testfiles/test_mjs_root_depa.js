@@ -3,5 +3,5 @@
 // Author(s): bumblehead <chris@bumblehead.com>
 
 export default {
-  start : () => console.log('start')
+  start: () => console.log('start')
 }
