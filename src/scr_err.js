@@ -1,5 +1,5 @@
-const scr_err_umdformatnotsupported = () => new Error(
-  '[!!!] umd format no-longer supported')
+const scr_err_umdformatnotsupported = filepath => new Error(
+  `[!!!] umd format no-longer supported: ${filepath}`)
 
 const scr_err_nodetypenotfound = type => new Error(
   `type not found ${type}`)
