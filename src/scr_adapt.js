@@ -26,7 +26,7 @@ const scr_adaptjs = async (opts, node, srcstr) => {
   const isesm = moduletype.esm(outstr)
 
   if (moduletype.umd(outstr))
-    throw scr_err_umdformatnotsupported()
+    throw scr_err_umdformatnotsupported(filepath)
 
   if (!iscjs && !isesm)
     return [ outstr, map ]
