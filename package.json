@@ -1,6 +1,6 @@
 {
   "name": "scroungejs",
-  "version": "1.8.4",
+  "version": "1.8.5",
   "license": "MIT",
   "type": "module",
   "readmeFilename": "README.md",
@@ -44,7 +44,7 @@
     "moduletype": "^0.0.8",
     "simpletime": "^0.3.1",
     "pathpublic": "^0.0.8",
-    "depgraph": "^0.5.4",
+    "depgraph": "^0.5.6",
     "umd": "^3.0.3"
   },
   "devDependencies": {

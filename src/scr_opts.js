@@ -36,6 +36,10 @@ export default opt => {
   // all options optional
   opt = opt || {}
   finopt.metaurl = metaurl
+
+  // pass priority options down to depgraph
+  // ex, opt.priority = ['browser', 'import', ':spectype', 'default']
+  finopt.priority = opt.priority
   finopt.inputpath = asFileUrl(castas.str(opt.inputpath, './'))
   finopt.outputpath = asFileUrl(castas.str(opt.outputpath, './www'))
   finopt.publicpath = castas.str(opt.publicpath, './')
