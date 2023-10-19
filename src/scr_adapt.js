@@ -14,6 +14,15 @@ import {
 const NODE_ENVre = /process\.env\.NODE_ENV/g
 const NODE_ENVstr = `'${process.env.NODE_ENV}'`
 
+const buildImportReplaceRe = key => (
+  key = key.replace('/', '\\/').replace('.', '\\.'),
+  // '$' dollar sign used in immutable.js import variable name :(
+  // '/' comment slash used in comments inside import expression
+  new RegExp(
+    '(import|export)' + // dollar sign used in immutable.js
+      `(?:[\\s.*]([\\w*{}\n\r\t, /$]+)[\\s*]from)?[\\s*](?:(["']${key}["']))`,
+    'gm'))
+
 const scr_adaptjs = async (opts, node, srcstr) => {
   const filepath = node.get('filepath')
   const nodeuid = node.get('uid')
@@ -61,13 +70,10 @@ const scr_adaptjs = async (opts, node, srcstr) => {
   if (isesm) {
     // replace import and export filepaths
     str = Object.keys(replace[0]).reduce((str, key) => {
-      const keyEsc = key.replace('/', '\\/').replace('.', '\\.')
-      const re = new RegExp(
-        `((import|export)(?!(from)).*from[ ]*['"])(${keyEsc})(['"])`, 'g')
+      const re = buildImportReplaceRe(key)
 
-      return str.replace(re, (match, g1, g2, g3, g4, g5) => {
-        return g1 + replace[0][key] + g5
-      })
+      return str.replace(re, (match, g1, g2, g4) => (
+        match.replace(g4, `'${replace[0][key]}'`)))
     }, str)
   }
 
