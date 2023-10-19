@@ -2,7 +2,6 @@ import umd from 'umd'
 import path from 'path'
 import moduletype from 'moduletype'
 import replacerequires from 'replace-requires'
-import replaceimports from 'replace-imports'
 
 import {
   scr_util_uidflat
@@ -59,8 +58,18 @@ const scr_adaptjs = async (opts, node, srcstr) => {
   if (iscjs && !/export default/g.test(str))
     str = replacerequires(str, replace[1])
 
-  if (isesm)
-    str = replaceimports(str, replace[0])
+  if (isesm) {
+    // replace import and export filepaths
+    str = Object.keys(replace[0]).reduce((str, key) => {
+      const keyEsc = key.replace('/', '\\/').replace('.', '\\.')
+      const re = new RegExp(
+        `((import|export)(?!(from)).*from[ ]*['"])(${keyEsc})(['"])`, 'g')
+
+      return str.replace(re, (match, g1, g2, g3, g4, g5) => {
+        return g1 + replace[0][key] + g5
+      })
+    }, str)
+  }
 
   // found in some sources, such as inferno. discussion,
   //   https://github.com/rollup/rollup/issues/208

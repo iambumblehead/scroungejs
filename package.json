@@ -1,6 +1,6 @@
 {
   "name": "scroungejs",
-  "version": "1.8.5",
+  "version": "1.8.6",
   "license": "MIT",
   "type": "module",
   "readmeFilename": "README.md",
@@ -40,7 +40,6 @@
     "castas": "^1.2.1",
     "archy": "^1.0.0",
     "replace-requires": "^1.1.0",
-    "replace-imports": "^0.0.3",
     "moduletype": "^0.0.8",
     "simpletime": "^0.3.1",
     "pathpublic": "^0.0.8",
