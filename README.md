@@ -5,13 +5,13 @@
 
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/main/img/hand3.png)
 
-[![npm version](https://badge.fury.io/js/scroungejs.svg)](https://badge.fury.io/js/scroungejs) [![Build Status](https://github.com/iambumblehead/scroungejs/workflows/test/badge.svg)][6]
+[![npm version](https://badge.fury.io/js/scroungejs.svg)](https://badge.fury.io/js/scroungejs) [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)][8] [![Build Status](https://github.com/iambumblehead/scroungejs/workflows/test/badge.svg)][6]
 
 An obscure build tool starting as an emacs elisp script in 2009. Scroungejs was used by [foxsports.com](https://espn.com) and [ties.com](http://ties.com).
 
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/main/img/hand10.png)
 
-A test configuration is found in spec/. Below is a config with common options. [All options][7] are optional and if you're unsure about an option, you likely don't need it.
+A test configuration is found in `spec/`. Below is a config with common options. [All options][7] are optional and if you're unsure about an option, you likely don't need it.
 ```javascript
 await scroungejs({
   version : process.env.npm_package_version,
@@ -46,7 +46,7 @@ await scroungejs({
 ```
 
 
-The example in test/ console-prints something like this when it runs,
+The example in `test/` console-prints something like this when it runs,
 ```bash
 [...] start: Tue Apr 03 2018 23:12:23 GMT-0700 (PDT)
 [...] root: app.js
@@ -122,6 +122,8 @@ When `iswatch` is true and concatenate is `false`, updating a file shows this,
 [4]: https://github.com/ForbesLindesay/umd                                "umd"
 [6]: https://github.com/iambumblehead/scroungejs                   "scroungejs"
 [7]: https://github.com/iambumblehead/scroungejs/blob/main/src/scr_opts.js  "scrounge_opts.js"
+
+[8]: https://www.gnu.org/licenses/gpl-3.0
 
 
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/main/img/hand.png) 
