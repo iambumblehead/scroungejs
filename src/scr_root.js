@@ -136,7 +136,7 @@ const scr_root_depswrite = async (deps, x, opts, rootname) => {
 //    }(deparr, deparr.length))
 
 const scr_root_depswriteroots = async (deps, x, opts, rootname, roots = []) => {
-  if (!x--) scr_root_nodewrite(opts, deps[0], rootname, roots.join('\n'))
+  if (!x--) return scr_root_nodewrite(opts, deps[0], rootname, roots.join('\n'))
 
   const adaptopts = {
     ...opts,
