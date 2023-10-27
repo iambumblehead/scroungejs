@@ -136,17 +136,14 @@ const scr_root_depswrite = async (deps, x, opts, rootname) => {
 //    }(deparr, deparr.length))
 
 const scr_root_depswriteroots = async (deps, x, opts, rootname, roots = []) => {
-  if (!x--) {
-    return scr_root_nodewrite(opts, deps[0], rootname, roots.join('\n'))
-  }
+  if (!x--) return scr_root_nodewrite(opts, deps[0], rootname, roots.join('\n'))
 
-  const adaptopts = {
+a  const adaptopts = {
     ...opts,
     issourcemap: false,
     iscompress: opts.issourcemap === false && opts.iscompress
   }
 
-  console.log('adapting', deps.length, x, deps[x])
   roots.push((await scr_adapt(adaptopts, deps[x]))[0])
 
   scr_logrootjoinfile(
