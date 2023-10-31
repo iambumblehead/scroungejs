@@ -1,10 +1,14 @@
 import simpletime from 'simpletime'
 
-import scr_watch from './scr_watch.js'
 import scr_cache from './scr_cache.js'
 import scr_node from './scr_node.js'
 import scr_file from './scr_file.js'
 import scr_opts from './scr_opts.js'
+
+import {
+  scr_watchers,
+  scr_watchersclose
+} from './scr_watch.js'
 
 import {
   scr_enum_extn_grouptypeJS,
@@ -138,8 +142,10 @@ const updatedestfile = async (optsuser, srcfilename) => {
   return true
 }
 
-const watch = opts => (
-  scr_watch(opts.inputpath, {}, async path => updatedestfile(opts, path)))
+const watchers = opts => (
+  scr_watchers(opts.inputpath, {}, async path => updatedestfile(opts, path)))
+
+const watchersclose = scr_watchersclose
 
 const build = async (opts = {}) => {
   let datebgn = new Date()
@@ -161,16 +167,20 @@ const build = async (opts = {}) => {
   scr_logfinish(opts, simpletime.getElapsedTimeFormatted(datebgn, new Date()))
 
   if (opts.iswatch)
-    watch(opts)
+    watchers(opts)
 
   return res
 }
 
-build.watch = watch
+Object.assign(build, {
+  watchers,
+  watchersclose
+})
 
 export {
   build as default,
-  watch,
+  watchers,
+  watchersclose,
   writeroots,
   copyroottpl,
   buildrootobj,
