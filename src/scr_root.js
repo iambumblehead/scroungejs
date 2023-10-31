@@ -56,9 +56,8 @@ const scr_root_deps_create = async (opts, rootname) => {
   const rootpath = opts.jsextnarr
     .map(extn => scr_name_with_extn(path.join(opts.inputpath, rootname), extn))
     .find(scr_file.isexist)
-
   if (!rootpath)
-    throw scr_err_rootpathnotfound(rootname)
+    throw scr_err_rootpathnotfound(opts.inputpath, rootname)
 
   const graph = await scr_root_graph_create(opts, rootpath)
 

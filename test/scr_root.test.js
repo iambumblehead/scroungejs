@@ -14,7 +14,8 @@ const __dirname = __filename.replace(/[/\\][^/\\]*?$/, '')
 
 
 test('should return an error if no root file found', async () => {
-  let opts = scr_opts({
+  const inputpathfull = `${__dirname}/src`
+  const opts = scr_opts({
     metaurl: import.meta.url,
     issilent: true,
     inputpath: './src',
@@ -23,7 +24,8 @@ test('should return an error if no root file found', async () => {
   })
   
   await assert.rejects(async () => scr_root_rootsobj(opts, [ 'june.js' ]), {
-    message: 'root path not found: june.js'
+    message: `root path not found: june.js, (inputpath: ${inputpathfull})`
+    // message: `root path not found: june.js, (inputpath: ${inputpathfull})`
   })
 })
 

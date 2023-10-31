@@ -138,6 +138,9 @@ const updatedestfile = async (optsuser, srcfilename) => {
   return true
 }
 
+const watch = opts => (
+  scr_watch(opts.inputpath, {}, async path => updatedestfile(opts, path)))
+
 const build = async (opts = {}) => {
   let datebgn = new Date()
 
@@ -158,16 +161,20 @@ const build = async (opts = {}) => {
   scr_logfinish(opts, simpletime.getElapsedTimeFormatted(datebgn, new Date()))
 
   if (opts.iswatch)
-    scr_watch(opts.inputpath, {}, async path => updatedestfile(opts, path))
+    watch(opts)
 
   return res
 }
 
-export default Object.assign(build, {
+build.watch = watch
+
+export {
+  build as default,
+  watch,
   writeroots,
   copyroottpl,
   buildrootobj,
   writebasepage,
   readbasepage,
   updatedestfile
-})
+}
