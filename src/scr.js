@@ -98,10 +98,9 @@ const readbasepage = async opts => {
 }
 
 const scr_filepath_get_grouptype = (opts, filepath) => (
-  [].concat(
-    [ opts.jsextnarr, scr_enum_extn_grouptypeJS ],
-    [ opts.cssextnarr, scr_enum_extn_grouptypeCSS ]
-  ).find(([ extns ]) => (
+  [ [ scr_enum_extn_grouptypeJS, ...opts.jsextnarr ],
+    [ scr_enum_extn_grouptypeCSS, ...opts.cssextnarr ]
+  ].find(extns => (
     extns.some(extn => scr_name_is_extn(filepath, extn)))) || [])[1]
 
 const updatedestfile = async (optsuser, srcfilename) => {

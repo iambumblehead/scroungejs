@@ -12,8 +12,8 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "test": "node --test ./spec",
-    "start": "node ./test/build.js",
+    "test": "node --test ./test/*test.js",
+    "start": "node ./sample/build.js",
     "prepublishOnly": "npm test"
   },
   "files": [

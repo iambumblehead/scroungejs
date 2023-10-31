@@ -12,7 +12,7 @@
   },
   "ignorePatterns": [
     "test_malformed.js",
-    "test/out"
+    "sample/out"
   ],
   "globals": {
     "Set": true,

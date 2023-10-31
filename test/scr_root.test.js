@@ -30,7 +30,7 @@ test('should return an error if no root file found', async () => {
 test('return an object mapping for ["app.js"]', async () => {
   const opts = scr_opts({
     metaurl: import.meta.url,
-    inputpath: path.join(__dirname, '/../test/src/'),
+    inputpath: path.join(__dirname, '/../sample/src/'),
     treearr: [ 'app.js' ],
     treetype: 'none'
   })
@@ -43,7 +43,7 @@ test('return an object mapping for ["app.js"]', async () => {
 test('return an object mapping for ["app.js", "app.css"]', async () => {
   const opts = scr_opts({
     metaurl: import.meta.url,
-    inputpath: path.join(__dirname, '/../test/src/'),
+    inputpath: path.join(__dirname, '/../sample/src/'),
     treearr: [ 'app.js', 'app.css' ],
     treetype: 'none'
   })
