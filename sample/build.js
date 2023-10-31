@@ -25,6 +25,7 @@ const app = express()
     isuidfilenames: true,
     iscompress: false,
     isconcat: false,
+    iswatch: false,
     treearr: [ 'app.js', 'app.css' ],
     deploytype: 'module',
     
