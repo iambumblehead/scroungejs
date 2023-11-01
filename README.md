@@ -1,7 +1,7 @@
 # scroungejs
 
 > [!WARNING]
-> This application is not suitable for production, if you plan on using it, you are on you own.
+> This application is not suitable for production and is missing many tests, if you plan on using it, you are on you own.
 
 ![scrounge](https://github.com/iambumblehead/scroungejs/raw/main/img/hand3.png)
 
