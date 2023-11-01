@@ -1,5 +1,9 @@
-// import chokidar from 'chokidar'
 import fs from 'node:fs'
+// import chokidar from 'chokidar'
+//
+// chokidar may be preferable to fs.watch.
+// chokidar was replaced w/ fs.watch when troubleshooting watch behaviour
+// and decided to continue using fs.watch, but chokidar is probably fine
 
 const scr_watchersclose = async watchers => {
   if (!watchers.length)
@@ -17,7 +21,6 @@ const scr_watchers = (dir, opts = {}, fn) => {
   dir = new URL(dir, opts.metaurl)
   watchers.push(fs.watch(dir, { recursive: true }, (evtype, filename) => {
     if (evtype === 'change') {
-      console.log('WATCH TRIG', { evtype, filename })
       const filepath = new URL(filename, dir)
       fn(String(filepath).replace(/^file:\/\//, ''))
     }
