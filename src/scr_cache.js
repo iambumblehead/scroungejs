@@ -7,9 +7,16 @@ import {
   scr_util_uidflat
 } from './scr_util.js'
 
+const getcachepathurl = opts =>
+  new URL('./.scrounge/', opts.metaurl)
+
+const getcachepathfrom = (opts, cachepath) =>
+  String(new URL(cachepath, getcachepathurl(opts)))
+    .replace(/^file:\/\//, '')
+
 const recoverrootcachemapnode = async (opts, rootname, node) => {
   const nodeuid = scr_util_uidflat(node.get('uid'))
-  const cachepath = path.join('./.scrounge', rootname, nodeuid)
+  const cachepath = getcachepathfrom(opts, path.join(nodeuid, rootname))
   const cachenode = await scr_file.read(opts, cachepath)
 
   return depgraph.node.get_fromjs(
@@ -17,16 +24,17 @@ const recoverrootcachemapnode = async (opts, rootname, node) => {
 }
 
 const recoverrootarrcachemapnode = async (opts, rootnamearr, node) => {
-  let rootobjarr = {};
+  let rootobjarr = {}
 
-  (async function next (rootarr, x = rootarr.length) {
+  return (async function next (rootarr, x = rootarr.length) {
     if (!x--) return rootobjarr
 
     const cachenode = await recoverrootcachemapnode(opts, rootarr[x], node)
-      .catch(() => null)
+      .catch(e => console.log(e))
 
-    if (cachenode)
+    if (cachenode) {
       rootobjarr[rootarr[x]] = [ cachenode ]
+    }
 
     return next(rootarr, x)
   }(rootnamearr))
@@ -35,9 +43,9 @@ const recoverrootarrcachemapnode = async (opts, rootnamearr, node) => {
 const persistrootcachemapfile = async (opts, rootname, node) => {
   const nodeuid = scr_util_uidflat(node.get('uid'))
   const nodejson = JSON.stringify(node.delete('content').toJS(), null, '  ')
-  const cachepath = path.join('./.scrounge', nodeuid, rootname)
+  const cachepath = getcachepathfrom(opts, path.join(nodeuid, rootname))
 
-  await scr_file.mkdirp(path.join('./.scrounge', nodeuid))
+  await scr_file.mkdirp(getcachepathfrom(opts, nodeuid))
   
   return scr_file.writesilent(opts, cachepath, nodejson)
 }

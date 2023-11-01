@@ -6,9 +6,8 @@ import viewb from './viewb.mjs'
 import viewa from './viewa.js'
 
 let viewsall = {
-  viewa,// : require('./viewa'),
+  viewa,
   viewb
-  //viewb : require('./viewb').default
 }
 
 const hello = () => 'hello'
@@ -17,7 +16,6 @@ const start = () => {
   viewsall.viewb.start()
 }
 
-// mo-dule.exp-orts = {
 export default {
   start,
   hello

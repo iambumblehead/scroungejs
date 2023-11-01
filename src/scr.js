@@ -1,10 +1,14 @@
 import simpletime from 'simpletime'
 
-import scr_watch from './scr_watch.js'
 import scr_cache from './scr_cache.js'
 import scr_node from './scr_node.js'
 import scr_file from './scr_file.js'
 import scr_opts from './scr_opts.js'
+
+import {
+  scr_watchers,
+  scr_watchersclose
+} from './scr_watch.js'
 
 import {
   scr_enum_extn_grouptypeJS,
@@ -122,13 +126,15 @@ const updatedestfile = async (optsuser, srcfilename) => {
 
   const nodefilepath = node.get('filepath')
   const groupTypeExtn = scr_filepath_get_grouptype(opts, nodefilepath)
-  const nodegrouppath = scr_name_with_extn(nodefilepath, groupTypeExtn)
+  // const nodegrouppath = scr_name_with_extn(nodefilepath, groupTypeExtn)
   const rootsarrfiltered = rootsarr.filter(root => (
-    nodegrouppath === scr_filepath_get_grouptype(opts, root)))
+    groupTypeExtn === scr_filepath_get_grouptype(opts, root)))
   const rootnodescached = await scr_cache
     .recoverrootarrcachemapnode(opts, rootsarrfiltered, node)
 
-  await writeroots(opts, rootsarrfiltered, rootnodescached)
+  if (rootnodescached) {
+    await writeroots(opts, rootsarrfiltered, rootnodescached)
+  }
 
   if (opts.basepage &&
       opts.istimestamp) {
@@ -137,6 +143,13 @@ const updatedestfile = async (optsuser, srcfilename) => {
 
   return true
 }
+
+const watchers = opts => (
+  scr_watchers(opts.inputpath, opts, async path => (
+    updatedestfile(opts, path)
+  )))
+
+const watchersclose = scr_watchersclose
 
 const build = async (opts = {}) => {
   let datebgn = new Date()
@@ -158,16 +171,24 @@ const build = async (opts = {}) => {
   scr_logfinish(opts, simpletime.getElapsedTimeFormatted(datebgn, new Date()))
 
   if (opts.iswatch)
-    scr_watch(opts.inputpath, {}, async path => updatedestfile(opts, path))
+    watchers(opts)
 
   return res
 }
 
-export default Object.assign(build, {
+Object.assign(build, {
+  watchers,
+  watchersclose
+})
+
+export {
+  build as default,
+  watchers,
+  watchersclose,
   writeroots,
   copyroottpl,
   buildrootobj,
   writebasepage,
   readbasepage,
   updatedestfile
-})
+}
