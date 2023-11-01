@@ -126,13 +126,15 @@ const updatedestfile = async (optsuser, srcfilename) => {
 
   const nodefilepath = node.get('filepath')
   const groupTypeExtn = scr_filepath_get_grouptype(opts, nodefilepath)
-  const nodegrouppath = scr_name_with_extn(nodefilepath, groupTypeExtn)
+  // const nodegrouppath = scr_name_with_extn(nodefilepath, groupTypeExtn)
   const rootsarrfiltered = rootsarr.filter(root => (
-    nodegrouppath === scr_filepath_get_grouptype(opts, root)))
+    groupTypeExtn === scr_filepath_get_grouptype(opts, root)))
   const rootnodescached = await scr_cache
     .recoverrootarrcachemapnode(opts, rootsarrfiltered, node)
 
-  await writeroots(opts, rootsarrfiltered, rootnodescached)
+  if (rootnodescached) {
+    await writeroots(opts, rootsarrfiltered, rootnodescached)
+  }
 
   if (opts.basepage &&
       opts.istimestamp) {
@@ -143,7 +145,9 @@ const updatedestfile = async (optsuser, srcfilename) => {
 }
 
 const watchers = opts => (
-  scr_watchers(opts.inputpath, {}, async path => updatedestfile(opts, path)))
+  scr_watchers(opts.inputpath, opts, async path => (
+    updatedestfile(opts, path)
+  )))
 
 const watchersclose = scr_watchersclose
 

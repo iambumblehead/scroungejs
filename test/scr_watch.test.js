@@ -7,12 +7,12 @@ import assert from 'node:assert/strict'
 
 import scroungejs from '../src/scr.js'
 
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
 
 test('should watch a file`', async () => {
   const opts = {
     metaurl: import.meta.url,
-    inputpath: '../sample/src',
+    inputpath: '../sample/src/',
     outputpath: '../sample/out/watch',
     publicpath: '../sample/out/watch/',
     basepagein: '../sample/index.tpl.html',
@@ -55,22 +55,23 @@ test('should watch a file`', async () => {
   // const outindexsrcfilets = +String(
   //   (outindexcontent.match(tsmatchRe) || [])[0]).slice(-13)
 
-  // console.log('creating watchers...')
   const watchers = scroungejs.watchers(opts)
+  // https://github.com/paulmillr/chokidar/issues/790
+  // setTimeout is used rather than 'ready' here, waiting for
+  // chokidar or fs.watch to listen
+  await setTimeout(4000)
 
   // write changes to this file
   await fs.writeFile(srcfilepath, srcfilecontentupdated, { encoding: 'utf8' })
-  await setTimeout(400)
+  await setTimeout(4000)
 
-  // console.log('wrote nw content', srcfilecontentupdated)
-/*
   // verify source copied to output file by watcher
   const outfilecontent1 = await fs.readFile(outfilepath, { encoding: 'utf8' })
   assert.ok(outfilecontent1.includes("const hello = () => 'hola'"))
   assert.ok(!outfilecontent1.includes("const hello = () => 'hello'"))
-*/  
+
   await fs.writeFile(srcfilepath, srcfilecontent, { encoding: 'utf8' })
-  await setTimeout(400)
+  await setTimeout(4000)
 
   // verify source copied to output file by watcher (again)
   const outfilecontent2 = await fs.readFile(outfilepath, { encoding: 'utf8' })
