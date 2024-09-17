@@ -37,7 +37,7 @@ import {
 import {
   scr_logstart,
   scr_logfinish,
-  scr_logupdatenode  
+  scr_logupdatenode
 } from './scr_log.js'
 
 const writeroots = async (opts, rootarr, rootobj) => (
@@ -102,8 +102,8 @@ const readbasepage = async opts => {
 }
 
 const scr_filepath_get_grouptype = (opts, filepath) => (
-  [ [ scr_enum_extn_grouptypeJS, ...opts.jsextnarr ],
-    [ scr_enum_extn_grouptypeCSS, ...opts.cssextnarr ]
+  [[scr_enum_extn_grouptypeJS, ...opts.jsextnarr],
+    [scr_enum_extn_grouptypeCSS, ...opts.cssextnarr]
   ].find(extns => (
     extns.some(extn => scr_name_is_extn(filepath, extn)))) || [])[1]
 
@@ -112,7 +112,7 @@ const updatedestfile = async (optsuser, srcfilename) => {
   const supportedextnsfound = []
     .concat(opts.cssextnarr, opts.jsextnarr)
     .filter(extn => scr_name_is_extn(srcfilename, extn))
-  
+
   if (opts.isconcat || supportedextnsfound.length === 0)
     return null
 

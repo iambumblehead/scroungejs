@@ -1,4 +1,6 @@
 import fs from 'node:fs'
+import url from 'node:url'
+
 // import chokidar from 'chokidar'
 //
 // chokidar may be preferable to fs.watch.
@@ -18,10 +20,10 @@ const scr_watchers = (dir, opts = {}, fn) => {
   const watchers = []
 
   // convert to url for mode compatibility
-  dir = new URL(dir, opts.metaurl)
+  dir = new url.URL(dir, opts.metaurl)
   watchers.push(fs.watch(dir, { recursive: true }, (evtype, filename) => {
     if (evtype === 'change') {
-      const filepath = new URL(filename, dir)
+      const filepath = new url.URL(filename, dir)
       fn(String(filepath).replace(/^file:\/\//, ''))
     }
   }))
@@ -33,15 +35,15 @@ const scr_watchers = (dir, opts = {}, fn) => {
 // const scr_watchers = (globs, opts = {}, fn) => {
 //   const watchers = []
 //   const watcher = chokidar.watch(globs, opts.watch || { cwd: '.' })
-// 
+//
 //   watchers.push(watcher)
-// 
+//
 //   if (typeof fn === 'function') {
 //     watcher
 //       .on('ready', () => console.log('[...] watch: ready'))
 //       .on('change', fn)
 //   }
-// 
+//
 //   return watchers
 // }
 

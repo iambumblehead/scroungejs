@@ -75,7 +75,7 @@ const scr_root_deps_create = async (opts, rootname) => {
 //
 const scr_roots_deps_create = async (opts, rootarr) => {
   // converts rootname array to the specified type
-  // then filters results for uniqueness  
+  // then filters results for uniqueness
   const graphnamearr = scr_name_list_unique(
     rootarr.map(name => scr_name_with_extn(name, '.js')))
   const prependspecarr = opts.prependarr
@@ -127,7 +127,8 @@ const scr_root_rootsobj = async (opts, rootarr) => {
 const scr_root_depswrite = async (deps, x, opts, rootname) => {
   if (!x--) return 'success'
 
-  const [ res ] = await scr_adapt(opts, deps[x])
+  const [res] = await scr_adapt(opts, deps[x])
+  // eslint-disable-next-line no-use-before-define
   await scr_root_nodewrite(opts, deps[x], rootname, res)
 
   return scr_root_depswrite(deps, x, opts, rootname)
@@ -135,6 +136,7 @@ const scr_root_depswrite = async (deps, x, opts, rootname) => {
 //    }(deparr, deparr.length))
 
 const scr_root_depswriteroots = async (deps, x, opts, rootname, roots = []) => {
+  // eslint-disable-next-line no-use-before-define
   if (!x--) return scr_root_nodewrite(opts, deps[0], rootname, roots.join('\n'))
 
   const adaptopts = {
@@ -162,7 +164,7 @@ const scr_root_nodewrite = async (opts, node, rootname, content) => {
   filepath = scr_file.setextn(filepath, fileextn)
 
   if (fileextn === scr_enum_extn_grouptypeJS && opts.issourcemap) {
-    const [ , map ] = await scr_adapt.js({
+    const [, map] = await scr_adapt.js({
       ...opts,
       sourcemap: true,
       iscompress: true,
@@ -177,7 +179,7 @@ const scr_root_nodewrite = async (opts, node, rootname, content) => {
     await scr_file.mkdirp(opts.outputpath)
     await scr_file.write(opts, mapfilepath, mapsource)
 
-    content = [ mapinclude, content ].join('\n')
+    content = [mapinclude, content].join('\n')
   }
 
   await scr_file.mkdirp(opts.outputpath)

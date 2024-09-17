@@ -26,13 +26,13 @@ const app = express()
     iscompress: false,
     isconcat: false,
     iswatch: false,
-    treearr: [ 'app.js', 'app.css' ],
+    treearr: ['app.js', 'app.css'],
     deploytype: 'module',
-    
+
     hooktransform: async (srcstr, node, srctype, srcpath, opts) => {
       // for ts...
       // let tsconfig = opts.tsconfig || {},
-      // jsstr = typescript.transpileModule(str, tsconfig).outputText      
+      // jsstr = typescript.transpileModule(str, tsconfig).outputText
       if (/m?js/.test(srctype) && opts.iscompress) {
         const res = await babel.transformAsync(srcstr, {
           compact: opts.iscompress,
@@ -45,19 +45,19 @@ const app = express()
             // given module definition
             //
             // do not convert umd or module-deployed esm
-            [ babelpresetenv, {
+            [babelpresetenv, {
               modules: (
                 node.get('module') === 'umd' || (
                   node.get('module') === 'esm' && opts.deploytype === 'module'))
                 ? false
                 : 'commonjs'
-            } ]
+            }]
           ]
         }).catch(() => {
           new Error(`[!!!] parse error ${srcpath}`)
         })
 
-        return [ res.code, res.map ]
+        return [res.code, res.map]
       }
 
       if (srctype === '.css') {
@@ -68,7 +68,7 @@ const app = express()
         ]
       }
 
-      return [ srcstr ]
+      return [srcstr]
     }
   })
 

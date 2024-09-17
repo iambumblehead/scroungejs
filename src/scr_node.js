@@ -78,9 +78,9 @@ const getoutputpathreal = (opts, node, rootname) => setoutputname(
 // for each node in the array build ordered listing of elements
 const arrgetincludetagarr = (opts, nodearr, rootname) => (
   (opts.isconcat || opts.deploytype === 'module')
-    ? [ scr_elem.getincludetag(
+    ? [scr_elem.getincludetag(
       opts, getoutputpathpublic(opts, nodearr[0], rootname),
-      nodearr[0].get('module')) ]
+      nodearr[0].get('module'))]
     : nodearr.map(node => (
       scr_elem.getincludetag(
         opts, getoutputpathpublic(opts, node, rootname),

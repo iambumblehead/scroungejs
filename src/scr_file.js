@@ -19,21 +19,20 @@ const setbasename = (filepath, uid) => path.join(
   path.dirname(filepath),
   scr_util_uidflat(uid) + path.extname(filepath))
 
+//
+// path.join, but don't lose relative './' if present
+//
+const setpath = (newpath, filepath) => (/^\.\//.test(newpath) ? './' : '') +
+  path.join(newpath, path.basename(filepath))
+
 const setpublicpath = (opts, filepath) => {
   // if publicpath not found in filepath, returns null
   const publicpath = pathpublic.get(filepath, opts.publicpath)
-  
+
   return publicpath && publicpath.startsWith(opts.publicpath)
     ? publicpath
     : setpath(opts.publicpath, path.basename(filepath))
 }
-
-//
-// the final output path combined w/ public path to generate final path
-// replace windows-style '\' w/ posix style '/'
-//
-const setpublicoutputpath = (opts, filepath, uid) => setpublicpath(
-  opts, setoutputpathreal(opts, filepath, uid)).replace(/\\/g, '/')
 
 //
 // 'real' outputpath, because this is the systempath
@@ -47,10 +46,11 @@ const setoutputpathreal = (opts, filepath, uid) => {
 }
 
 //
-// path.join, but don't lose relative './' if present
+// the final output path combined w/ public path to generate final path
+// replace windows-style '\' w/ posix style '/'
 //
-const setpath = (newpath, filepath) => (/^\.\//.test(newpath) ? './' : '') +
-  path.join(newpath, path.basename(filepath))
+const setpublicoutputpath = (opts, filepath, uid) => setpublicpath(
+  opts, setoutputpathreal(opts, filepath, uid)).replace(/\\/g, '/')
 
 // ({ outputpath: './hey' }, '/path/to/file.js')
 //

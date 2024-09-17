@@ -1,6 +1,6 @@
-// Filename: ctrlsall.js  
+// Filename: ctrlsall.js
 // Timestamp: 2015.12.07-20:16:52 (last modified)
-// Author(s): bumblehead <chris@bumblehead.com>  
+// Author(s): bumblehead <chris@bumblehead.com>
 
 import ctrla from './ctrla.js'
 import ctrlb from './ctrlb.js'
@@ -13,6 +13,6 @@ const ctrlsall = {
 export default {
   start: function () {
     ctrlsall.ctrla.start()
-    ctrlsall.ctrlb.start()    
+    ctrlsall.ctrlb.start()
   }
 }
