@@ -19,11 +19,11 @@ await scroungejs({
   outputpath: './build/',
   iscompress: true,
   isconcat: false,
-  
+
   // read this template html and output to basepage
   basepagein: './src/index.tpl.html',
   basepage: './build/index.html',
-  
+
   // join contents of these files to top of this tree's file
   prependarr: [{
     treename: 'app.js',
@@ -42,7 +42,7 @@ await scroungejs({
     'app.js',
     'app.css'
   ]
-});
+})
 ```
 
 
