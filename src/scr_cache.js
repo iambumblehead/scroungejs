@@ -1,3 +1,4 @@
+import url from 'node:url'
 import path from 'path'
 import depgraph from 'depgraph'
 
@@ -8,10 +9,10 @@ import {
 } from './scr_util.js'
 
 const getcachepathurl = opts =>
-  new URL('./.scrounge/', opts.metaurl)
+  new url.URL('./.scrounge/', opts.metaurl)
 
 const getcachepathfrom = (opts, cachepath) =>
-  String(new URL(cachepath, getcachepathurl(opts)))
+  String(new url.URL(cachepath, getcachepathurl(opts)))
     .replace(/^file:\/\//, '')
 
 const recoverrootcachemapnode = async (opts, rootname, node) => {
@@ -33,7 +34,7 @@ const recoverrootarrcachemapnode = async (opts, rootnamearr, node) => {
       .catch(e => console.log(e))
 
     if (cachenode) {
-      rootobjarr[rootarr[x]] = [ cachenode ]
+      rootobjarr[rootarr[x]] = [cachenode]
     }
 
     return next(rootarr, x)
@@ -46,7 +47,7 @@ const persistrootcachemapfile = async (opts, rootname, node) => {
   const cachepath = getcachepathfrom(opts, path.join(nodeuid, rootname))
 
   await scr_file.mkdirp(getcachepathfrom(opts, nodeuid))
-  
+
   return scr_file.writesilent(opts, cachepath, nodejson)
 }
 

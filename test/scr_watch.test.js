@@ -7,7 +7,7 @@ import assert from 'node:assert/strict'
 
 import scroungejs from '../src/scr.js'
 
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
+const __dirname = url.fileURLToPath(new url.URL('.', import.meta.url))
 
 test('should watch a file`', async () => {
   const opts = {
@@ -20,7 +20,7 @@ test('should watch a file`', async () => {
     isuidfilenames: true,
     iscompress: false,
     isconcat: false,
-    treearr: [ 'app.js', 'app.css' ],
+    treearr: ['app.js', 'app.css'],
     deploytype: 'module'
   }
 
@@ -32,7 +32,7 @@ test('should watch a file`', async () => {
     __dirname, '../sample/out/watch/')
   const outfile = await fs.readdir(outdir)
     .then(files => files.find(file => file.endsWith('viewsall.js')))
-  const outfilepath = path.join(outdir, outfile)  
+  const outfilepath = path.join(outdir, outfile)
   // const tsmatchRe = /\.js\?ts=\d{13}/g
   const srcfilepath = path.join(
     __dirname, '../sample/src/views/viewsall.js')

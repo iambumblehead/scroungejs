@@ -28,16 +28,18 @@ const scr_adaptjs = async (opts, node, srcstr) => {
   const nodeuid = node.get('uid')
   const extname = path.extname(filepath)
   const modname = scr_util_uidflat(nodeuid)
-  const [ outstr, map ] = await opts
+  const [outstr, map] = await opts
     .hooktransform(srcstr, node, extname, filepath, opts)
   const iscjs = moduletype.cjs(outstr)
   const isesm = moduletype.esm(outstr)
 
-  if (moduletype.umd(outstr))
+  // umd test is not fully accurate/reliable.
+  // esm test is more reliable, so assume esm if esm test true
+  if (moduletype.umd(outstr) && !isesm)
     throw scr_err_umdformatnotsupported(filepath)
 
   if (!iscjs && !isesm)
-    return [ outstr, map ]
+    return [outstr, map]
 
   let str = (iscjs && !isesm && opts.isbrowser)
     ? umd(modname, outstr, { commonJS: true })
@@ -53,7 +55,7 @@ const scr_adaptjs = async (opts, node, srcstr) => {
     // alias allows build to map customm paths values
     // to the require/import value
     // aliasarr scenario needs tests
-    opts.aliasarr.map(([ matchname, newname ]) => (
+    opts.aliasarr.map(([matchname, newname]) => (
       newname === refname && (
         prev[1][matchname] = depname,
         prev[0][matchname] = `/${depname}.js`)))
@@ -62,7 +64,7 @@ const scr_adaptjs = async (opts, node, srcstr) => {
     prev[0][refname] = `./${depname}.js`
 
     return prev
-  }, [ {}, {} ])
+  }, [{}, {}])
 
   if (iscjs && !/export default/g.test(str))
     str = replacerequires(str, replace[1])
@@ -81,7 +83,7 @@ const scr_adaptjs = async (opts, node, srcstr) => {
   //   https://github.com/rollup/rollup/issues/208
   str = str.replace(NODE_ENVre, NODE_ENVstr)
 
-  return [ str, map ]
+  return [str, map]
 }
 
 const adapt = async (opts, node, src) => {

@@ -37,12 +37,12 @@ test('should convert content to umd by default', async () => {
   const opts = scr_opts({
     metaurl: import.meta.url,
     iscompress: false,
-    hooktransform: () => [ 'minified' ]
+    hooktransform: () => ['minified']
   })
 
   assert.deepStrictEqual(
     await scr_adapt.js(opts, cjsnode, test_cjs_root),
-    [ 'minified', undefined ])
+    ['minified', undefined])
 })
 
 test('should throw an error for a malformed file', async () => {
@@ -60,7 +60,7 @@ test('should throw an error for a malformed file', async () => {
 })
 
 test('should skip content of "skippatharr" nodes', async () => {
-  const [ res ] = await scr_adapt.js(scr_opts({
+  const [res] = await scr_adapt.js(scr_opts({
     metaurl: import.meta.url,
     isbrowser: false,
     skippatharr: [
@@ -76,10 +76,10 @@ test('should process scripts with no module format', async () => {
     metaurl: import.meta.url,
     iscompress: false,
     isbrowser: false,
-    hooktransform: src => [ src + '_processed_' ]
+    hooktransform: src => [src + '_processed_']
   })
 
-  const [ res ] = await scr_adapt.js(opts, globalnode, test_global)
+  const [res] = await scr_adapt.js(opts, globalnode, test_global)
   const matches = ((res || '').match(/_processed_/mgi) || []).length
   assert.strictEqual(matches, 1)
   assert.strictEqual(res.replace(/_processed_/mgi, ''), test_global)
@@ -90,10 +90,10 @@ test('should convert cjs to umd', async () => {
     metaurl: import.meta.url,
     iscompress: false,
     isbrowser: true,
-    hooktransform: () => [ cjsnode ]
+    hooktransform: () => [cjsnode]
   })
 
-  const [ res ] = await scr_adapt.js(opts, mjsnode, test_mjs_root)
+  const [res] = await scr_adapt.js(opts, mjsnode, test_mjs_root)
 
   assert.strictEqual(/import/g.test(res), false)
 })
@@ -105,7 +105,7 @@ test('should not convert mjs, when deploytype is "module"', async () => {
     deploytype: 'module'
   })
 
-  const [ res ] = await scr_adapt.js(opts, mjsnode, test_mjs_root)
+  const [res] = await scr_adapt.js(opts, mjsnode, test_mjs_root)
 
   assert.strictEqual(/import/g.test(res), true)
 })
@@ -123,7 +123,7 @@ test('should replace require calls w/ node out-going edge names', async () => {
     iscompress: false
   })
 
-  const [ res ] = await scr_adapt.js(opts, rootcjsnode, test_cjs_root)
+  const [res] = await scr_adapt.js(opts, rootcjsnode, test_cjs_root)
 
   assert.strictEqual(replacedreq.test(res), true)
   assert.strictEqual(originalreq.test(res), false)
@@ -142,7 +142,7 @@ test('replace mjs import paths w/ out-going edge IF "module"', async () => {
     iscompress: false,
     deploytype: 'module'
   })
-  const [ res ] = await scr_adapt.js(opts, rootmjsnode, test_mjs_root)
+  const [res] = await scr_adapt.js(opts, rootmjsnode, test_mjs_root)
 
   assert.strictEqual(replacedimp.test(res), true)
   assert.strictEqual(originalimp.test(res), false)
@@ -175,26 +175,26 @@ test('replace mjs import paths w/ out-going edge IF "script"', async () => {
             // given module definition
             //
             // do not convert umd or module-deployed esm
-            [ babelpresetenv, {
+            [babelpresetenv, {
               modules: (
                 node.get('module') === 'umd' || (
                   node.get('module') === 'esm' && opts.deploytype === 'module'))
                 ? false
                 : 'commonjs'
-            } ]
+            }]
           ]
         }).catch(() => {
           new Error(`[!!!] parse error ${srcpath}`)
         })
 
-        return [ res.code, res.map ]
+        return [res.code, res.map]
       }
 
-      return [ srcstr ]
+      return [srcstr]
     }
   })
 
-  const [ res ] = await scr_adapt.js(opts, rootmjsnode, test_mjs_root)
+  const [res] = await scr_adapt.js(opts, rootmjsnode, test_mjs_root)
 
   assert.strictEqual(replacedimp.test(res), true)
   assert.strictEqual(originalimp.test(res), false)
@@ -209,13 +209,13 @@ test('should handle aliases', async () => {
   const opts = scr_opts({
     metaurl: import.meta.url,
     iscompress: false,
-    aliasarr: [ [
+    aliasarr: [[
       'inferno',
       'inferno/dist/inferno'
-    ] ]
+    ]]
   })
 
-  const [ res ] = await scr_adapt
+  const [res] = await scr_adapt
     .js(opts, aliascjsnode, aliascjsnode.get('content'))
 
   assert.strictEqual(/inferno = require\("inferno"\)/.test(res), false)

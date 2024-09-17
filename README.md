@@ -14,31 +14,31 @@ An obscure build tool starting as an emacs elisp script in 2009. Scroungejs was 
 A test configuration is found in `spec/`. Below is a config with common options. [All options][7] are optional and if you're unsure about an option, you likely don't need it.
 ```javascript
 await scroungejs({
-  version : process.env.npm_package_version,
-  inputpath : './src/',
-  outputpath : './build/',
-  iscompress : true,
-  isconcat : false,
+  version: process.env.npm_package_version,
+  inputpath: './src/',
+  outputpath: './build/',
+  iscompress: true,
+  isconcat: false,
   
   // read this template html and output to basepage
-  basepagein : './src/index.tpl.html',
-  basepage : './build/index.html',
+  basepagein: './src/index.tpl.html',
+  basepage: './build/index.html',
   
   // join contents of these files to top of this tree's file
-  prependarr : [{
-    treename : 'app.js',
-    sourcearr : [
+  prependarr: [{
+    treename: 'app.js',
+    sourcearr: [
       './node_modules/three/build/three.js',
       './node_modules/hls.js/dist/hls.min.js'
     ]
   }],
 
-  skipdeparr : [
+  skipdeparr: [
     '/hls.js'
   ],
 
   // write these trees, the root file of a tree the treename
-  treearr : [
+  treearr: [
     'app.js',
     'app.css'
   ]

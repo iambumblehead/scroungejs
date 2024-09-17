@@ -41,7 +41,7 @@ test('should populate a scrounge elem', () => {
     ' <!-- <scrounge root="app.css"> -->',
     ' <link href="./out/viewa.css?ts=222" rel="stylesheet" type="text/css">',
     ' <link href="./out/viewb.css?ts=222" rel="stylesheet" type="text/css">',
-    ' <!-- </scrounge> -->' ].join('\n'))
+    ' <!-- </scrounge> -->'].join('\n'))
 })
 
 test('should REpopulate a scrounge elem', () => {
@@ -60,7 +60,7 @@ test('should REpopulate a scrounge elem', () => {
     ' <!-- <scrounge root="app.css"> -->',
     ' <link href="./out/viewa.css?ts=222" rel="stylesheet" type="text/css">',
     ' <link href="./out/viewb.css?ts=222" rel="stylesheet" type="text/css">',
-    ' <!-- </scrounge> -->' ].join('\n'))
+    ' <!-- </scrounge> -->'].join('\n'))
 })
 
 test('should return javascript <script> element', () => {

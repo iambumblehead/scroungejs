@@ -50,10 +50,10 @@ export default opt => {
   // A rare situation to use original filenames is for packaging web-extensions
   // as mozilla do not allow build tools and output files must look hand-made.
   finopt.isuidfilenames = castas.bool(opt.isuidfilenames, true)
-  
+
   // hooktransform(src, node, type, path, opts)
-  finopt.hooktransform = opt.hooktransform || (src => [ src, null ])
-  
+  finopt.hooktransform = opt.hooktransform || (src => [src, null])
+
 
   // deploytype is 'script' or 'module'.
   //
@@ -65,9 +65,9 @@ export default opt => {
   finopt.deploytype = castas.str(opt.deploytype, 'module') // script|module
   finopt.version = castas.str(opt.version, '')
 
-  finopt.tplextnarr = [ '.mustache' ]
-  finopt.cssextnarr = [ '.css' ]
-  finopt.jsextnarr = [ '.js', '.mjs', '.ts', '.tsx' ]
+  finopt.tplextnarr = ['.mustache']
+  finopt.cssextnarr = ['.css']
+  finopt.jsextnarr = ['.js', '.mjs', '.ts', '.tsx']
   finopt.jsextnre = /(js|mjs|ts|tsx)$/
 
   finopt.tsconfig = opt.tsconfig || {}
