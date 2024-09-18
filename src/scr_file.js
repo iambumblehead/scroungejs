@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises'
+import url from 'node:url'
 import { statSync } from 'fs'
 import path from 'path'
 import pathpublic from 'pathpublic'
@@ -26,8 +27,15 @@ const setpath = (newpath, filepath) => (/^\.\//.test(newpath) ? './' : '') +
   path.join(newpath, path.basename(filepath))
 
 const setpublicpath = (opts, filepath) => {
-  // if publicpath not found in filepath, returns null
-  const publicpath = pathpublic.get(filepath, opts.publicpath)
+  const metapath = url.fileURLToPath(opts.metaurl)
+  const filepathrel = filepath.replace(metapath, '')
+  // where file path includes public path in project root path
+  //  * publicpath: '/project.name/'
+  //  * filepath: '/path/to/project.name/build/project.name/'
+  //
+  // public filepath should begin from from the build directory
+  // remove metaurl from filepath to avoid getting wrong publicpath match
+  const publicpath = pathpublic.get(filepathrel, opts.publicpath)
 
   return publicpath && publicpath.startsWith(opts.publicpath)
     ? publicpath

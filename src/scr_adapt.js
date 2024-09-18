@@ -1,4 +1,4 @@
-import umd from 'umd'
+// import umd from 'umd'
 import path from 'path'
 import moduletype from 'moduletype'
 import replacerequires from 'replace-requires'
@@ -42,7 +42,7 @@ const scr_adaptjs = async (opts, node, srcstr) => {
     return [outstr, map]
 
   let str = (iscjs && !isesm && opts.isbrowser)
-    ? umd(modname, outstr, { commonJS: true })
+    ? outstr // umd(modname, outstr, { commonJS: true })
     : outstr
 
   // build import and require replacement mappings

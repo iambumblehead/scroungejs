@@ -79,7 +79,8 @@ const buildrootobj = async (opts, rootarr) => (
 const writebasepage = async (opts, rootarr, rootobj) => {
   const { basepage, basepagein } = opts
 
-  if (basepage && !scr_file.isexist(basepage))
+  // TODO consider if basepage check should be removed
+  if (basepage && (!scr_file.isexist(basepage) && true))
     await scr_file.copy(opts, basepagein, basepage)
 
   return basepage
