@@ -4,7 +4,8 @@ import markdown from 'eslint-plugin-markdown'
 export default [
   {
     ignores: [
-      "test/testfiles"
+      "test/testfiles",
+      "test/.scrounge"
     ]
   },
   js.configs.recommended,
