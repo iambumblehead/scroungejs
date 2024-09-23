@@ -1,13 +1,10 @@
 import fs from 'node:fs/promises'
 import { setTimeout } from 'node:timers/promises'
-import url from 'node:url'
 import path from 'node:path'
 import test from 'node:test'
 import assert from 'node:assert/strict'
 
 import scroungejs from '../src/scr.js'
-
-const __dirname = url.fileURLToPath(new url.URL('.', import.meta.url))
 
 test('should watch a file`', async () => {
   const opts = {
@@ -29,22 +26,21 @@ test('should watch a file`', async () => {
 
   // create and find various filepaths needed or test
   const outdir = path.join(
-    __dirname, '../sample/out/watch/')
+    import.meta.dirname, '../sample/out/watch/')
   const outfile = await fs.readdir(outdir)
     .then(files => files.find(file => file.endsWith('viewsall.js')))
   const outfilepath = path.join(outdir, outfile)
   // const tsmatchRe = /\.js\?ts=\d{13}/g
   const srcfilepath = path.join(
-    __dirname, '../sample/src/views/viewsall.js')
+    import.meta.dirname, '../sample/src/views/viewsall.js')
 
-  const srcfilecontent = (
-    await fs.readFile(srcfilepath, { encoding: 'utf8' }))
+  const srcfilecontent = await fs.readFile(srcfilepath, 'utf8')
   const srcfilecontentupdated =  srcfilecontent.replace(
     "const hello = () => 'hello'",
     "const hello = () => 'hola'")
 
   // verify current output file
-  const outfilecontent0 = await fs.readFile(outfilepath, { encoding: 'utf8' })
+  const outfilecontent0 = await fs.readFile(outfilepath, 'utf8')
   assert.ok(outfilecontent0.includes("const hello = () => 'hello'"))
   assert.ok(!outfilecontent0.includes("const hello = () => 'hola'"))
 
@@ -62,19 +58,19 @@ test('should watch a file`', async () => {
   await setTimeout(4000)
 
   // write changes to this file
-  await fs.writeFile(srcfilepath, srcfilecontentupdated, { encoding: 'utf8' })
+  await fs.writeFile(srcfilepath, srcfilecontentupdated)
   await setTimeout(4000)
 
   // verify source copied to output file by watcher
-  const outfilecontent1 = await fs.readFile(outfilepath, { encoding: 'utf8' })
+  const outfilecontent1 = await fs.readFile(outfilepath, 'utf8')
   assert.ok(outfilecontent1.includes("const hello = () => 'hola'"))
   assert.ok(!outfilecontent1.includes("const hello = () => 'hello'"))
 
-  await fs.writeFile(srcfilepath, srcfilecontent, { encoding: 'utf8' })
+  await fs.writeFile(srcfilepath, srcfilecontent)
   await setTimeout(4000)
 
   // verify source copied to output file by watcher (again)
-  const outfilecontent2 = await fs.readFile(outfilepath, { encoding: 'utf8' })
+  const outfilecontent2 = await fs.readFile(outfilepath, 'utf8')
   assert.ok(outfilecontent2.includes("const hello = () => 'hello'"))
   assert.ok(!outfilecontent2.includes("const hello = () => 'hola'"))
 

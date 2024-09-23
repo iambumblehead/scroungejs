@@ -23,8 +23,9 @@ const scr_watchers = (dir, opts = {}, fn) => {
   dir = new url.URL(dir, opts.metaurl)
   watchers.push(fs.watch(dir, { recursive: true }, (evtype, filename) => {
     if (evtype === 'change') {
-      const filepath = new url.URL(filename, dir)
-      fn(String(filepath).replace(/^file:\/\//, ''))
+      const filepath = new url.URL(filename, dir).pathname
+
+      fn(String(filepath))
     }
   }))
 
