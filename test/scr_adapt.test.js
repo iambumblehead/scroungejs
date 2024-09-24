@@ -89,6 +89,7 @@ test('should process scripts with no module format', async () => {
 test('should convert cjs to umd', async () => {
   const opts = scr_opts({
     metaurl: import.meta.url,
+    deploytype: 'script',
     iscompress: false,
     isbrowser: true,
     hooktransform: () => [cjsnode]
