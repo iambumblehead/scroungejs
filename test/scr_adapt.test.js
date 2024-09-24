@@ -37,6 +37,7 @@ test('should convert content to umd by default', async () => {
   const opts = scr_opts({
     metaurl: import.meta.url,
     iscompress: false,
+    deploytype: 'script',
     hooktransform: () => ['minified']
   })
 
