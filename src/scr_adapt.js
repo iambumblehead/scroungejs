@@ -14,6 +14,35 @@ import {
 const NODE_ENVre = /process\.env\.NODE_ENV/g
 const NODE_ENVstr = `'${process.env.NODE_ENV}'`
 
+// typescript projects such as path-to-regexp define this,
+// ```
+// Object.defineProperty(exports, "__esModule", { value: true })
+// ```
+//
+// fully transform these files to esm by adding
+//  * exports definition, and export
+const typescriptCJSesModuleRe = /Object\.defineProperty\(exports, "__esModule"/
+const typescriptCJSesModuleToESM = srccjs => {
+  const exportMatches = srccjs.match(/exports\.(\w*)/g)
+    .filter((e, i, matches) => matches.indexOf(e) === i)
+  const exportMatchFlat = lookup => lookup.replaceAll('.', '')
+  const exportESM = exportMatches.reduce((str, r) => [
+    `const ${exportMatchFlat(r)} = ${r};`,
+    str,
+    `export{${exportMatchFlat(r)} as ${r.replace('exports.', '')}};`
+  ].join('\n'), '\n')
+
+  return [
+    'const exports = {}',
+    srccjs,
+    exportESM
+  ].join('\n')
+}
+
+const pretransform = src => typescriptCJSesModuleRe.test(src)
+  ? typescriptCJSesModuleToESM(src)
+  : src
+
 const buildImportReplaceRe = key => (
   key = key.replace('/', '\\/').replace('.', '\\.'),
   // '$' dollar sign used in immutable.js import variable name :(
@@ -29,7 +58,7 @@ const scr_adaptjs = async (opts, node, srcstr) => {
   const extname = path.extname(filepath)
   const modname = scr_util_uidflat(nodeuid)
   const [outstr, map] = await opts
-    .hooktransform(srcstr, node, extname, filepath, opts)
+    .hooktransform(pretransform(srcstr), node, extname, filepath, opts)
   const iscjs = moduletype.cjs(outstr)
   const isesm = moduletype.esm(outstr)
 
@@ -41,7 +70,7 @@ const scr_adaptjs = async (opts, node, srcstr) => {
   if (!iscjs && !isesm)
     return [outstr, map]
 
-  let str = (iscjs && !isesm && opts.isbrowser)
+  let str = (iscjs && !isesm && opts.isbrowser && opts.deploytype !== 'module')
     ? umd(modname, outstr, { commonJS: true })
     : outstr
 
