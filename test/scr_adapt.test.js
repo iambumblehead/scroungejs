@@ -37,6 +37,7 @@ test('should convert content to umd by default', async () => {
   const opts = scr_opts({
     metaurl: import.meta.url,
     iscompress: false,
+    deploytype: 'script',
     hooktransform: () => ['minified']
   })
 
@@ -88,6 +89,7 @@ test('should process scripts with no module format', async () => {
 test('should convert cjs to umd', async () => {
   const opts = scr_opts({
     metaurl: import.meta.url,
+    deploytype: 'script',
     iscompress: false,
     isbrowser: true,
     hooktransform: () => [cjsnode]
