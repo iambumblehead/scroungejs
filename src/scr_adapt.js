@@ -72,7 +72,7 @@ const scr_adaptjs = async (opts, node, srcstr) => {
 
   let str = (iscjs && !isesm && opts.isbrowser && opts.deploytype !== 'module')
     ? umd(modname, outstr, { commonJS: true })
-    : outstr
+    : outstr.replace(/\/\/.*sourceMappingURL=[^\n]*/, '// sourceMapRemoved')
 
   // build import and require replacement mappings
   const replace = node.get('outarr').reduce((prev, cur) => {
